@@ -13,7 +13,9 @@ class Body extends StatelessWidget {
     dateinput.text = DateFormat('dd.MM.yy').format(DateTime.now());
     timeinput.text = TimeOfDay.now().format(context);
     return Column(
-      children: <Widget>[HeaderWithSearchBox(size, context)],
+      children: <Widget>[
+        HeaderWithSearchBox(size, context),
+      ],
     );
   }
 

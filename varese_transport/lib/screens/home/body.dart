@@ -2,16 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:intl/intl.dart';
+import 'package:varese_transport/main.dart';
+import 'package:varese_transport/screens/home/components/home_screen.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  State<StatefulWidget> createState() {
+    return BodyState();
+  }
+}
+
+class BodyState extends State<Body> {
+  String getStart() {
+    print("getStart " + startLabel.text);
+    return startLabel.text;
+  }
+
+  String getDestination() {
+    return destinationLabel.text;
+  }
+
+  String getTime() {
+    return timeinput.text;
+  }
+
+  String getDate() {
+    return dateinput.text;
+  }
+
   TextEditingController dateinput = TextEditingController();
   TextEditingController timeinput = TextEditingController();
+  TextEditingController startLabel = TextEditingController();
+  TextEditingController destinationLabel = TextEditingController();
   @override
   Widget build(BuildContext context) {
     //Get total size of the screen
     Size size = MediaQuery.of(context).size;
     dateinput.text = DateFormat('dd.MM.yy').format(DateTime.now());
     timeinput.text = TimeOfDay.now().format(context);
+    HomeScreen.date = DateFormat('dd.MM.yy').format(DateTime.now());
+    HomeScreen.time = TimeOfDay.now().format(context);
     return Column(
       children: <Widget>[
         HeaderWithSearchBox(size, context),
@@ -57,8 +86,8 @@ class Body extends StatelessWidget {
                 //As widget list
                 +
                 //Append the two text field lists
-                text_field(size, "Partenza", 120) +
-                text_field(size, "Destinazione", 60) +
+                text_field(size, "Partenza", 120, true) +
+                text_field(size, "Destinazione", 60, false) +
                 <Widget>[
                   Positioned(
                       bottom: 0,
@@ -104,6 +133,7 @@ class Body extends StatelessWidget {
                                   String formated = DateFormat('dd.MM.yyyy')
                                       .format(pickedDate);
                                   dateinput.text = formated;
+                                  HomeScreen.date = formated;
                                 } else {
                                   dateinput.text = "Data";
                                 }
@@ -150,6 +180,7 @@ class Body extends StatelessWidget {
                                   });
                               if (pickedTime != null) {
                                 timeinput.text = pickedTime.format(context);
+                                HomeScreen.time = pickedTime.format(context);
                               }
                             },
                           ),
@@ -158,7 +189,8 @@ class Body extends StatelessWidget {
                 ]));
   }
 
-  List<Widget> text_field(Size size, String hintText, double positionBottom) {
+  List<Widget> text_field(
+      Size size, String hintText, double positionBottom, bool isFrom) {
     return <Widget>[
       //Searchfield
       Positioned(
@@ -179,7 +211,13 @@ class Body extends StatelessWidget {
                     color: kPrimaryColor.withOpacity(0.23))
               ]),
           child: TextField(
-            onChanged: (value) {},
+            onChanged: (value) {
+              if (isFrom) {
+                HomeScreen.from = value;
+              } else {
+                HomeScreen.to = value;
+              }
+            },
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: TextStyle(

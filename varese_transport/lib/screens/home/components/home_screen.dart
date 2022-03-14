@@ -6,9 +6,21 @@ import 'package:http/http.dart' as http;
 import '../body.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  HomeScreen({Key? key}) : super(key: key);
+  static String from = "", to = "", time = "", date = "";
   //const HomeScreen({Key? key}) : super(key: key);
+
+  Future<http.Response> fetchItinerary() {
+    print("values: " + from + " " + to + " " + time + " " + date);
+    return http.get(Uri.parse('http://192.168.1.52:8081/path?from=' +
+        from +
+        "&to=" +
+        to +
+        "&date=" +
+        date +
+        "&time=" +
+        time));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +34,10 @@ class HomeScreen extends StatelessWidget {
             color: kSecondaryColor,
           ),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              print("Hello");
+              fetchItinerary();
+            },
             child: const SizedBox(
               height: 50,
               width: double.infinity,

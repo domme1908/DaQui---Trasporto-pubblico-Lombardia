@@ -13,14 +13,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      //Some basic settings
       debugShowCheckedModeBanner: false,
+      //TODO Final Title must be inserted
       title: 'VT',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
-        primaryColor: Colors.red,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      //Start the home screen
       home: HomeScreen(),
     );
   }

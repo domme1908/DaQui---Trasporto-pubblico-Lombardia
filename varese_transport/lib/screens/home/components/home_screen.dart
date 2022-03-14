@@ -2,59 +2,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:varese_transport/constants.dart';
-import 'package:http/http.dart' as http;
+import 'package:varese_transport/screens/home/components/api_call.dart';
 import '../body.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
-  static String from = "", to = "", time = "", date = "";
-  //const HomeScreen({Key? key}) : super(key: key);
-
-  Future<http.Response> fetchItinerary() {
-    print("values: " + from + " " + to + " " + time + " " + date);
-    return http.get(Uri.parse('http://192.168.1.52:8081/path?from=' +
-        from +
-        "&to=" +
-        to +
-        "&date=" +
-        date +
-        "&time=" +
-        time));
-  }
 
   @override
   Widget build(BuildContext context) {
+    //This is the layout of the homescreen
     return Scaffold(
+        //Paint the top app bar - in this case just the menu icon
         appBar: build_app_bar(),
+        //Call the body class to paint the central elements
         body: Body(),
-        bottomNavigationBar: Container(
-          margin: const EdgeInsets.all(kDefaultPadding),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(36),
-            color: kSecondaryColor,
-          ),
-          child: InkWell(
-            onTap: () {
-              print("Hello");
-              fetchItinerary();
-            },
-            child: const SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: Center(
-                  child: Text(
-                'Cerca',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25),
-              )),
-            ),
-          ),
-        ));
+        //Call the class that manages the bottom button and the
+        //API call
+        bottomNavigationBar: APICall());
   }
 
   AppBar build_app_bar() {
+    //Just some design stuff
     return AppBar(
       elevation: 0,
       backgroundColor: kPrimaryColor,

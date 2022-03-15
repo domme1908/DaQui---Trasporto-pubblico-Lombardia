@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:varese_transport/lib/classes/itinerary.dart';
+import 'package:varese_transport/screens/solutions/solutions_screen.dart';
 
 class APICall extends StatefulWidget {
   @override
@@ -27,10 +31,11 @@ class APICallState extends State<APICall> {
         //On botton click call API
         onTap: () {
           //Check if neccessary values have been given
-          if (!(from == "null") && !(to == "null"))
+          if (!(from == "null") && !(to == "null")) {
+            print("In the right if");
             //If yes call the api
-            fetchItinerary();
-          else {
+            print(fetchItinerary());
+          } else {
             //Otherwise display a snackbar with the error message
             const errorMes = SnackBar(
               //Snackbar desing
@@ -40,6 +45,8 @@ class APICallState extends State<APICall> {
             //Display the snackbar
             ScaffoldMessenger.of(context).showSnackBar(errorMes);
           }
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => SolutionsScreen()));
         },
         //Further design of the button
         child: const SizedBox(
@@ -57,15 +64,21 @@ class APICallState extends State<APICall> {
   }
 
   //The api call - sends the collected values to the js rest api
-  Future<http.Response> fetchItinerary() {
+  Future<Itinerary> fetchItinerary() async {
     //TODO URL must be changed to final value
-    return http.get(Uri.parse('http://192.168.1.52:8081/path?from=' +
-        from +
-        "&to=" +
-        to +
-        "&date=" +
-        date +
-        "&time=" +
-        time));
+    final response = await http.get(Uri.parse(
+        'http://192.168.1.52:8081/path?from=' +
+            from +
+            "&to=" +
+            to +
+            "&date=" +
+            date +
+            "&time=" +
+            time));
+    if (response.statusCode == 200) {
+      return Itinerary.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Impossibile accedere al server");
+    }
   }
 }

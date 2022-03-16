@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
@@ -10,6 +7,7 @@ import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/screens/solutions/solutions_screen.dart';
 
 class APICall extends StatefulWidget {
+  const APICall({Key? key}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return APICallState();
@@ -34,9 +32,8 @@ class APICallState extends State<APICall> {
         onTap: () {
           //Check if neccessary values have been given
           if (!(from == "null") && !(to == "null")) {
-            print("In the right if");
-            //If yes call the api
-            print(fetchItinerary());
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SolutionsScreen()));
           } else {
             //Otherwise display a snackbar with the error message
             const errorMes = SnackBar(
@@ -47,8 +44,6 @@ class APICallState extends State<APICall> {
             //Display the snackbar
             ScaffoldMessenger.of(context).showSnackBar(errorMes);
           }
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SolutionsScreen()));
         },
         //Further design of the button
         child: const SizedBox(
@@ -77,12 +72,17 @@ class APICallState extends State<APICall> {
             date +
             "&time=" +
             time));
-
-    return compute(parseItinerary, response.body);
+    //Call the compute function provided by flutter
+    return compute(
+        parseItinerary,
+        response
+            .body); //--> We create an isolated element that eventually returns the value, thus the fetchItinerary() function must be async
   }
 
   List<Itinerary> parseItinerary(String responseBody) {
+    //Parse the response to a JSON Map
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    //Execute the json-factory of class Itinerary on all elements in order to return a List<Itinerary>
     return parsed.map<Itinerary>((json) => Itinerary.fromJson(json)).toList();
   }
 }

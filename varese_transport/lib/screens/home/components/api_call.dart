@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:http/http.dart' as http;
@@ -64,7 +66,7 @@ class APICallState extends State<APICall> {
   }
 
   //The api call - sends the collected values to the js rest api
-  Future<Itinerary> fetchItinerary() async {
+  Future<List<Itinerary>> fetchItinerary() async {
     //TODO URL must be changed to final value
     final response = await http.get(Uri.parse(
         'http://192.168.1.52:8081/path?from=' +
@@ -75,10 +77,12 @@ class APICallState extends State<APICall> {
             date +
             "&time=" +
             time));
-    if (response.statusCode == 200) {
-      return Itinerary.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception("Impossibile accedere al server");
-    }
+
+    return compute(parseItinerary, response.body);
+  }
+
+  List<Itinerary> parseItinerary(String responseBody) {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<Itinerary>((json) => Itinerary.fromJson(json)).toList();
   }
 }

@@ -15,7 +15,6 @@ class Itinerary {
 
   factory Itinerary.fromJson(dynamic json) {
     var linesObsJson = json['lines'] as List;
-
     List<Lines> _lines = linesObsJson
         .map((linesObj) => Lines.fromJson(linesObj))
         .toList() as List<Lines>;

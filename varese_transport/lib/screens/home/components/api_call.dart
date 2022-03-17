@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/screens/solutions/solutions_screen.dart';
 
+import '../../../lib/classes/station.dart';
+
 class APICall extends StatefulWidget {
   const APICall({Key? key}) : super(key: key);
   @override
@@ -84,5 +86,16 @@ class APICallState extends State<APICall> {
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     //Execute the json-factory of class Itinerary on all elements in order to return a List<Itinerary>
     return parsed.map<Itinerary>((json) => Itinerary.fromJson(json)).toList();
+  }
+
+  Future<List<Station>> fetchStations() async {
+    final response =
+        await http.get(Uri.parse('http://192.168.1.52:8081/stations'));
+    return compute(parseStations, response.body);
+  }
+
+  List<Station> parseStations(String responseBody) {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<Station>((json) => Station.fromJson(json)).toList();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:varese_transport/constants.dart';
+import 'package:varese_transport/lib/classes/autocomplete.dart';
 
 import 'api_call.dart';
 
@@ -219,25 +220,7 @@ List<Widget> text_field(
                   blurRadius: 50,
                   color: kPrimaryColor.withOpacity(0.23))
             ]),
-        child: TextField(
-          onChanged: (value) {
-            //If text is inputted save it to the static variables
-            if (isFrom) {
-              APICallState.from = value;
-            } else {
-              APICallState.to = value;
-            }
-          },
-          //Some desing code
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: TextStyle(
-              color: kPrimaryColor.withOpacity(0.5),
-            ),
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-          ),
-        ),
+        child: VTAutocomplete(isFrom, hintText),
       ),
     ),
   ];

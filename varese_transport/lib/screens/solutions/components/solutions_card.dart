@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
 
 class SolutionsCard extends StatelessWidget {
@@ -76,10 +77,16 @@ class SolutionsCard extends StatelessWidget {
               color: const Color(0xff00c6ff)),
           Expanded(
             child: Text(("Da: " + data.departureStation),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                softWrap: false,
                 style: regularTextStyle.copyWith(fontSize: 14)),
           ),
           Expanded(
               child: Text(("Da: " + data.arrivalStation),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
                   style: regularTextStyle.copyWith(fontSize: 14))),
         ],
       ),
@@ -130,6 +137,7 @@ List<Widget> lineIcons(Itinerary itinerary) {
         width: 50,
         height: 29,
         decoration: BoxDecoration(
+            border: Border.all(color: kPrimaryColor, width: 2),
             color: hexToColor(itinerary.lines[i].color),
             borderRadius: BorderRadius.circular(10)),
         child: Center(

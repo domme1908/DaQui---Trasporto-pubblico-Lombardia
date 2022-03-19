@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     //This is the layout of the homescreen
     return Scaffold(
         //Paint the top app bar - in this case just the menu icon
-        appBar: build_app_bar(),
+        //appBar: build_app_bar(),
         //Call the body class to paint the central elements
         body: Body(),
         //Call the class that manages the bottom button and the

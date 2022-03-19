@@ -30,7 +30,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
     Size size = MediaQuery.of(context).size;
     return Container(
         //40% of total height
-        height: size.height * 0.4,
+        height: size.height * 0.45,
         child: Stack(
             children: <Widget>[
                   //Upper round box
@@ -40,10 +40,11 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                         left: kDefaultPadding,
                         right: kDefaultPadding,
                         bottom: 100 + kDefaultPadding),
-                    height: size.height * 0.4 - 27,
+                    height: size.height * 0.45 - 27,
                     decoration: const BoxDecoration(
                       //Color of upper half of the screen
-                      color: kPrimaryColor,
+                      gradient: kGradient,
+                      //color: kPrimaryColor,
                       //Make edges round
                       borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(36),

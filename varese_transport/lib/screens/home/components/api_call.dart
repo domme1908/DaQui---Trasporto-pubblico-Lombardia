@@ -67,9 +67,9 @@ class APICallState extends State<APICall> {
     //TODO URL must be changed to final value
     final response = await http.get(Uri.parse(
         'http://192.168.1.52:8081/path?from=' +
-            from +
+            from.replaceAll(RegExp('\\s'), '%20') +
             "&to=" +
-            to +
+            to.replaceAll(RegExp('\\s'), '%20') +
             "&date=" +
             date +
             "&time=" +

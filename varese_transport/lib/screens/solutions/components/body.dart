@@ -54,6 +54,38 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
         builder: (context, snapshot) {
           //Check if response is feasable
           if (snapshot.hasData) {
+            //Check if there are solutions to display - if not display cute dog
+            if (snapshot.data!.isEmpty) {
+              return Expanded(
+                  child: Container(
+                      padding: const EdgeInsets.fromLTRB(
+                          kDefaultPadding, kDefaultPadding, kDefaultPadding, 0),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Ci dispiace!",
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30)),
+                            const Text(
+                              "Non ci sono risultati per la tua ricerca",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 30),
+                            ),
+                            const Spacer(),
+                            Positioned.fill(
+                                child: Image.asset(
+                              'assets/images/dog.png',
+                              fit: BoxFit.fitWidth,
+                              alignment: Alignment.bottomCenter,
+                              scale: 6,
+                            ))
+                          ])));
+            }
             return Expanded(
                 //Create a ListView.builder in order to display the elements of the fetched array
                 child: ListView.builder(

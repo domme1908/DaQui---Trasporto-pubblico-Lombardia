@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/autocomplete.dart';
+import 'package:varese_transport/lib/classes/dynamic_autocomplete.dart';
 
 import 'api_call.dart';
 
@@ -38,7 +39,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                     //Upper box that lies underneath the textfields
                     padding: const EdgeInsets.only(
                         left: kDefaultPadding,
-                        right: kDefaultPadding,
+                        right: 2,
                         bottom: 100 + kDefaultPadding),
                     height: size.height * 0.45 - 27,
                     decoration: const BoxDecoration(
@@ -51,23 +52,26 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                           bottomRight: Radius.circular(36)),
                     ),
                     //Upper row of greetings text and logo
-                    child: Row(children: <Widget>[
-                      //Greetings text
-                      Text(
-                        'Ciao!',
-                        style: Theme.of(context).textTheme.headline3!.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      const Spacer(),
-                      //TODO Insert final logo
-                      Image.asset(
-                        "assets/images/logo.png",
-                        //Fit oversize logo to screen
-                        scale: 7,
-                      )
-                    ]),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          //Greetings text
+                          Text(
+                            'Ciao!',
+                            style:
+                                Theme.of(context).textTheme.headline3!.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                          //const Spacer(),
+                          //TODO Insert final logo
+                          Image.asset(
+                            "assets/images/logo.png",
+                            //Fit oversize logo to screen
+                            scale: 2,
+                          )
+                        ]),
                   )
                 ]
                 //As widget list
@@ -221,7 +225,7 @@ List<Widget> text_field(
                   blurRadius: 50,
                   color: kPrimaryColor.withOpacity(0.23))
             ]),
-        child: VTAutocomplete(isFrom, hintText),
+        child: DynamicVTAutocomplete(isFrom, hintText),
       ),
     ),
   ];

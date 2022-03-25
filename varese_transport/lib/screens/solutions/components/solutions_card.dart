@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
+import 'package:varese_transport/screens/details/details_screen.dart';
 
 class SolutionsCard extends StatelessWidget {
   //The data of this specific solution
@@ -92,23 +93,29 @@ class SolutionsCard extends StatelessWidget {
       ),
     );
     //The block that depicts the card
-    final solutionCard = Container(
-      child: cardContent,
-      height: 170.0,
-      margin: const EdgeInsets.only(left: 46.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFF333366),
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10.0,
-            offset: Offset(0.0, 10.0),
+    final solutionCard = GestureDetector(
+        onTap: () {
+          DetailsScreen.solutionId = data.solutionID;
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => DetailsScreen()));
+        },
+        child: Container(
+          child: cardContent,
+          height: 170.0,
+          margin: const EdgeInsets.only(left: 46.0),
+          decoration: BoxDecoration(
+            color: kPrimaryColor,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: const <BoxShadow>[
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10.0,
+                offset: Offset(0.0, 10.0),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
     //Putting all the pieces together and return a container card
     return Container(
         height: 170.0,

@@ -7,6 +7,7 @@ import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/screens/solutions/solutions_screen.dart';
 
 import '../../../lib/classes/station.dart';
+import '../../../lib/classes/stop.dart';
 
 class APICall extends StatefulWidget {
   const APICall({Key? key}) : super(key: key);
@@ -65,15 +66,22 @@ class APICallState extends State<APICall> {
   //The api call - sends the collected values to the js rest api
   Future<List<Itinerary>> fetchItinerary() async {
     //TODO URL must be changed to final value
-    final response = await http.get(Uri.parse(
-        'http://192.168.1.52:8081/path?from=' +
-            from.replaceAll(RegExp('\\s'), '%20') +
-            "&to=" +
-            to.replaceAll(RegExp('\\s'), '%20') +
-            "&date=" +
-            date +
-            "&time=" +
-            time));
+    final response = await http.get(Uri.parse('http://10.102.74.66/path?from=' +
+        from.replaceAll(RegExp('\\s'), '%20') +
+        "&to=" +
+        to.replaceAll(RegExp('\\s'), '%20') +
+        "&date=" +
+        date +
+        "&time=" +
+        time));
+    print(('http://10.102.74.66:8081/path?from=' +
+        from.replaceAll(RegExp('\\s'), '%20') +
+        "&to=" +
+        to.replaceAll(RegExp('\\s'), '%20') +
+        "&date=" +
+        date +
+        "&time=" +
+        time));
     //Call the compute function provided by flutter
     return compute(
         parseItinerary,
@@ -83,19 +91,49 @@ class APICallState extends State<APICall> {
 
   List<Itinerary> parseItinerary(String responseBody) {
     //Parse the response to a JSON Map
+    print(responseBody);
+
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     //Execute the json-factory of class Itinerary on all elements in order to return a List<Itinerary>
     return parsed.map<Itinerary>((json) => Itinerary.fromJson(json)).toList();
   }
 
-  Future<List<Station>> fetchStations() async {
-    final response =
-        await http.get(Uri.parse('http://192.168.1.52:8081/stations'));
+  Future<List<Station>> fetchStations([text]) async {
+    print("Fetching stations for " + text);
+    final response = await http
+        .get(Uri.parse('http://192.168.1.59:8081/testStations?text=' + text));
     return compute(parseStations, response.body);
   }
 
   List<Station> parseStations(String responseBody) {
+    print(responseBody);
+
+    //TODO HTTP STATUS CODES SWITCH
+
+    if (responseBody.contains("error")) {
+      return List<Station>.empty();
+    }
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     return parsed.map<Station>((json) => Station.fromJson(json)).toList();
+  }
+
+  Future<List<Stop>> fetchStops(int solutionID) async {
+    final response = await http.get(Uri.parse(
+        'http://10.102.74.66:8081/details?from=' +
+            from.replaceAll(RegExp('\\s'), '%20') +
+            '&to=' +
+            to.replaceAll(RegExp('\\s'), '%20') +
+            '&date=' +
+            date +
+            '&time=' +
+            time +
+            '&solutionId=' +
+            solutionID.toString()));
+    return compute(parseStops, response.body);
+  }
+
+  List<Stop> parseStops(String responseBody) {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+    return parsed.map<Stop>((json) => Stop.fromJson(json)).toList();
   }
 }

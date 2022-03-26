@@ -1,7 +1,11 @@
 class Station {
   String station;
-  Station(this.station);
+  String type;
+  String x;
+  String y;
+  Station(this.station, this.type, this.x, this.y);
   factory Station.fromJson(dynamic json) {
-    return Station(json["address"] as String);
+    return Station(json["address"] as String, json["type"] as String,
+        json["x"] as String, json["y"] as String);
   }
 }

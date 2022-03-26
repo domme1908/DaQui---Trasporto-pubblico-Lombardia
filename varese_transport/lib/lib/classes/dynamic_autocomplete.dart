@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,8 @@ class _DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
   bool isFrom;
   String hintText;
   String tempValue = "";
+  TextEditingController _textController = TextEditingController();
+
   //Constructor
   _DynamicVTAutocompleteState(this.isFrom, this.hintText);
   //List to save the stations
@@ -52,24 +55,36 @@ class _DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
 
     return TypeAheadField(
       textFieldConfiguration: TextFieldConfiguration(
+        controller: _textController,
         autofocus: true,
-        style: DefaultTextStyle.of(context)
-            .style
-            .copyWith(fontStyle: FontStyle.italic),
+        style: const TextStyle(fontFamily: 'Poppins'),
         decoration: InputDecoration(
-            border: const OutlineInputBorder(), hintText: hintText),
+          hintText: hintText,
+          suffixIcon: IconButton(
+            onPressed: _textController.clear,
+            icon: Icon(Icons.clear),
+          ),
+        ),
       ),
       suggestionsCallback: (pattern) async {
         return await APICallState().fetchStations(pattern);
       },
       itemBuilder: (context, Station suggestion) {
         return ListTile(
-          title: Text(suggestion.station),
+          tileColor: kPrimaryColor,
+          hoverColor: kSecondaryColor,
+          leading: SvgPicture.asset(
+            "assets/icons/" + suggestion.type + ".svg",
+            width: 30,
+            height: 30,
+            color: Colors.white,
+          ),
+          title: Text(suggestion.station,
+              style:
+                  const TextStyle(color: Colors.white, fontFamily: 'Poppins')),
         );
       },
-      onSuggestionSelected: (Station suggestion) {
-        print(suggestion);
-      },
+      onSuggestionSelected: (Station suggestion) {},
     );
   }
 }

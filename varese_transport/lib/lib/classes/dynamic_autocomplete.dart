@@ -84,7 +84,14 @@ class _DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
                   const TextStyle(color: Colors.white, fontFamily: 'Poppins')),
         );
       },
-      onSuggestionSelected: (Station suggestion) {},
+      onSuggestionSelected: (Station suggestion) {
+        _textController.text = suggestion.station;
+        if (isFrom) {
+          APICallState.fromStation = suggestion;
+        } else {
+          APICallState.toStation = suggestion;
+        }
+      },
     );
   }
 }

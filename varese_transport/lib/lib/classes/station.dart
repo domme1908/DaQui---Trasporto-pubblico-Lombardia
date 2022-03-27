@@ -3,6 +3,11 @@ class Station {
   String type;
   String x;
   String y;
+  Station.empty()
+      : station = "null",
+        type = "null",
+        x = "null",
+        y = "null";
   Station(this.station, this.type, this.x, this.y);
   factory Station.fromJson(dynamic json) {
     return Station(json["address"] as String, json["type"] as String,

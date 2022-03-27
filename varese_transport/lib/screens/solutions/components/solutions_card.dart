@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
+import 'package:varese_transport/lib/classes/vehicles_icons.dart';
 import 'package:varese_transport/screens/details/details_screen.dart';
 
 class SolutionsCard extends StatelessWidget {
@@ -138,19 +140,16 @@ List<Widget> lineIcons(Itinerary itinerary) {
   //Neccessary to save how many lines cannot be display on-screen
   var remaining = 0;
   //Add max 2 lines
-  for (var i = 0; i < itinerary.lines.length; i++) {
+  for (var i = 0; i < itinerary.vehicels.length; i++) {
     if (i < 2) {
       result.add(Container(
         width: 50,
         height: 29,
         decoration: BoxDecoration(
             border: Border.all(color: kPrimaryColor, width: 2),
-            color: hexToColor(itinerary.lines[i].color),
+            //color: hexToColor(itinerary.lines[i].color),
             borderRadius: BorderRadius.circular(10)),
-        child: Center(
-            child: Text(itinerary.lines[i].line,
-                style: const TextStyle(
-                    fontFamily: 'Poppins', fontWeight: FontWeight.w500))),
+        child: VehiclesIcons(itinerary.vehicels.elementAt(i)),
       ));
     } else {
       remaining++;

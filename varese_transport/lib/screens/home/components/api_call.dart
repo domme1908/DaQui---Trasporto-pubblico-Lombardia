@@ -19,6 +19,7 @@ class APICall extends StatefulWidget {
 
 class APICallState extends State<APICall> {
   //These variables are used for the API call - they are updated from the body class
+  static Station fromStation = Station.empty(), toStation = Station.empty();
   static String from = "null", to = "null", time = "", date = "";
   @override
   Widget build(BuildContext context) {
@@ -34,9 +35,12 @@ class APICallState extends State<APICall> {
         //On botton click call API
         onTap: () {
           //Check if neccessary values have been given
-          if (!(from == "null") && !(to == "null")) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SolutionsScreen()));
+          if (!(fromStation.station == "null") &&
+              !(toStation.station == "null")) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SolutionsScreen()));
           } else {
             //Otherwise display a snackbar with the error message
             const errorMes = SnackBar(
@@ -65,23 +69,42 @@ class APICallState extends State<APICall> {
 
   //The api call - sends the collected values to the js rest api
   Future<List<Itinerary>> fetchItinerary() async {
+    print("FETCHING SOLUTIONS");
+    print('http://192.168.1.59:8081/getSolutions?from=' +
+        fromStation.station.replaceAll(RegExp('\\s'), '%20') +
+        "&fromX=" +
+        fromStation.x +
+        "&fromY=" +
+        fromStation.y +
+        "&to=" +
+        toStation.station.replaceAll(RegExp('\\s'), '%20') +
+        "&toX=" +
+        toStation.x +
+        "&toY=" +
+        toStation.y +
+        "&date=" +
+        date.replaceAll(".", "/") +
+        "&when=" +
+        time);
     //TODO URL must be changed to final value
-    final response = await http.get(Uri.parse('http://10.102.74.66/path?from=' +
-        from.replaceAll(RegExp('\\s'), '%20') +
-        "&to=" +
-        to.replaceAll(RegExp('\\s'), '%20') +
-        "&date=" +
-        date +
-        "&time=" +
-        time));
-    print(('http://10.102.74.66:8081/path?from=' +
-        from.replaceAll(RegExp('\\s'), '%20') +
-        "&to=" +
-        to.replaceAll(RegExp('\\s'), '%20') +
-        "&date=" +
-        date +
-        "&time=" +
-        time));
+    final response = await http.get(Uri.parse(
+        'http://192.168.1.59:8081/getSolutions?from=' +
+            fromStation.station.replaceAll(RegExp('\\s'), '%20') +
+            "&fromX=" +
+            fromStation.x +
+            "&fromY=" +
+            fromStation.y +
+            "&to=" +
+            toStation.station.replaceAll(RegExp('\\s'), '%20') +
+            "&toX=" +
+            toStation.x +
+            "&toY=" +
+            toStation.y +
+            "&date=" +
+            date.replaceAll(".", "/") +
+            "&when=" +
+            time));
+
     //Call the compute function provided by flutter
     return compute(
         parseItinerary,

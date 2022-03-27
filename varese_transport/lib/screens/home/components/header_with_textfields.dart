@@ -22,10 +22,10 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
   @override
   Widget build(BuildContext context) {
     //Set the initial value for date and time fields to today and now
-    dateinput.text = DateFormat('dd.MM.yy').format(DateTime.now());
+    dateinput.text = DateFormat('dd.MM.yyyy').format(DateTime.now());
     timeinput.text = TimeOfDay.now().format(context);
     //Save same values in the static variables of the APICall
-    APICallState.date = DateFormat('dd.MM.yy').format(DateTime.now());
+    APICallState.date = DateFormat('dd.MM.yyyy').format(DateTime.now());
     APICallState.time = TimeOfDay.now().format(context);
     //Get total size of the screen
     Size size = MediaQuery.of(context).size;
@@ -94,7 +94,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: kDefaultPadding),
                             height: 50,
-                            width: 150,
+                            width: 160,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(36),

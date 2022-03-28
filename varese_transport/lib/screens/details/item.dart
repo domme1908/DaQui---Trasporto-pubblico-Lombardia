@@ -1,71 +1,62 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../lib/classes/stop.dart';
+import '../../constants.dart';
+import '../../lib/classes/section.dart';
 
 class Item extends StatelessWidget {
-  final Stop stops;
+  final Section section;
   final int index;
   final int end;
-  Item(this.stops, this.index, this.end, {Key? key}) : super(key: key);
+  Item(this.section, this.index, this.end, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     String image;
-    var baseTextStyle;
-    var timeTextStyle;
-    if (index == 0) {
-      image = "assets/images/list_start.png";
-      baseTextStyle = const TextStyle(
-          fontFamily: 'Poppins', color: Colors.white, fontSize: 18);
-      timeTextStyle = const TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.w800,
-          fontFamily: 'Poppins',
-          color: Colors.white);
-    } else if (index == end) {
-      image = "assets/images/list_end.png";
-      baseTextStyle = const TextStyle(
-          fontFamily: 'Poppins', color: Colors.white, fontSize: 18);
-      timeTextStyle = const TextStyle(
-          fontSize: 25,
-          fontWeight: FontWeight.w800,
-          fontFamily: 'Poppins',
-          color: Colors.white);
-    } else {
-      baseTextStyle = const TextStyle(
-          fontFamily: 'Poppins', color: Colors.white, fontSize: 10);
-      timeTextStyle = const TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          fontFamily: 'Poppins',
-          color: Colors.white);
-      image = "assets/images/list_middle.png";
-    }
-
-    return Row(children: [
-      Image.asset(
-        image,
-        scale: 14,
-      ),
-      SizedBox(
-          width: size.width * 0.8,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                stops.time.substring(0, 5),
-                style: timeTextStyle,
-              ),
-              Text(
-                stops.station,
-                style: baseTextStyle,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-              ),
-            ],
-          ))
-    ]);
+    const baseTextStyle = TextStyle(fontFamily: 'Poppins');
+    final regularTextStyle = baseTextStyle.copyWith(
+        color: kPrimaryColor.withAlpha(200),
+        fontSize: 9.0,
+        fontWeight: FontWeight.w400);
+    final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 15.0);
+    final headerTextStyle = baseTextStyle.copyWith(
+        color: kPrimaryColor, fontSize: 23.0, fontWeight: FontWeight.w600);
+    return Container(
+        padding: EdgeInsets.zero,
+        color: Colors.white,
+        height: 100,
+        width: 200,
+        margin: EdgeInsets.all(0),
+        child: Row(children: [
+          Expanded(child: sectionTile(section)),
+          Text(
+            section.departureTime,
+            style: subHeaderTextStyle,
+          ),
+          Image.asset("assets/images/list_middle.png")
+        ]));
   }
+}
+
+Widget sectionTile(Section section) {
+  const baseTextStyle = TextStyle(fontFamily: 'Poppins');
+  final regularTextStyle = baseTextStyle.copyWith(
+      color: kPrimaryColor.withAlpha(200),
+      fontSize: 9.0,
+      fontWeight: FontWeight.w400);
+  final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0);
+  final headerTextStyle = baseTextStyle.copyWith(
+      color: kPrimaryColor, fontSize: 18.0, fontWeight: FontWeight.w600);
+  if (section.description == "TRATTO A PIEDI") {
+    return ListTile(
+      title: Text(section.departure, style: headerTextStyle),
+      subtitle: Text(section.departureTime, style: baseTextStyle),
+      leading: const Icon(Icons.directions_walk, size: 50),
+    );
+  }
+  return ListTile(
+      title: Text(section.departure, style: headerTextStyle),
+      subtitle: Text(section.departureTime, style: baseTextStyle),
+      leading: const Icon(Icons.directions_walk));
 }

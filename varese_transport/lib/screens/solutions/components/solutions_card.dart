@@ -121,9 +121,9 @@ class SolutionsCard extends StatelessWidget {
     //The block that depicts the card
     final solutionCard = GestureDetector(
         onTap: () {
-          DetailsScreen.solutionId = data.solutionID;
+          DetailsScreen.chosenItinerary = data;
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => DetailsScreen()));
+              MaterialPageRoute(builder: (context) => const DetailsScreen()));
         },
         child: Container(
           child: cardContent,

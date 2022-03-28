@@ -1,8 +1,25 @@
 class Stop {
-  String station;
-  String time;
-  Stop(this.station, this.time);
+  var id;
+  String name;
+  String arrival;
+  String departure;
+  String x;
+  String y;
+  Stop(
+    this.id,
+    this.name,
+    this.arrival,
+    this.departure,
+    this.x,
+    this.y,
+  );
   factory Stop.fromJson(dynamic json) {
-    return Stop(json["stationName"] as String, json["timeOfStop"] as String);
+    return Stop(
+        int.parse(json["id"]),
+        json["name"] as String,
+        json["arrival"] as String,
+        json["departure"] as String,
+        json["x"] as String,
+        json["y"] as String);
   }
 }

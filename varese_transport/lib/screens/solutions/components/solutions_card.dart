@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/lib/classes/vehicles_icons.dart';
 import 'package:varese_transport/screens/details/details_screen.dart';
+import 'package:varese_transport/screens/home/components/api_call.dart';
 
 class SolutionsCard extends StatelessWidget {
   //The data of this specific solution
@@ -27,15 +27,15 @@ class SolutionsCard extends StatelessWidget {
     //Basic text styles
     const baseTextStyle = TextStyle(fontFamily: 'Poppins');
     final regularTextStyle = baseTextStyle.copyWith(
-        color: const Color(0xffb6b2df),
+        color: kPrimaryColor.withAlpha(200),
         fontSize: 9.0,
         fontWeight: FontWeight.w400);
     final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0);
     final headerTextStyle = baseTextStyle.copyWith(
-        color: Colors.white, fontSize: 23.0, fontWeight: FontWeight.w600);
+        color: kPrimaryColor, fontSize: 23.0, fontWeight: FontWeight.w600);
     //The actual content of the card
     final cardContent = Container(
-      margin: const EdgeInsets.fromLTRB(30.0, 20.0, 16.0, 16.0),
+      margin: const EdgeInsets.all(kDefaultPadding),
       constraints: const BoxConstraints.expand(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,14 +45,56 @@ class SolutionsCard extends StatelessWidget {
             //Space between positions the elements on the outside -> perfect for this case
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(data.departure, style: headerTextStyle),
-              Text(
-                "---------",
-                style: headerTextStyle.copyWith(fontSize: 15),
+              Column(
+                children: [
+                  SizedBox(
+                      width: 200,
+                      child: ListTile(
+                        leading: Image.asset("assets/images/departure.png",
+                            scale: 20),
+                        title: Text(data.departure, style: headerTextStyle),
+                        subtitle: Text((data.departureStation),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                            style: regularTextStyle.copyWith(fontSize: 12)),
+                        dense: true,
+                      )),
+                  SizedBox(
+                      width: 200,
+                      child: ListTile(
+                        leading:
+                            Image.asset("assets/images/arrival.png", scale: 20),
+                        title: Text(data.arrival, style: headerTextStyle),
+                        subtitle: Text((data.arrivalStation),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                            style: regularTextStyle.copyWith(fontSize: 12)),
+                        dense: true,
+                      )),
+                ],
               ),
-              Text(
-                data.arrival,
-                style: headerTextStyle,
+              Column(
+                children: [
+                  Text("Parte tra", style: subHeaderTextStyle),
+                  Text(
+                    //Check if difference is less than 2 hours
+                    getTimeToDeparture(data).inMinutes > 119
+                        ?
+                        //If no check if difference is less than 1 day
+                        getTimeToDeparture(data).inHours > 24
+                            ?
+                            //If no print the difference formatted as days
+                            getTimeToDeparture(data).inDays.toString() + "g"
+                            //If difference is less than a day but more than 2 hours print formatted as hours
+                            : getTimeToDeparture(data).inHours.toString() +
+                                " ore"
+                        //If difference is less than 2 hours print formatted as minutes
+                        : getTimeToDeparture(data).inMinutes.toString() + "min",
+                    style: headerTextStyle.copyWith(fontSize: 30),
+                  )
+                ],
               )
             ],
           ),
@@ -103,16 +145,15 @@ class SolutionsCard extends StatelessWidget {
         },
         child: Container(
           child: cardContent,
-          height: 170.0,
-          margin: const EdgeInsets.only(left: 46.0),
+          height: 220.0,
           decoration: BoxDecoration(
-            color: kPrimaryColor,
+            color: Colors.white,
             shape: BoxShape.rectangle,
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: const <BoxShadow>[
               BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10.0,
+                color: Colors.black38,
+                blurRadius: 15.0,
                 offset: Offset(0.0, 10.0),
               ),
             ],
@@ -120,18 +161,59 @@ class SolutionsCard extends StatelessWidget {
         ));
     //Putting all the pieces together and return a container card
     return Container(
-        height: 170.0,
-        margin: const EdgeInsets.symmetric(
-          vertical: 16.0,
-          horizontal: 24.0,
-        ),
-        child: Stack(
-          children: <Widget>[
-            solutionCard,
-            itineraryThumb,
-          ],
-        ));
+      height: 220.0,
+      margin: const EdgeInsets.symmetric(
+        vertical: 16.0,
+        horizontal: 20.0,
+      ),
+      child: solutionCard,
+    );
   }
+}
+
+//This function determines how much time remains before the departure of the given itinerary
+Duration getTimeToDeparture(Itinerary itinerary) {
+  //End date is the date of departure
+  DateTime endDate = DateTime.parse(DateTime.now().year.toString() +
+      "-" +
+      (DateTime.now().month < 10
+          ? "0" + DateTime.now().month.toString()
+          : DateTime.now().month.toString()) +
+      "-" +
+      DateTime.now().day.toString() +
+      " " +
+      itinerary.departure +
+      ":00");
+  //startDate is the current time
+  DateTime startDate = DateTime.now();
+  //Check if solution departs after the requested date
+  if (itinerary.dayNoticeDeparture == 1) startDate.add(const Duration(days: 1));
+  //Get the requested date
+  String tempDate = APICallState.date;
+  tempDate = tempDate.replaceAll(".", "-");
+  //Convert the date into the right format
+  DateTime requestedDate = DateTime.parse(tempDate.substring(6, 10) +
+      "-" +
+      tempDate.substring(3, 5) +
+      "-" +
+      tempDate.substring(0, 2));
+  //Get only the date of today without the time!
+  DateTime today = DateTime.parse(DateTime.now().toString().substring(0, 10));
+  //Check if search is being conducted for a date in the future
+  if (requestedDate.isAfter(today)) {
+    //If date is in the future add the days it is in the future to the endDate
+    endDate = endDate.add(Duration(
+        days: (Duration(
+                milliseconds: requestedDate
+                    .subtract(
+                        Duration(milliseconds: today.millisecondsSinceEpoch))
+                    .millisecondsSinceEpoch)
+            .inDays)));
+  }
+  //Calculate the difference between the two dates
+  Duration diff = endDate.difference(startDate);
+  //Return the latter
+  return diff;
 }
 
 //This function defines the thumbnail consisting of all the lines used

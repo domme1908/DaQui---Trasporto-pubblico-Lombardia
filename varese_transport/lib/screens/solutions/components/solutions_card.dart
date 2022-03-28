@@ -17,9 +17,8 @@ class SolutionsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     //Save the thumbnail consisting of the list of lines
     final itineraryThumb = Container(
-      margin: const EdgeInsets.symmetric(vertical: 16),
       alignment: FractionalOffset.centerLeft,
-      child: Column(
+      child: Row(
         //For readability excluded to function
         children: lineIcons(data),
       ),
@@ -76,6 +75,7 @@ class SolutionsCard extends StatelessWidget {
                 ],
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text("Parte tra", style: subHeaderTextStyle),
                   Text(
@@ -93,46 +93,28 @@ class SolutionsCard extends StatelessWidget {
                         //If difference is less than 2 hours print formatted as minutes
                         : getTimeToDeparture(data).inMinutes.toString() + "min",
                     style: headerTextStyle.copyWith(fontSize: 30),
-                  )
+                  ),
+                  Text(
+                    "Durata: " + data.duration.toString(),
+                    style: subHeaderTextStyle,
+                  ),
+                  Text(
+                    "Cambi: " + data.transfers.toString(),
+                    style: subHeaderTextStyle,
+                    textAlign: TextAlign.left,
+                  ),
                 ],
               )
             ],
           ),
           //A small spacer
-          Container(height: 10.0),
-          //Transfers and duration
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Cambi: " + data.transfers.toString(),
-                  style: subHeaderTextStyle),
-              Text(
-                "Durata: " + data.duration.toString(),
-                style: subHeaderTextStyle,
-              )
-            ],
-          ),
-          //Departure station to arrival station
-          //TODO: This is not really neccessary -> Substitute it with something better
-
+          Container(height: 5.0),
           //Spacer
           Container(
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               height: 2.0,
               color: const Color(0xff00c6ff)),
-          Expanded(
-            child: Text(("Da: " + data.departureStation),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-                style: regularTextStyle.copyWith(fontSize: 14)),
-          ),
-          Expanded(
-              child: Text(("Da: " + data.arrivalStation),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: regularTextStyle.copyWith(fontSize: 14))),
+          itineraryThumb
         ],
       ),
     );
@@ -223,16 +205,20 @@ List<Widget> lineIcons(Itinerary itinerary) {
   var remaining = 0;
   //Add max 2 lines
   for (var i = 0; i < itinerary.vehicels.length; i++) {
-    if (i < 2) {
-      result.add(Container(
-        width: 50,
-        height: 29,
-        decoration: BoxDecoration(
-            border: Border.all(color: kPrimaryColor, width: 2),
+    if (i < 4) {
+      result.add(
+        Container(
+            width: 46,
+            height: 30,
             //color: hexToColor(itinerary.lines[i].color),
-            borderRadius: BorderRadius.circular(10)),
-        child: VehiclesIcons(itinerary.vehicels.elementAt(i)),
-      ));
+            child: VehiclesIcons(itinerary.vehicels.elementAt(i))),
+      );
+      if (i != itinerary.vehicels.length - 1) {
+        result.add(const Text(
+          " > ",
+          style: TextStyle(fontFamily: 'Poppins', fontSize: 22),
+        ));
+      }
     } else {
       remaining++;
     }

@@ -14,19 +14,58 @@ class VehiclesIcons extends StatelessWidget {
     switch (trimmedVehicle) {
       case "REGIONALE":
         return Container(
-            padding: EdgeInsets.all(2),
-            color: kBackgroundColor,
+            decoration: BoxDecoration(
+                //color: hexToColor(itinerary.lines[i].color),
+                borderRadius: BorderRadius.circular(9),
+                color: Colors.black12),
+            padding: const EdgeInsets.all(3),
             child: SvgPicture.asset("assets/icons/areadifermata.svg"));
       case "METROPOLITANA":
         return Container(
-            padding: EdgeInsets.all(2),
-            color: kBackgroundColor,
-            child: SvgPicture.asset("assets/icons/metropolitana.svg"));
+            decoration: BoxDecoration(
+                //color: hexToColor(itinerary.lines[i].color),
+                borderRadius: BorderRadius.circular(9),
+                color: Colors.red),
+            padding: const EdgeInsets.all(3),
+            child: SvgPicture.asset("assets/icons/metropolitana.svg",
+                color: Colors.white));
+      case "AUTOBUS":
+        return Container(
+            decoration: BoxDecoration(
+                //color: hexToColor(itinerary.lines[i].color),
+                borderRadius: BorderRadius.circular(9),
+                color: Colors.white),
+            padding: const EdgeInsets.all(3),
+            child: Image.asset("assets/images/autobus.png"));
+      case "TRAGHETTO":
+        return Container(
+            decoration: BoxDecoration(
+                //color: hexToColor(itinerary.lines[i].color),
+                borderRadius: BorderRadius.circular(9),
+                color: Colors.white),
+            padding: const EdgeInsets.all(3),
+            child: Image.asset("assets/images/traghetto.png"));
+      case "TRAM":
+        return Container(
+            decoration: BoxDecoration(
+                //color: hexToColor(itinerary.lines[i].color),
+                borderRadius: BorderRadius.circular(9),
+                color: Colors.white),
+            padding: const EdgeInsets.all(3),
+            child: Image.asset("assets/images/tram.png"));
+      case "FUNICOLARE":
+        return Container(
+            decoration: BoxDecoration(
+                //color: hexToColor(itinerary.lines[i].color),
+                borderRadius: BorderRadius.circular(9),
+                color: Colors.white),
+            padding: const EdgeInsets.all(3),
+            child: Image.asset("assets/images/funicolare.png"));
     }
     if (trimmedVehicle.contains("LINEE")) {
       getIntFromString(trimmedVehicle.split(" ")[1]);
       return Container(
-          padding: EdgeInsets.all(kDefaultPadding),
+          padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             //color: hexToColor(itinerary.lines[i].color),
             borderRadius: BorderRadius.circular(9),
@@ -36,7 +75,7 @@ class VehiclesIcons extends StatelessWidget {
           ),
           child: Center(child: Text(trimmedVehicle.split(" ")[1])));
     }
-    return Icon(Icons.bus_alert);
+    return const Icon(Icons.bus_alert);
   }
 }
 

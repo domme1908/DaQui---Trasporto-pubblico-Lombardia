@@ -70,7 +70,7 @@ class APICallState extends State<APICall> {
   //The api call - sends the collected values to the js rest api
   Future<List<Itinerary>> fetchItinerary() async {
     print("FETCHING SOLUTIONS");
-    print('http://192.168.1.59:8081/getSolutions?from=' +
+    print('http://apivt.hopto.org:14000/getSolutions?from=' +
         fromStation.station.replaceAll(RegExp('\\s'), '%20') +
         "&fromX=" +
         fromStation.x +
@@ -88,7 +88,7 @@ class APICallState extends State<APICall> {
         time);
     //TODO URL must be changed to final value
     final response = await http.get(Uri.parse(
-        'http://192.168.1.59:8081/getSolutions?from=' +
+        'http://apivt.hopto.org:14000/getSolutions?from=' +
             fromStation.station.replaceAll(RegExp('\\s'), '%20') +
             "&fromX=" +
             fromStation.x +
@@ -123,8 +123,8 @@ class APICallState extends State<APICall> {
 
   Future<List<Station>> fetchStations([text]) async {
     print("Fetching stations for " + text);
-    final response = await http
-        .get(Uri.parse('http://192.168.1.59:8081/testStations?text=' + text));
+    final response = await http.get(
+        Uri.parse('http://apivt.hopto.org:14000/testStations?text=' + text));
     return compute(parseStations, response.body);
   }
 
@@ -142,7 +142,7 @@ class APICallState extends State<APICall> {
 
   Future<List<Stop>> fetchStops(int solutionID) async {
     final response = await http.get(Uri.parse(
-        'http://10.102.74.66:8081/details?from=' +
+        'http://apivt.hopto.org:14000/details?from=' +
             from.replaceAll(RegExp('\\s'), '%20') +
             '&to=' +
             to.replaceAll(RegExp('\\s'), '%20') +

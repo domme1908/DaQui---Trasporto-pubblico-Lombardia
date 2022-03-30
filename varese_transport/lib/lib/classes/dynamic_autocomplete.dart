@@ -62,7 +62,7 @@ class _DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
           hintText: hintText,
           suffixIcon: IconButton(
             onPressed: _textController.clear,
-            icon: Icon(Icons.clear),
+            icon: const Icon(Icons.clear),
           ),
         ),
       ),

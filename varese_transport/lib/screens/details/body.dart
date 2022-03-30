@@ -51,6 +51,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
           //Create a ListView.builder in order to display the elements of the fetched array
           child: Container(
               child: ListView.builder(
+        shrinkWrap: true,
         //Every item (element) is a SolutionsCard
         itemBuilder: (context, index) => Item(chosenSolution.sections[index],
             index, chosenSolution.sections.length),

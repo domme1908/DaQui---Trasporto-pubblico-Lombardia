@@ -129,30 +129,12 @@ class APICallState extends State<APICall> {
   }
 
   List<Station> parseStations(String responseBody) {
-    print(responseBody);
-
     //TODO HTTP STATUS CODES SWITCH
-
     if (responseBody.contains("error")) {
       return List<Station>.empty();
     }
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     return parsed.map<Station>((json) => Station.fromJson(json)).toList();
-  }
-
-  Future<List<Stop>> fetchStops(int solutionID) async {
-    final response = await http.get(Uri.parse(
-        'https://apidaqui-18067.nodechef.com/details?from=' +
-            from.replaceAll(RegExp('\\s'), '%20') +
-            '&to=' +
-            to.replaceAll(RegExp('\\s'), '%20') +
-            '&date=' +
-            date +
-            '&time=' +
-            time +
-            '&solutionId=' +
-            solutionID.toString()));
-    return compute(parseStops, response.body);
   }
 
   List<Stop> parseStops(String responseBody) {

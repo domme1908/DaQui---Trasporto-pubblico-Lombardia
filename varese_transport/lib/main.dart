@@ -15,8 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       //Some basic settings
       debugShowCheckedModeBanner: false,
-      //TODO Final Title must be inserted
-      title: 'VT',
+      title: 'DA-QUI',
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
         textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),

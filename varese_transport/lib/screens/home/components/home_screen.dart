@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
+import 'package:varese_transport/screens/home/components/navigation_drawer.dart';
 import '../body.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,8 +13,10 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     //This is the layout of the homescreen
     return Scaffold(
+        extendBodyBehindAppBar: true,
+        drawer: NavigationDrawer(),
         //Paint the top app bar - in this case just the menu icon
-        //appBar: build_app_bar(),
+        appBar: build_app_bar(),
         //Call the body class to paint the central elements
         body: Body(),
         //Call the class that manages the bottom button and the
@@ -25,11 +28,7 @@ class HomeScreen extends StatelessWidget {
     //Just some design stuff
     return AppBar(
       elevation: 0,
-      backgroundColor: kPrimaryColor,
-      leading: IconButton(
-        icon: SvgPicture.asset("assets/icons/menu.svg"),
-        onPressed: () {},
-      ),
+      backgroundColor: Color(0x00000000),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:varese_transport/constants.dart';
-import 'package:varese_transport/lib/classes/autocomplete.dart';
 import 'package:varese_transport/lib/classes/dynamic_autocomplete.dart';
 
 import 'api_call.dart';
@@ -40,7 +39,8 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                     padding: const EdgeInsets.only(
                         left: kDefaultPadding,
                         right: 2,
-                        bottom: 100 + kDefaultPadding),
+                        bottom: 100 + kDefaultPadding,
+                        top: 40),
                     height: size.height * 0.45 - 27,
                     decoration: const BoxDecoration(
                       //Color of upper half of the screen

@@ -54,6 +54,14 @@ class _DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
     //Futer builder as the stations need to be loaded first
 
     return TypeAheadField(
+      noItemsFoundBuilder: (context) {
+        return const ListTile(
+          tileColor: kPrimaryColor,
+          hoverColor: kSecondaryColor,
+          title: Text("Sto cercando...",
+              style: TextStyle(color: Colors.white, fontFamily: 'Poppins')),
+        );
+      },
       textFieldConfiguration: TextFieldConfiguration(
         controller: _textController,
         autofocus: true,

@@ -2,7 +2,7 @@
     package="com.example.varese_transport">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="varese_transport"
+        android:label="Da-Qui: Trasporto pubblico Lombardia"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

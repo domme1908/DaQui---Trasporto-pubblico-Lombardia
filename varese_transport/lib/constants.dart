@@ -8,6 +8,13 @@ const kGradientColorOne = Color.fromARGB(255, 64, 78, 206);
 const kGradientColorTwo = Color.fromARGB(255, 8, 85, 16);
 const kTextColor = Color.fromARGB(255, 0, 0, 0);
 
+const baseTextStyle = TextStyle(fontFamily: 'Poppins');
+final regularTextStyle = baseTextStyle.copyWith(
+    color: kPrimaryColor.withAlpha(200), fontWeight: FontWeight.w400);
+final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0);
+final headerTextStyle = baseTextStyle.copyWith(
+    color: kPrimaryColor, fontSize: 15.0, fontWeight: FontWeight.w600);
+
 const kGradient = LinearGradient(
   begin: Alignment.topRight,
   end: Alignment.bottomLeft,

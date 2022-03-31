@@ -168,8 +168,6 @@ Duration getTimeToDeparture(Itinerary itinerary) {
       ":00");
   //startDate is the current time
   DateTime startDate = DateTime.now();
-  //Check if solution departs after the requested date
-  if (itinerary.dayNoticeDeparture == 1) startDate.add(const Duration(days: 1));
   //Get the requested date
   String tempDate = APICallState.date;
   tempDate = tempDate.replaceAll(".", "-");
@@ -179,6 +177,8 @@ Duration getTimeToDeparture(Itinerary itinerary) {
       tempDate.substring(3, 5) +
       "-" +
       tempDate.substring(0, 2));
+  if (itinerary.dayNoticeDeparture == 1)
+    requestedDate = requestedDate.add(const Duration(days: 1));
   //Get only the date of today without the time!
   DateTime today = DateTime.parse(DateTime.now().toString().substring(0, 10));
   //Check if search is being conducted for a date in the future
@@ -205,7 +205,7 @@ List<Widget> lineIcons(Itinerary itinerary) {
   var remaining = 0;
   //Add max 2 lines
   for (var i = 0; i < itinerary.vehicels.length; i++) {
-    if (i < 4) {
+    if (i < 3) {
       result.add(
         Container(
             width: 46,

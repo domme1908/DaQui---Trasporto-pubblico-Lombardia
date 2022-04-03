@@ -78,8 +78,8 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                 +
                 //Append the two text field lists
                 //See below for doc on helper method
-                text_field(size, "Partenza", 120, true) +
-                text_field(size, "Destinazione", 60, false) +
+                text_field(size, "Partenza", 120, true, context) +
+                text_field(size, "Destinazione", 60, false, context) +
                 //Add widget list for time and date
                 <Widget>[
                   Positioned(
@@ -94,7 +94,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: kDefaultPadding),
                             height: 50,
-                            width: 160,
+                            width: size.width * 0.43,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(36),
@@ -146,7 +146,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                         Container(
                           //Some basic desing code
                           height: 50,
-                          width: 150,
+                          width: size.width * 0.35,
                           margin: const EdgeInsets.symmetric(
                               horizontal: kDefaultPadding),
                           padding: const EdgeInsets.symmetric(
@@ -204,8 +204,10 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
 //The params are: size: screen size, hintText: The hint text for initializazion of
 //the empty text field, positionBottom: The margin to the bottom of the textfield -> To be able to stack them
 // and isFrom as boolean to set the right static variable for the API call
-List<Widget> text_field(
-    Size size, String hintText, double positionBottom, bool isFrom) {
+List<Widget> text_field(Size size, String hintText, double positionBottom,
+    bool isFrom, BuildContext context) {
+  Size screenSize = MediaQuery.of(context).size;
+
   return <Widget>[
     //Searchfield
     Positioned(

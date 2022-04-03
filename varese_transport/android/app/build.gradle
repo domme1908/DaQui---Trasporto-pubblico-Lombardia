@@ -50,12 +50,11 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.daQui.daQuiTrasportoLom"
         minSdkVersion flutterMinSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 2
+        versionName "2.0.0"
     }
 
    signingConfigs {

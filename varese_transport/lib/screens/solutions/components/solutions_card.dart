@@ -162,7 +162,9 @@ Duration getTimeToDeparture(Itinerary itinerary) {
           ? "0" + DateTime.now().month.toString()
           : DateTime.now().month.toString()) +
       "-" +
-      DateTime.now().day.toString() +
+      (DateTime.now().day < 10
+          ? "0" + DateTime.now().day.toString()
+          : DateTime.now().day.toString()) +
       " " +
       itinerary.departure +
       ":00");

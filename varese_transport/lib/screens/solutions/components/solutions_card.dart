@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/lib/classes/vehicles_icons.dart';

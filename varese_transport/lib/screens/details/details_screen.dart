@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
+import 'package:varese_transport/lib/classes/logo_banner.dart';
 import 'package:varese_transport/screens/details/body.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -16,8 +17,9 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Body(),
+      bottomNavigationBar: LogoBanner(),
     );
   }
 }

@@ -1,7 +1,5 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
 import 'package:varese_transport/screens/home/components/navigation_drawer.dart';
 import '../body.dart';
@@ -11,7 +9,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //This is the layout of the homescreen
     return Scaffold(
         extendBodyBehindAppBar: true,
         drawer: NavigationDrawer(),

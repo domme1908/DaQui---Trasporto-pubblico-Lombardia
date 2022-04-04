@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/dynamic_autocomplete.dart';
 
+import '../../../lib/classes/station.dart';
 import 'api_call.dart';
 
 class HeaderWithTextfields extends StatefulWidget {
@@ -28,6 +29,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
     APICallState.time = TimeOfDay.now().format(context);
     //Get total size of the screen
     Size size = MediaQuery.of(context).size;
+
     return Container(
         //40% of total height
         height: size.height * 0.45,
@@ -65,7 +67,6 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                                     ),
                           ),
                           //const Spacer(),
-                          //TODO Insert final logo
                           Image.asset(
                             "assets/images/logo.png",
                             //Fit oversize logo to screen
@@ -213,7 +214,7 @@ List<Widget> text_field(Size size, String hintText, double positionBottom,
     Positioned(
       bottom: positionBottom,
       left: 0,
-      right: 0,
+      right: 50,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
         padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
@@ -230,5 +231,31 @@ List<Widget> text_field(Size size, String hintText, double positionBottom,
         child: DynamicVTAutocomplete(isFrom, hintText),
       ),
     ),
+    //This widget draws an iconbutton that switches destination with arrival on tap
+    Positioned(
+      bottom: screenSize.height * 0.135,
+      right: 20,
+      child: IconButton(
+        icon: Icon(
+          Icons.swap_vert_circle_sharp,
+          color: Colors.white,
+          size: 50,
+        ),
+        tooltip: 'Cambia partenza e destinazione',
+        onPressed: () {
+          if (APICallState.toStation.station != "null" &&
+              APICallState.toStation.station != "null") {
+            Station temp = APICallState.fromStation;
+            APICallState.fromStation = APICallState.toStation;
+            APICallState.toStation = temp;
+            String tempText =
+                DynamicVTAutocompleteState.textControllerFrom.text;
+            DynamicVTAutocompleteState.textControllerFrom.text =
+                DynamicVTAutocompleteState.textControllerTo.text;
+            DynamicVTAutocompleteState.textControllerTo.text = tempText;
+          }
+        },
+      ),
+    )
   ];
 }

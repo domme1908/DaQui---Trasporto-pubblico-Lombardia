@@ -21,6 +21,7 @@ class APICallState extends State<APICall> {
   //These variables are used for the API call - they are updated from the body class
   static Station fromStation = Station.empty(), toStation = Station.empty();
   static String from = "null", to = "null", time = "", date = "";
+
   @override
   Widget build(BuildContext context) {
     return Container(

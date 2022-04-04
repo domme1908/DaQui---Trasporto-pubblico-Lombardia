@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/station.dart';
@@ -18,18 +17,19 @@ class DynamicVTAutocomplete extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     //Pass on the arguments to the state
-    return _DynamicVTAutocompleteState(isFrom, hintText);
+    return DynamicVTAutocompleteState(isFrom, hintText);
   }
 }
 
-class _DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
+class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
   bool isFrom;
   String hintText;
   String tempValue = "";
-  TextEditingController _textController = TextEditingController();
+  static TextEditingController textControllerFrom = TextEditingController();
+  static TextEditingController textControllerTo = TextEditingController();
 
   //Constructor
-  _DynamicVTAutocompleteState(this.isFrom, this.hintText);
+  DynamicVTAutocompleteState(this.isFrom, this.hintText);
   //List to save the stations
   final StreamController<Future<List<Station>>> _controller =
       StreamController();
@@ -63,13 +63,19 @@ class _DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
         );
       },
       textFieldConfiguration: TextFieldConfiguration(
-        controller: _textController,
+        controller: isFrom ? textControllerFrom : textControllerTo,
         autofocus: true,
         style: const TextStyle(fontFamily: 'Poppins'),
         decoration: InputDecoration(
           hintText: hintText,
           suffixIcon: IconButton(
-            onPressed: _textController.clear,
+            onPressed: () {
+              if (isFrom) {
+                textControllerFrom.clear();
+              } else {
+                textControllerTo.clear();
+              }
+            },
             icon: const Icon(Icons.clear),
           ),
         ),
@@ -93,11 +99,12 @@ class _DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
         );
       },
       onSuggestionSelected: (Station suggestion) {
-        _textController.text = suggestion.station;
         if (isFrom) {
           APICallState.fromStation = suggestion;
+          textControllerFrom.text = suggestion.station;
         } else {
           APICallState.toStation = suggestion;
+          textControllerTo.text = suggestion.station;
         }
       },
     );

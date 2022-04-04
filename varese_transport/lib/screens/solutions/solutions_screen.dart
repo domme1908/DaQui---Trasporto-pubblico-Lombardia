@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:varese_transport/lib/classes/logo_banner.dart';
 import 'package:varese_transport/screens/solutions/components/body.dart';
 
 class SolutionsScreen extends StatefulWidget {
@@ -13,8 +14,9 @@ class SolutionsScreen extends StatefulWidget {
 class _SolutionsScreenState extends State<SolutionsScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Body(),
+      bottomNavigationBar: LogoBanner(),
     );
   }
 }

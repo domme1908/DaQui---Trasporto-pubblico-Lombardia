@@ -90,9 +90,31 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                 //Create a ListView.builder in order to display the elements of the fetched array
                 child: ListView.builder(
               //Every item (element) is a SolutionsCard
-              itemBuilder: (context, index) =>
-                  SolutionsCard(snapshot.data![index]),
-              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return (index == snapshot.data!.length)
+                    ? Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+                        child: ElevatedButton(
+                          child: Text("Carica altri soluzioni"),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              kSecondaryColor,
+                            ),
+                          ),
+                          onPressed: () {
+                            APICallState.time = snapshot
+                                .data![snapshot.data!.length - 1].departure;
+                            setState(() {
+                              print("inSetstate");
+                              futureItinerary = APICallState().fetchItinerary();
+                            });
+                          },
+                        ),
+                      )
+                    : SolutionsCard(snapshot.data![index]);
+              },
+              itemCount: snapshot.data!.length + 1,
             ));
             //Some error-handling
           } else if (snapshot.hasError) {

@@ -64,7 +64,7 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
       },
       textFieldConfiguration: TextFieldConfiguration(
         controller: isFrom ? textControllerFrom : textControllerTo,
-        autofocus: true,
+        autofocus: false,
         style: const TextStyle(fontFamily: 'Poppins'),
         decoration: InputDecoration(
           hintText: hintText,

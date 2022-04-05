@@ -1,12 +1,30 @@
 import 'dart:async';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/station.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
 
+import '../../screens/favorites/favorites_screen.dart';
+import '../../screens/menu_items/about.dart';
+
 class DynamicVTAutocomplete extends StatefulWidget {
+  static String getTypeOfStation(String type) {
+    switch (type) {
+      case "areadifermata":
+        return "Fermata";
+      case "comune":
+        return "Comune";
+      case "indirizzo":
+        return "Indirizzo";
+      case "poi":
+        return "POI";
+      case "civico":
+        return "Indirizzo";
+    }
+    return "Type not found";
+  }
+
   //Parameters passed by the call in the headerWithTextfields class
   bool isFrom;
   String hintText;
@@ -68,12 +86,26 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
         style: const TextStyle(fontFamily: 'Poppins'),
         decoration: InputDecoration(
           hintText: hintText,
+          icon: IconButton(
+            icon: Icon(
+              Icons.star,
+              color: Colors.orange,
+            ),
+            visualDensity: VisualDensity.compact,
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => FavScreen(),
+              ));
+            },
+          ),
           suffixIcon: IconButton(
             onPressed: () {
               if (isFrom) {
                 textControllerFrom.clear();
+                APICallState.fromStation = Station.empty();
               } else {
                 textControllerTo.clear();
+                APICallState.toStation = Station.empty();
               }
             },
             icon: const Icon(Icons.clear),
@@ -87,11 +119,13 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
         return ListTile(
           tileColor: kPrimaryColor,
           hoverColor: kSecondaryColor,
-          leading: SvgPicture.asset(
-            "assets/icons/" + suggestion.type + ".svg",
-            width: 30,
-            height: 30,
-            color: Colors.white,
+          leading: Image.asset(
+            "assets/images/" + suggestion.type + ".png",
+            scale: 16,
+          ),
+          subtitle: Text(
+            DynamicVTAutocomplete.getTypeOfStation(suggestion.type),
+            style: TextStyle(color: Colors.grey),
           ),
           title: Text(suggestion.station,
               style:

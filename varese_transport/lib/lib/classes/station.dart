@@ -13,4 +13,12 @@ class Station {
     return Station(json["address"] as String, json["type"] as String,
         json["x"] as String, json["y"] as String);
   }
+  List<String> toStringList() {
+    List<String> result = [];
+    result.add(this.station);
+    result.add(this.type);
+    result.add(this.x);
+    result.add(this.y);
+    return result;
+  }
 }

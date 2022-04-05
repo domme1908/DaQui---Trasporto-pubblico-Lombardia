@@ -217,7 +217,7 @@ List<Widget> text_field(Size size, String hintText, double positionBottom,
       right: 50,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         height: 50,
         decoration: BoxDecoration(
             color: Colors.white,

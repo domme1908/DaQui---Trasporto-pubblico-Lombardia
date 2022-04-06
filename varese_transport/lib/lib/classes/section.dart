@@ -1,5 +1,6 @@
 import 'stop.dart';
 
+//This class saves all the relevant data from each individual section of a given itinerary
 class Section {
   var id;
   String duration;
@@ -15,6 +16,7 @@ class Section {
   String yDeparture;
   String yArrival;
   List<Stop> stops;
+  //The firm that operates this line if "" walking
   String manager;
   Section(
       this.id,
@@ -32,12 +34,15 @@ class Section {
       this.yArrival,
       this.stops,
       [this.manager = "none"]);
-
+  //Create a section instance from a JSON string
   factory Section.fromJson(dynamic json) {
+    //Parse the list of stops and save them temporarily
     var stopsObsJson = json["stops"] as List;
     List<Stop> _stops =
         stopsObsJson.map((stopsObj) => Stop.fromJson(stopsObj)).toList();
+    //Distinguish walking and other forms of transportation
     if (json.containsKey("manager")) {
+      //This one is for bus, train, etc.
       return Section(
           int.parse(json['id']),
           json["duration"] as String,
@@ -55,6 +60,7 @@ class Section {
           _stops,
           json["manager"] as String);
     }
+    //This one is for walking
     return Section(
         int.parse(json['id']),
         json["duration"] as String,

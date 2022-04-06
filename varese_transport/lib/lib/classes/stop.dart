@@ -1,4 +1,6 @@
+//This class represents a stop of a section
 class Stop {
+  //Not much to comment - everything pretty self-explainatory
   var id;
   String name;
   String arrival;

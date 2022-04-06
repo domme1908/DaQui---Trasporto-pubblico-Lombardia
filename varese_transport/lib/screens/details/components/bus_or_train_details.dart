@@ -3,82 +3,105 @@ import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/section.dart';
 import 'package:varese_transport/screens/details/components/get_manager.dart';
 
+//This widget is the small container between departure and arrival station that contains info
+//such as bus or train number, who operates this line, the duration and the stops
 class BusOrTrainDetails extends StatelessWidget {
   final Section section;
   const BusOrTrainDetails(this.section, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    //The out-most container
+    //No height constraint in order to allow for adaptation (opening fermate or simply more or less info)
+    //No width constraint since it is being set by the parent
     return Container(
       margin: const EdgeInsets.only(left: 40),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.grey.withAlpha(50),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        //This row is for the line number and the logo of the manager of the service
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          //Line number
-          Container(
-            margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
-            height: 30,
-            width: 60,
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: Colors.primaries.elementAt(
-                  getIntFromString(section.line) % Colors.primaries.length),
+      child: Column(
+          //Aling the items on the left side
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //This row is for the line number and the logo of the manager of the service
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              //Line number
+              Container(
+                margin: const EdgeInsets.fromLTRB(5, 5, 0, 0),
+                height: 30,
+                width: 60,
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  //As in the solutions screen assign each line an exact color
+                  color: Colors.primaries.elementAt(
+                      getIntFromString(section.line) % Colors.primaries.length),
+                ),
+                child: Text(
+                  section.line,
+                  style: baseTextStyle.copyWith(
+                      fontWeight: FontWeight.w600,
+                      //Choose the text color based on what provides greater contrast using the .computeLuminance
+                      //function provided by Color
+                      //Since we are using only primaries colors I think its always white but better be safe than sorry
+                      color: Colors.primaries
+                                  .elementAt(getIntFromString(section.line) %
+                                      Colors.primaries.length)
+                                  .computeLuminance() >
+                              0.5
+                          ? Colors.black
+                          : Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              //Logo of the manager
+              Container(
+                  padding: const EdgeInsets.fromLTRB(0, 7, 15, 0),
+                  child: GetManager(section)),
+            ]),
+            //Indication about the bus/train etc.
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: Text(
+                section.note,
+                style: regularTextStyle.copyWith(fontSize: 12),
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            child: Text(
-              section.line,
-              style: baseTextStyle.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.primaries
-                              .elementAt(getIntFromString(section.line) %
-                                  Colors.primaries.length)
-                              .computeLuminance() >
-                          0.5
-                      ? Colors.black
-                      : Colors.white),
-              textAlign: TextAlign.center,
+            Container(
+              padding: const EdgeInsets.all(5),
+              child: Text(
+                "Durata: " + section.duration,
+                style: regularTextStyle.copyWith(fontSize: 12),
+              ),
             ),
-          ),
-          //Logo of the manager
-          Container(
-              padding: const EdgeInsets.fromLTRB(0, 7, 15, 0),
-              child: GetManager(section)),
-        ]),
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: Text(
-            section.note,
-            style: regularTextStyle.copyWith(fontSize: 12),
-            maxLines: 2,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(5),
-          child: Text(
-            "Durata: " + section.duration,
-            style: regularTextStyle.copyWith(fontSize: 12),
-          ),
-        ),
-        ExpansionTile(
-          //-2 since list includes arrival
-          title: Text(
-            (section.stops.length - 2).toString() + " fermate",
-            textAlign: TextAlign.left,
-            style: regularTextStyle.copyWith(
-                fontSize: 12, fontWeight: FontWeight.w700, color: Colors.blue),
-          ),
-          controlAffinity: ListTileControlAffinity.leading,
-          expandedCrossAxisAlignment: CrossAxisAlignment.start,
-          childrenPadding: const EdgeInsets.all(10),
-          children: getStops(section),
-        )
-      ]),
+            //Make sure the stops tab is only display if there actually are any stops
+            section.stops.length > 2
+                ? ExpansionTile(
+                    //-2 since list includes arrival
+                    title: Text(
+                      (section.stops.length - 2).toString() +
+                          (section.stops.length > 3 ? " fermate" : " fermata"),
+                      textAlign: TextAlign.left,
+                      style: regularTextStyle.copyWith(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.blue),
+                    ),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                    childrenPadding: const EdgeInsets.all(10),
+                    children: getStops(section),
+                  )
+                :
+                //Small placeholder in case of direct connection
+                Container(
+                    height: 10,
+                  )
+          ]),
     );
   }
 

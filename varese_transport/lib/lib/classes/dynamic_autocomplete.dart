@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/station.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
-
 import '../../screens/favorites/favorites_screen.dart';
-import '../../screens/menu_items/about.dart';
 
 class DynamicVTAutocomplete extends StatefulWidget {
+  //Returns the right string of the station type
   static String getTypeOfStation(String type) {
     switch (type) {
       case "areadifermata":
@@ -42,20 +41,17 @@ class DynamicVTAutocomplete extends StatefulWidget {
 class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
   bool isFrom;
   String hintText;
-  String tempValue = "";
   static TextEditingController textControllerFrom = TextEditingController();
   static TextEditingController textControllerTo = TextEditingController();
 
   //Constructor
   DynamicVTAutocompleteState(this.isFrom, this.hintText);
-  //List to save the stations
+  //Stream -> Element can be constantly re-fetched -> stream will go through one
+  //response after the other
   final StreamController<Future<List<Station>>> _controller =
       StreamController();
-  @override
-  void initState() {
-    super.initState();
-  }
 
+  //Make the request to fetch the stations and when done add them to the stream
   Future<void> getStationsStream(text) async {
     final response = APICallState().fetchStations(text);
     _controller.sink.add(response);
@@ -64,15 +60,18 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
   @override
   void dispose() {
     super.dispose();
+    //Dispose the stream controller
     _controller.close();
   }
 
   @override
   Widget build(BuildContext context) {
-    //Futer builder as the stations need to be loaded first
-
+    //Use TypeAhead in order to be able to load the suggestions one by one
     return TypeAheadField(
+      //TODO Check if Sto cercando stays on too long
       noItemsFoundBuilder: (context) {
+        //Avoid confusing the user with no items found when in realty we are simply waiting
+        //for the first response to be returned
         return const ListTile(
           tileColor: kPrimaryColor,
           hoverColor: kSecondaryColor,
@@ -80,12 +79,14 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
               style: TextStyle(color: Colors.white, fontFamily: 'Poppins')),
         );
       },
+      //Style and config of the Textfield
       textFieldConfiguration: TextFieldConfiguration(
         controller: isFrom ? textControllerFrom : textControllerTo,
         autofocus: false,
         style: const TextStyle(fontFamily: 'Poppins'),
         decoration: InputDecoration(
           hintText: hintText,
+          //Fav-Icon
           icon: IconButton(
             icon: Icon(
               Icons.star,
@@ -93,11 +94,13 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
             ),
             visualDensity: VisualDensity.compact,
             onPressed: () {
+              //Open the FavScreen
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => FavScreen(),
+                builder: (context) => FavScreen(isFrom),
               ));
             },
           ),
+          //Clear icon
           suffixIcon: IconButton(
             onPressed: () {
               if (isFrom) {
@@ -112,9 +115,11 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
           ),
         ),
       ),
+      //Specify the source of the data
       suggestionsCallback: (pattern) async {
         return await APICallState().fetchStations(pattern);
       },
+      //Style of the suggestion boxes
       itemBuilder: (context, Station suggestion) {
         return ListTile(
           tileColor: kPrimaryColor,
@@ -132,6 +137,7 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
                   const TextStyle(color: Colors.white, fontFamily: 'Poppins')),
         );
       },
+      //If clicked save value in API call and in the textfield
       onSuggestionSelected: (Station suggestion) {
         if (isFrom) {
           APICallState.fromStation = suggestion;

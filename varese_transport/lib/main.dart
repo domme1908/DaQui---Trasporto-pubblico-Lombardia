@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:varese_transport/constants.dart';
-import 'package:varese_transport/screens/favorites/favorites_screen.dart';
 import 'package:varese_transport/screens/home/components/home_screen.dart';
 
 void main() {
@@ -20,10 +19,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: <String, WidgetBuilder>{
-        '/hometest': (BuildContext context) => new HomeScreen(),
-        '/favstest': (BuildContext context) => new FavScreen(),
-      },
       //Some basic settings
       debugShowCheckedModeBanner: false,
       title: 'DA-QUI',

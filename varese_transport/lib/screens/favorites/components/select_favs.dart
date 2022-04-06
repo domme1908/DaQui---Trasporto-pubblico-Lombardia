@@ -14,13 +14,17 @@ import '../../home/components/api_call.dart';
 import '../favorites_screen.dart';
 
 class SelectFavs extends StatefulWidget {
+  bool isFrom;
+  SelectFavs(this.isFrom);
   @override
   State<StatefulWidget> createState() {
-    return _SelectFavsState();
+    return _SelectFavsState(isFrom);
   }
 }
 
 class _SelectFavsState extends State<SelectFavs> {
+  bool isFrom;
+  _SelectFavsState(this.isFrom);
   final StreamController<Future<List<Station>>> _controller =
       StreamController();
   final TextEditingController _textController = TextEditingController();
@@ -91,8 +95,10 @@ class _SelectFavsState extends State<SelectFavs> {
                 saveFav(suggestion);
                 Navigator.pop(context);
                 Navigator.pop(context);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: ((context) => FavScreen())));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => FavScreen(isFrom))));
               }))
     ]));
   }

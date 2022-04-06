@@ -6,14 +6,19 @@ import 'package:varese_transport/screens/favorites/components/fav_list.dart';
 import 'package:varese_transport/screens/favorites/components/select_favs.dart';
 
 class Body extends StatefulWidget {
+  bool isFrom;
+  Body(this.isFrom);
   static bool removingFavs = false;
   @override
   State<StatefulWidget> createState() {
-    return _BodyState();
+    return _BodyState(isFrom);
   }
 }
 
 class _BodyState extends State<Body> {
+  _BodyState(this.isFrom);
+  bool isFrom;
+
   final Future<List<List<String>>> _favs = getFavs();
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -29,7 +34,7 @@ class _BodyState extends State<Body> {
               if (snapshot.hasData) {
                 if (snapshot.data!.isEmpty) return noFavsYet();
 
-                return Expanded(child: FavList(snapshot));
+                return Expanded(child: FavList(snapshot, this.isFrom));
               } else {
                 return CircularProgressIndicator();
               }
@@ -67,7 +72,7 @@ class _BodyState extends State<Body> {
               ),
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => SelectFavs(),
+                  builder: (context) => SelectFavs(isFrom),
                 ));
               },
             )),

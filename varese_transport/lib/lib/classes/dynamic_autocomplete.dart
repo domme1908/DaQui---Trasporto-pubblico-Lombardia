@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
+import 'package:varese_transport/lib/classes/determine_position.dart';
 import 'package:varese_transport/lib/classes/station.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
 import '../../screens/favorites/favorites_screen.dart';
+import 'package:geolocator/geolocator.dart';
 
 class DynamicVTAutocomplete extends StatefulWidget {
   //Returns the right string of the station type
@@ -20,6 +22,8 @@ class DynamicVTAutocomplete extends StatefulWidget {
         return "POI";
       case "civico":
         return "Indirizzo";
+      case "posizione":
+        return "La tua posizione";
     }
     return "Type not found";
   }
@@ -117,8 +121,30 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
       ),
       //Specify the source of the data
       suggestionsCallback: (pattern) async {
+        print(pattern);
+
+        if (pattern.length < 3) {
+          var completer = new Completer<List<Station>>();
+          List<Station> position = [];
+          DeterminePosition();
+          Position coordinates = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          position.add(Station(
+              "Posizione",
+              "posizione",
+              coordinates.longitude.toString(),
+              coordinates.latitude.toString()));
+          print(coordinates.longitude.toString() +
+              " - " +
+              coordinates.latitude.toString());
+          completer.complete(position);
+
+          return completer.future;
+        }
         return await APICallState().fetchStations(pattern);
       },
+      keepSuggestionsOnLoading: false,
+
       //Style of the suggestion boxes
       itemBuilder: (context, Station suggestion) {
         return ListTile(

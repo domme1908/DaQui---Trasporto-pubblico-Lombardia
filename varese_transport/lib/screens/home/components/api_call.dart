@@ -90,7 +90,9 @@ class APICallState extends State<APICall> {
     //TODO URL must be changed to final value
     final response = await http.get(Uri.parse(
         'https://apidaqui-18067.nodechef.com/getSolutions?from=' +
-            fromStation.station.replaceAll(RegExp('\\s'), '%20') +
+            (fromStation.station != "Posizione"
+                ? fromStation.station.replaceAll(RegExp('\\s'), '%20')
+                : "La tua posizione") +
             "&fromX=" +
             fromStation.x +
             "&fromY=" +

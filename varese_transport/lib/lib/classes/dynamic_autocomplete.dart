@@ -6,7 +6,6 @@ import 'package:varese_transport/lib/classes/determine_position.dart';
 import 'package:varese_transport/lib/classes/station.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
 import '../../screens/favorites/favorites_screen.dart';
-import 'package:geolocator/geolocator.dart';
 
 class DynamicVTAutocomplete extends StatefulWidget {
   //Returns the right string of the station type
@@ -42,14 +41,28 @@ class DynamicVTAutocomplete extends StatefulWidget {
   }
 }
 
-class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
+class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
+    with TickerProviderStateMixin {
   bool isFrom;
   String hintText;
   static TextEditingController textControllerFrom = TextEditingController();
   static TextEditingController textControllerTo = TextEditingController();
-
+  late AnimationController _animationController;
+  late Animation<Color?> _colorTween;
   //Constructor
   DynamicVTAutocompleteState(this.isFrom, this.hintText);
+
+  @override
+  void initState() {
+    super.initState();
+    //Regulates the progress indicator
+    _animationController =
+        AnimationController(duration: const Duration(seconds: 3), vsync: this);
+    _colorTween = _animationController
+        .drive(ColorTween(begin: kPrimaryColor, end: kSecondaryColor));
+    _animationController.repeat();
+  }
+
   //Stream -> Element can be constantly re-fetched -> stream will go through one
   //response after the other
   final StreamController<Future<List<Station>>> _controller =
@@ -64,6 +77,8 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
   @override
   void dispose() {
     super.dispose();
+    //Dispose the animation controller
+    _animationController.dispose();
     //Dispose the stream controller
     _controller.close();
   }
@@ -121,30 +136,40 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete> {
       ),
       //Specify the source of the data
       suggestionsCallback: (pattern) async {
-        print(pattern);
-
-        if (pattern.length < 3) {
+        //If textfield is empty and selected grab position and display it as list
+        if (pattern == "") {
+          //Produce a future object and complete it later with the coordinates
           var completer = new Completer<List<Station>>();
           List<Station> position = [];
-          DeterminePosition();
-          Position coordinates = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          position.add(Station(
-              "Posizione",
-              "posizione",
-              coordinates.longitude.toString(),
-              coordinates.latitude.toString()));
-          print(coordinates.longitude.toString() +
-              " - " +
-              coordinates.latitude.toString());
-          completer.complete(position);
-
-          return completer.future;
+          //Make sure the user consented to the usage of his position and only if so enter the position section
+          return DeterminePosition().then((coordinates) {
+            //Create a list containing just the position
+            position.add(Station(
+                "Posizione",
+                "posizione",
+                coordinates.longitude.toString(),
+                coordinates.latitude.toString()));
+            //Since we need to provide a future we use a completer
+            completer.complete(position);
+            //Return the future of the completer
+            return completer.future;
+          });
         }
+        //This is used if the user does not conset to using the location or if the user types something into the field
         return await APICallState().fetchStations(pattern);
       },
+      //Display the loading field while fetching stations or user-location
       keepSuggestionsOnLoading: false,
-
+      loadingBuilder: (BuildContext context) {
+        return Container(
+          height: 200,
+          color: kPrimaryColor,
+          child: Center(
+              child: CircularProgressIndicator(
+            valueColor: _colorTween,
+          )),
+        );
+      },
       //Style of the suggestion boxes
       itemBuilder: (context, Station suggestion) {
         return ListTile(

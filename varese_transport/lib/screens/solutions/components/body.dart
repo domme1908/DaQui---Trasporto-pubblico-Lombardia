@@ -20,6 +20,8 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
   //Variables needed for the color-changing progressbar
   late AnimationController _animationController;
   late Animation<Color?> _colorTween;
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
@@ -89,6 +91,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
             return Expanded(
                 //Create a ListView.builder in order to display the elements of the fetched array
                 child: ListView.builder(
+              controller: _scrollController,
               //Every item (element) is a SolutionsCard
               itemBuilder: (context, index) {
                 return (index == snapshot.data!.length)
@@ -103,10 +106,17 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                             ),
                           ),
                           onPressed: () {
+                            checkDate(
+                                APICallState.time,
+                                snapshot.data![snapshot.data!.length - 1]
+                                    .departure);
                             APICallState.time = snapshot
                                 .data![snapshot.data!.length - 1].departure;
                             setState(() {
-                              print("inSetstate");
+                              _scrollController.animateTo(
+                                  _scrollController.position.minScrollExtent,
+                                  duration: const Duration(milliseconds: 2000),
+                                  curve: Curves.fastOutSlowIn);
                               futureItinerary = APICallState().fetchItinerary();
                             });
                           },
@@ -129,5 +139,30 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
         },
       )
     ]));
+  }
+}
+
+void checkDate(String requestedTime, String lastEvent) {
+  DateTime dtLastEvent = DateTime.parse("1970-01-01 " + lastEvent);
+  DateTime dtRequestedTime = DateTime.parse("1970-01-01 " + requestedTime);
+  if (dtRequestedTime.isAfter(dtLastEvent)) {
+    //Get the set date
+    String tempDate = APICallState.date;
+    //Convert the date into the right format
+    DateTime requestedDate = DateTime.parse(tempDate.substring(6, 10) +
+        "-" +
+        tempDate.substring(3, 5) +
+        "-" +
+        tempDate.substring(0, 2));
+    //Add one day to the requested date
+    requestedDate = requestedDate.add(const Duration(days: 1));
+    //Reformat the string
+    String result = requestedDate.toString().substring(8, 10) +
+        "/" +
+        requestedDate.toString().substring(5, 7) +
+        "/" +
+        requestedDate.toString().substring(0, 4);
+    //Save the date of the next day in the APICallState
+    APICallState.date = result;
   }
 }

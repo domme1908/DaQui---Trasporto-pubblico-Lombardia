@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:syncfusion_flutter_maps/maps.dart';
+import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/section.dart';
 import 'package:varese_transport/lib/classes/stop.dart';
 
@@ -93,7 +94,9 @@ class _OSMapState extends State<OSMap> {
             urlTemplate:
                 'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=VBw9do6eEQAZXKn5YhfG',
             sublayers: [
-              MapPolylineLayer(polylines: getLines().toSet()),
+              MapPolylineLayer(
+                polylines: getLines().toSet(),
+              ),
             ],
             initialMarkersCount: getListOfMarkers().length,
             markerBuilder: (BuildContext context, int index) {
@@ -115,7 +118,8 @@ class _OSMapState extends State<OSMap> {
           MapLatLng(
               double.parse(section.yArrival), double.parse(section.xArrival))
         ];
-        sectionLine = MapPolyline(points: points, color: Colors.blue);
+        sectionLine =
+            MapPolyline(points: points, color: Colors.blue, dashArray: [5, 5]);
         result.add(sectionLine);
       } else {
         for (Stop stop in section.stops) {
@@ -123,13 +127,22 @@ class _OSMapState extends State<OSMap> {
           points.add(MapLatLng(double.parse(stop.y), double.parse(stop.x)));
           sectionLine = MapPolyline(
               points: points,
-              color: Colors.primaries.elementAt(
-                  getIntFromString(section.line) % Colors.primaries.length));
+              color: getColorFromTD(section.transportDescription),
+              width: 3.5);
           result.add(sectionLine);
         }
       }
     }
     return result;
+  }
+
+  Color getColorFromTD(String description) {
+    if (description == "REGIONALE" || description.contains("LINEE")) {
+      return Colors.blue;
+    } else if (description == "AUTOBUS") {
+      return kSecondaryColor;
+    }
+    return Colors.red;
   }
 
   int getIntFromString(String lineName) {
@@ -149,20 +162,20 @@ class _OSMapState extends State<OSMap> {
       section = chosenSolution.sections.elementAt(i);
       if (i == 0) {
         result.add(MapMarker(
-            child: Icon(
-              Icons.circle,
-              color: Colors.yellow,
+            child: Image.asset(
+              "assets/images/departure_map.png",
+              scale: 7,
             ),
             latitude: double.parse(section.yDeparture),
             longitude: double.parse(section.xDeparture)));
       } else if (i == chosenSolution.sections.length - 1) {
         result.add(MapMarker(
-            child: Icon(
-              Icons.circle,
-              color: Colors.blue,
+            child: Image.asset(
+              "assets/images/destination_map.png",
+              scale: 7,
             ),
-            latitude: double.parse(section.yDeparture),
-            longitude: double.parse(section.xDeparture)));
+            latitude: double.parse(section.yArrival),
+            longitude: double.parse(section.xArrival)));
       } else {
         if (section.stops == 0) {
           result.add(MapMarker(
@@ -179,7 +192,7 @@ class _OSMapState extends State<OSMap> {
               result.add(MapMarker(
                   child: Icon(
                     Icons.circle,
-                    color: Colors.red,
+                    color: kPrimaryColor,
                     size: 15,
                   ),
                   latitude: double.parse(stop.y),
@@ -188,8 +201,8 @@ class _OSMapState extends State<OSMap> {
               result.add(MapMarker(
                   child: Icon(
                     Icons.circle,
-                    color: Colors.green,
-                    size: 10,
+                    color: Colors.white,
+                    size: 6,
                   ),
                   latitude: double.parse(stop.y),
                   longitude: double.parse(stop.x)));

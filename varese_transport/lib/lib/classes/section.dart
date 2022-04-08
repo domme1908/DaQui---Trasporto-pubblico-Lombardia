@@ -18,6 +18,8 @@ class Section {
   List<Stop> stops;
   //The firm that operates this line if "" walking
   String manager;
+  String transportDescription;
+
   Section(
       this.id,
       this.duration,
@@ -33,6 +35,7 @@ class Section {
       this.yDeparture,
       this.yArrival,
       this.stops,
+      this.transportDescription,
       [this.manager = "none"]);
   //Create a section instance from a JSON string
   factory Section.fromJson(dynamic json) {
@@ -44,21 +47,23 @@ class Section {
     if (json.containsKey("manager")) {
       //This one is for bus, train, etc.
       return Section(
-          int.parse(json['id']),
-          json["duration"] as String,
-          json["line"] as String,
-          json["transportDescription"] as String,
-          json["departure"] as String,
-          json["departureTime"] as String,
-          json["arrival"] as String,
-          json["arrivalTime"] as String,
-          json["note"] as String,
-          json["xDeparture"] as String,
-          json["xArrival"] as String,
-          json["yDeparture"] as String,
-          json["yArrival"] as String,
-          _stops,
-          json["manager"] as String);
+        int.parse(json['id']),
+        json["duration"] as String,
+        json["line"] as String,
+        json["transportDescription"] as String,
+        json["departure"] as String,
+        json["departureTime"] as String,
+        json["arrival"] as String,
+        json["arrivalTime"] as String,
+        json["note"] as String,
+        json["xDeparture"] as String,
+        json["xArrival"] as String,
+        json["yDeparture"] as String,
+        json["yArrival"] as String,
+        _stops,
+        json["transportDescription"] as String,
+        json["manager"] as String,
+      );
     }
     //This one is for walking
     return Section(
@@ -75,6 +80,7 @@ class Section {
         json["xArrival"] as String,
         json["yDeparture"] as String,
         json["yArrival"] as String,
-        _stops);
+        _stops,
+        json["transportDescription"] as String);
   }
 }

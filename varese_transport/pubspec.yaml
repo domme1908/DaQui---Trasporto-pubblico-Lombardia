@@ -45,6 +45,9 @@ dependencies:
   flutter_svg: ^0.22.0
   geolocator: ^8.2.0
   sliding_up_panel: ^2.0.0+1
+  flutter_map: ^0.14.0
+  latlong2: ^0.8.1
+  syncfusion_flutter_maps: ^20.1.47
 
 dev_dependencies:
   flutter_test:

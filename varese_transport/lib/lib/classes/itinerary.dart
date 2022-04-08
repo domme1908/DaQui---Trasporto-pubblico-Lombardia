@@ -7,10 +7,15 @@ class Itinerary {
   int transfers;
   String duration;
   String departure;
+  String xDeparture;
+  String yDeparture;
   String arrival;
   String departureStation;
   String arrivalStation;
+  String xArrival;
+  String yArrival;
   int dayNoticeDeparture;
+
   List<Section> sections;
   //A list of all the lines involved in the solution
   List<String> vehicels;
@@ -24,7 +29,11 @@ class Itinerary {
         arrivalStation = "",
         vehicels = List<String>.empty(),
         dayNoticeDeparture = -1,
-        sections = List<Section>.empty();
+        sections = List<Section>.empty(),
+        xArrival = "",
+        yArrival = "",
+        xDeparture = "",
+        yDeparture = "";
   //Constructor
   Itinerary(
       this.solutionID,
@@ -36,7 +45,11 @@ class Itinerary {
       this.arrivalStation,
       this.vehicels,
       this.dayNoticeDeparture,
-      this.sections);
+      this.sections,
+      this.xDeparture,
+      this.yDeparture,
+      this.xArrival,
+      this.yArrival);
   //Factory that gets a well-defined JSON string and initializes a new Itinerary-Object
   factory Itinerary.fromJson(dynamic json) {
     var sectionsObsJson = json["sections"] as List;
@@ -54,6 +67,10 @@ class Itinerary {
         json['arrival'] as String,
         json['transports'].split(",") as List<String>,
         json['dayNoticeDeparture'] as int,
-        _sections);
+        _sections,
+        json['xDeparture'] as String,
+        json['yDeparture'] as String,
+        json['xArrival'] as String,
+        json['yArrival'] as String);
   }
 }

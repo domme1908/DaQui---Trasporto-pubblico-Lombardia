@@ -44,9 +44,22 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(children: [
-      const GradientAppBar("Viaggio:"),
+    return Container(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Container(
+          height: 4,
+          margin: EdgeInsets.only(top: 20),
+          child: Container(
+            height: 3,
+            width: 50,
+            color: Colors.black54,
+          )),
+      Container(
+          margin: EdgeInsets.all(kDefaultPadding),
+          child: Text(
+            "Viaggio",
+            style: headerTextStyle.copyWith(fontSize: 30),
+          )),
       Expanded(
           //Create a ListView.builder in order to display the elements of the fetched array
           child: ListView.builder(

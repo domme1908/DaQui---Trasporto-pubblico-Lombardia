@@ -26,8 +26,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
         panel: Body(),
         body: OSMap(),
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-        maxHeight: size.height * 0.8,
-        minHeight: size.height * 0.4,
+        maxHeight: size.height * 0.7,
+        minHeight: size.height * 0.15,
+        defaultPanelState: PanelState.OPEN,
       ),
       bottomNavigationBar: LogoBanner(),
     );

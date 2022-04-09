@@ -29,24 +29,6 @@ class _OSMapState extends State<OSMap> {
   late double longArr;
   @override
   void initState() {
-    polylinePoints = [
-      MapLatLng(
-        45.659277,
-        8.798542,
-      ),
-      MapLatLng(
-        45.615725,
-        8.864649,
-      ),
-      MapLatLng(
-        45.593782,
-        8.91062,
-      ),
-      MapLatLng(
-        45.593782,
-        8.910611,
-      ),
-    ];
     double resultLat, resultLong;
     resultLat = (double.parse(chosenSolution.yDeparture) +
             double.parse(chosenSolution.yArrival)) /
@@ -84,8 +66,6 @@ class _OSMapState extends State<OSMap> {
         MapTileLayer(
             zoomPanBehavior: _zoomPanBehavior,
             controller: mapController,
-            initialFocalLatLng: MapLatLng(45.359277, 8.798542),
-            //initialZoomLevel: getInitialZoomeBasedOnDistance(),
             initialLatLngBounds: MapLatLngBounds(
                 MapLatLng(min(latArr, latDep) - getDistance() / 90000,
                     max(longArr, longDep) + getDistance() / 1000000),
@@ -201,7 +181,7 @@ class _OSMapState extends State<OSMap> {
               result.add(MapMarker(
                   child: Icon(
                     Icons.circle,
-                    color: Colors.white,
+                    color: kPrimaryColor,
                     size: 6,
                   ),
                   latitude: double.parse(stop.y),

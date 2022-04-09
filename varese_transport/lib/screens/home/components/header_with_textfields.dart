@@ -6,6 +6,14 @@ import 'package:varese_transport/lib/classes/dynamic_autocomplete.dart';
 import '../../../lib/classes/station.dart';
 import 'api_call.dart';
 
+extension TimeOfDayConverter on TimeOfDay {
+  String to24hours() {
+    final hour = this.hour.toString().padLeft(2, "0");
+    final min = this.minute.toString().padLeft(2, "0");
+    return "$hour:$min";
+  }
+}
+
 class HeaderWithTextfields extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -191,7 +199,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                               //Always check if the time was correctly set in order to avoid NullPointerExceptions
                               if (pickedTime != null) {
                                 timeinput.text = pickedTime.format(context);
-                                APICallState.time = pickedTime.format(context);
+                                APICallState.time = pickedTime.to24hours();
                               }
                             },
                           ),

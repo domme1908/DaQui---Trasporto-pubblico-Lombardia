@@ -5,6 +5,7 @@ import 'package:varese_transport/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/screens/solutions/solutions_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../lib/classes/station.dart';
 import '../../../lib/classes/stop.dart';
@@ -54,12 +55,12 @@ class APICallState extends State<APICall> {
           }
         },
         //Further design of the button
-        child: const SizedBox(
+        child: SizedBox(
           height: 50,
           width: double.infinity,
           child: Center(
               child: Text(
-            'Cerca',
+            AppLocalizations.of(context)!.search_button,
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
           )),

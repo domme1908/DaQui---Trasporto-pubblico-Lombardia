@@ -5,7 +5,7 @@ import 'package:varese_transport/lib/classes/station.dart';
 import 'package:varese_transport/screens/favorites/components/body.dart';
 import 'package:varese_transport/screens/favorites/favorites_screen.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
-import 'package:varese_transport/screens/home/components/header_with_textfields.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../constants.dart';
 
@@ -82,12 +82,30 @@ class _FavListState extends State<FavList> {
                   style: headerTextStyle.copyWith(fontSize: 20),
                 ),
                 subtitle: Text(
-                  DynamicVTAutocomplete.getTypeOfStation(
-                      snapshot.data![index].elementAt(1)),
+                  getTypeOfStation(snapshot.data![index].elementAt(1)),
                   style: subHeaderTextStyle.copyWith(fontSize: 16),
                 ),
               ));
         });
+  }
+
+//Returns the right string of the station type
+  String getTypeOfStation(String type) {
+    switch (type) {
+      case "areadifermata":
+        return AppLocalizations.of(context)!.areadifermata;
+      case "comune":
+        return AppLocalizations.of(context)!.comune;
+      case "indirizzo":
+        return AppLocalizations.of(context)!.indirizzo;
+      case "poi":
+        return AppLocalizations.of(context)!.poi;
+      case "civico":
+        return AppLocalizations.of(context)!.indirizzo;
+      case "posizione":
+        return AppLocalizations.of(context)!.posizione;
+    }
+    return AppLocalizations.of(context)!.stop_type_not_found;
   }
 }
 

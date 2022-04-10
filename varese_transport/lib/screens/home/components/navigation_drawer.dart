@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
+import 'package:varese_transport/screens/menu_items/language_picker.dart';
 import 'package:varese_transport/screens/menu_items/settings_page.dart';
 
 import '../../menu_items/about.dart';
@@ -28,8 +29,8 @@ class NavigationDrawer extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Impostazioni',
-                    icon: Icons.settings,
+                    text: 'Lingua',
+                    icon: Icons.language,
                     onClicked: () => selectedItem(context, 1),
                   ),
                   const SizedBox(height: 16),
@@ -105,7 +106,7 @@ class NavigationDrawer extends StatelessWidget {
         break;
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => SettingsPage(),
+          builder: (context) => LanguagePicker(),
         ));
         break;
     }

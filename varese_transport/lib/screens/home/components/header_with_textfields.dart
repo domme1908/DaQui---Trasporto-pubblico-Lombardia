@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:language_builder/language_builder.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/dynamic_autocomplete.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../lib/classes/station.dart';
 import 'api_call.dart';
@@ -67,7 +69,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                         children: <Widget>[
                           //Greetings text
                           Text(
-                            'Ciao!',
+                            AppLocalizations.of(context)!.homescreen_greeting,
                             style:
                                 Theme.of(context).textTheme.headline3!.copyWith(
                                       color: Colors.white,
@@ -87,8 +89,8 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                 +
                 //Append the two text field lists
                 //See below for doc on helper method
-                text_field(size, "Partenza", 120, true, context) +
-                text_field(size, "Destinazione", 60, false, context) +
+                text_field(size, 120, true, context) +
+                text_field(size, 60, false, context) +
                 //Add widget list for time and date
                 <Widget>[
                   Positioned(
@@ -121,7 +123,6 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                               //Design the calendar field
                               decoration: const InputDecoration(
                                 icon: Icon(Icons.calendar_month),
-                                hintText: "Data",
                                 hintStyle: TextStyle(
                                   color: Colors.grey,
                                 ),
@@ -175,7 +176,6 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                             readOnly: true,
                             decoration: const InputDecoration(
                               icon: Icon(Icons.access_time),
-                              hintText: "Ora",
                               hintStyle: TextStyle(
                                 color: Colors.grey,
                               ),
@@ -213,8 +213,8 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
 //The params are: size: screen size, hintText: The hint text for initializazion of
 //the empty text field, positionBottom: The margin to the bottom of the textfield -> To be able to stack them
 // and isFrom as boolean to set the right static variable for the API call
-List<Widget> text_field(Size size, String hintText, double positionBottom,
-    bool isFrom, BuildContext context) {
+List<Widget> text_field(
+    Size size, double positionBottom, bool isFrom, BuildContext context) {
   Size screenSize = MediaQuery.of(context).size;
 
   return <Widget>[
@@ -236,7 +236,7 @@ List<Widget> text_field(Size size, String hintText, double positionBottom,
                   blurRadius: 50,
                   color: kPrimaryColor.withOpacity(0.23))
             ]),
-        child: DynamicVTAutocomplete(isFrom, hintText),
+        child: DynamicVTAutocomplete(isFrom),
       ),
     ),
     //This widget draws an iconbutton that switches destination with arrival on tap

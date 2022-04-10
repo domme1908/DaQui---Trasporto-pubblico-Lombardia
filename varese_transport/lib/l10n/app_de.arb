@@ -1,0 +1,23 @@
+{
+    
+    "homescreen_greeting": "Hallo!",
+    "departure": "Startpunkt",
+    "arrival": "Wo möchtest du hin?",
+    "search_button": "Suche",
+    "language": "Sprache",
+    "coffe":"Offrimi un cafè",
+    "contact":"contatti",
+    "data_banner_drawer":"Dati sempre aggiornati direttamente da",
+    "location":"Posizione",
+    "location_description":"La tua posizione",
+    "solutions":"Soluzioni",
+    "departs_at":"Parte tra",
+    "duration":"Durata",
+    "transfers":"Cambi",
+    "favs":"Preferiti",
+    "remove_favs":"Rimuovi preferiti",
+    "add_favs":"Aggiungi preferiti",
+    "travel_route":"Viaggio",
+    "stop":"fermata",
+    "stops":"fermate"
+}

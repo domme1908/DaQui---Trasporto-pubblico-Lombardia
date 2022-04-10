@@ -6,51 +6,32 @@ import 'package:varese_transport/lib/classes/determine_position.dart';
 import 'package:varese_transport/lib/classes/station.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
 import '../../screens/favorites/favorites_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DynamicVTAutocomplete extends StatefulWidget {
-  //Returns the right string of the station type
-  static String getTypeOfStation(String type) {
-    switch (type) {
-      case "areadifermata":
-        return "Fermata";
-      case "comune":
-        return "Comune";
-      case "indirizzo":
-        return "Indirizzo";
-      case "poi":
-        return "POI";
-      case "civico":
-        return "Indirizzo";
-      case "posizione":
-        return "La tua posizione";
-    }
-    return "Type not found";
-  }
-
   //Parameters passed by the call in the headerWithTextfields class
   bool isFrom;
-  String hintText;
   //Constructor
-  DynamicVTAutocomplete(this.isFrom, this.hintText, {Key? key})
-      : super(key: key);
+  DynamicVTAutocomplete(this.isFrom, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
     //Pass on the arguments to the state
-    return DynamicVTAutocompleteState(isFrom, hintText);
+    return DynamicVTAutocompleteState(isFrom);
   }
 }
 
 class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
     with TickerProviderStateMixin {
   bool isFrom;
-  String hintText;
   static TextEditingController textControllerFrom = TextEditingController();
   static TextEditingController textControllerTo = TextEditingController();
   late AnimationController _animationController;
   late Animation<Color?> _colorTween;
   //Constructor
-  DynamicVTAutocompleteState(this.isFrom, this.hintText);
+  DynamicVTAutocompleteState(
+    this.isFrom,
+  );
 
   @override
   void initState() {
@@ -104,7 +85,9 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
         autofocus: false,
         style: const TextStyle(fontFamily: 'Poppins'),
         decoration: InputDecoration(
-          hintText: hintText,
+          hintText: isFrom
+              ? AppLocalizations.of(context)!.departure
+              : AppLocalizations.of(context)!.arrival,
           //Fav-Icon
           icon: IconButton(
             icon: Icon(
@@ -180,7 +163,7 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
             scale: 16,
           ),
           subtitle: Text(
-            DynamicVTAutocomplete.getTypeOfStation(suggestion.type),
+            getTypeOfStation(suggestion.type),
             style: TextStyle(color: Colors.grey),
           ),
           title: Text(suggestion.station,
@@ -199,5 +182,24 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
         }
       },
     );
+  }
+
+  //Returns the right string of the station type
+  String getTypeOfStation(String type) {
+    switch (type) {
+      case "areadifermata":
+        return AppLocalizations.of(context)!.areadifermata;
+      case "comune":
+        return AppLocalizations.of(context)!.comune;
+      case "indirizzo":
+        return AppLocalizations.of(context)!.indirizzo;
+      case "poi":
+        return AppLocalizations.of(context)!.poi;
+      case "civico":
+        return AppLocalizations.of(context)!.indirizzo;
+      case "posizione":
+        return AppLocalizations.of(context)!.posizione;
+    }
+    return AppLocalizations.of(context)!.stop_type_not_found;
   }
 }

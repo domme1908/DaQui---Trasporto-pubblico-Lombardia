@@ -4,6 +4,7 @@ import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/gradient_app_bar.dart';
 import 'package:varese_transport/screens/favorites/components/fav_list.dart';
 import 'package:varese_transport/screens/favorites/components/select_favs.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Body extends StatefulWidget {
   bool isFrom;
@@ -26,13 +27,13 @@ class _BodyState extends State<Body> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GradientAppBar("Preferiti"),
+        GradientAppBar(AppLocalizations.of(context)!.favs),
         FutureBuilder(
             future: _favs,
             builder: (BuildContext context,
                 AsyncSnapshot<List<List<String>>> snapshot) {
               if (snapshot.hasData) {
-                if (snapshot.data!.isEmpty) return noFavsYet();
+                if (snapshot.data!.isEmpty) return noFavsYet(context);
 
                 return Expanded(child: FavList(snapshot, this.isFrom));
               } else {
@@ -48,7 +49,7 @@ class _BodyState extends State<Body> {
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
               ),
               child: Text(
-                "Rimuovi preferiti",
+                AppLocalizations.of(context)!.remove_favs,
                 style:
                     headerTextStyle.copyWith(color: Colors.white, fontSize: 22),
               ),
@@ -66,7 +67,7 @@ class _BodyState extends State<Body> {
                     MaterialStateProperty.all<Color>(kSecondaryColor),
               ),
               child: Text(
-                "Aggiungi preferiti",
+                AppLocalizations.of(context)!.add_favs,
                 style:
                     headerTextStyle.copyWith(color: Colors.white, fontSize: 22),
               ),
@@ -81,7 +82,7 @@ class _BodyState extends State<Body> {
   }
 }
 
-Widget noFavsYet() {
+Widget noFavsYet(BuildContext context) {
   return Container(
       margin: EdgeInsets.only(top: 30),
       child: Column(
@@ -91,11 +92,11 @@ Widget noFavsYet() {
             scale: 7,
           ),
           Text(
-            "Non hai preferiti",
+            AppLocalizations.of(context)!.no_favs,
             style: headerTextStyle.copyWith(fontSize: 30),
           ),
           Text(
-            "Prova ad aggiungerne un paia",
+            AppLocalizations.of(context)!.try_add_favs,
             style: headerTextStyle.copyWith(fontSize: 20),
           )
         ],

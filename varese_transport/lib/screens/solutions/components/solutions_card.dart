@@ -78,20 +78,27 @@ class SolutionsCard extends StatelessWidget {
                 children: [
                   Text("Parte tra", style: subHeaderTextStyle),
                   Text(
-                    //Check if difference is less than 2 hours
-                    getTimeToDeparture(data).inMinutes > 119
-                        ?
-                        //If no check if difference is less than 1 day
-                        getTimeToDeparture(data).inHours > 24
+                    //Check if solution has already departed
+                    getTimeToDeparture(data).inMinutes < 0
+                        ? "Già partito"
+                        :
+                        //Check if difference is less than 2 hours
+                        getTimeToDeparture(data).inMinutes > 119
                             ?
-                            //If no print the difference formatted as days
-                            getTimeToDeparture(data).inDays.toString() + "g"
-                            //If difference is less than a day but more than 2 hours print formatted as hours
-                            : getTimeToDeparture(data).inHours.toString() +
-                                " ore"
-                        //If difference is less than 2 hours print formatted as minutes
-                        : getTimeToDeparture(data).inMinutes.toString() + "min",
-                    style: headerTextStyle.copyWith(fontSize: 30),
+                            //If no check if difference is less than 1 day
+                            getTimeToDeparture(data).inHours > 24
+                                ?
+                                //If no print the difference formatted as days
+                                getTimeToDeparture(data).inDays.toString() + "g"
+                                //If difference is less than a day but more than 2 hours print formatted as hours
+                                : getTimeToDeparture(data).inHours.toString() +
+                                    " ore"
+                            //If difference is less than 2 hours print formatted as minutes
+                            : getTimeToDeparture(data).inMinutes.toString() +
+                                "min",
+                    style: headerTextStyle.copyWith(
+                        fontSize:
+                            getTimeToDeparture(data).inMinutes < 0 ? 18 : 30),
                   ),
                   Text(
                     "Durata: " + data.duration.toString(),
@@ -211,7 +218,6 @@ List<Widget> lineIcons(Itinerary itinerary) {
         Container(
             width: 46,
             height: 30,
-            //color: hexToColor(itinerary.lines[i].color),
             child: VehiclesIcons(itinerary.vehicels.elementAt(i))),
       );
       if (i != itinerary.vehicels.length - 1) {

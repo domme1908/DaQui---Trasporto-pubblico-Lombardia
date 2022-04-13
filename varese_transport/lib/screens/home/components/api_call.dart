@@ -72,7 +72,7 @@ class APICallState extends State<APICall> {
   //The api call - sends the collected values to the js rest api
   Future<List<Itinerary>> fetchItinerary() async {
     print("FETCHING SOLUTIONS");
-    print('https://apidaqui-18067.nodechef.com/getSolutions?from=' +
+    print('http://localhost:3000/getSolutions?from=' +
         fromStation.station.replaceAll(RegExp('\\s'), '%20') +
         "&fromX=" +
         fromStation.x +
@@ -90,7 +90,8 @@ class APICallState extends State<APICall> {
         time);
     //TODO URL must be changed to final value
     final response = await http.get(Uri.parse(
-        'https://apidaqui-18067.nodechef.com/getSolutions?from=' +
+        'http://192.168.1.56:3000/getSolutions?from=' +
+            // 'https://apidaqui-18067.nodechef.com/getSolutions?from=' +
             (fromStation.station != "Posizione"
                 ? fromStation.station.replaceAll(RegExp('\\s'), '%20')
                 : "La tua posizione") +
@@ -108,7 +109,7 @@ class APICallState extends State<APICall> {
             date.replaceAll(".", "/") +
             "&when=" +
             time));
-
+    print("AFTER FETCHING ");
     //Call the compute function provided by flutter
     return compute(
         parseItinerary,
@@ -127,8 +128,10 @@ class APICallState extends State<APICall> {
 
   Future<List<Station>> fetchStations([text]) async {
     print("Fetching stations for " + text);
-    final response = await http.get(Uri.parse(
-        'https://apidaqui-18067.nodechef.com/testStations?text=' + text));
+    final response =
+        await http.get(Uri.parse('http://localhost:3000/getStations?text=' +
+            //'https://apidaqui-18067.nodechef.com/testStations?text=' +
+            text));
     return compute(parseStations, response.body);
   }
 

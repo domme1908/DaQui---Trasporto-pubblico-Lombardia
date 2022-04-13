@@ -2,7 +2,7 @@ import 'stop.dart';
 
 //This class saves all the relevant data from each individual section of a given itinerary
 class Section {
-  var id;
+  String id;
   String duration;
   String line;
   String description;
@@ -40,47 +40,48 @@ class Section {
   //Create a section instance from a JSON string
   factory Section.fromJson(dynamic json) {
     //Parse the list of stops and save them temporarily
-    var stopsObsJson = json["stops"] as List;
+    var stopsObsJson = json["listaFermate"] as List;
     List<Stop> _stops =
         stopsObsJson.map((stopsObj) => Stop.fromJson(stopsObj)).toList();
     //Distinguish walking and other forms of transportation
     if (json.containsKey("manager")) {
       //This one is for bus, train, etc.
       return Section(
-        int.parse(json['id']),
-        json["duration"] as String,
-        json["line"] as String,
-        json["transportDescription"] as String,
-        json["departure"] as String,
-        json["departureTime"] as String,
-        json["arrival"] as String,
-        json["arrivalTime"] as String,
+        json['idTratta'] as String,
+        json["durata"] as String,
+        json["linea"] as String,
+        json["mezzo"] as String,
+        json["partenza"] as String,
+        json["oraPartenza"] as String,
+        json["arrivo"] as String,
+        json["oraArrivo"] as String,
         json["note"] as String,
-        json["xDeparture"] as String,
-        json["xArrival"] as String,
-        json["yDeparture"] as String,
-        json["yArrival"] as String,
+        json["xPartenza"] as String,
+        json["xArrivo"] as String,
+        json["yPartenza"] as String,
+        json["yArrivo"] as String,
         _stops,
-        json["transportDescription"] as String,
-        json["manager"] as String,
+        json["transport"] as String,
+        json["gestore"] as String,
       );
     }
     //This one is for walking
     return Section(
-        int.parse(json['id']),
-        json["duration"] as String,
-        json["line"] as String,
-        json["transportDescription"] as String,
-        json["departure"] as String,
-        json["departureTime"] as String,
-        json["arrival"] as String,
-        json["arrivalTime"] as String,
-        json["note"] as String,
-        json["xDeparture"] as String,
-        json["xArrival"] as String,
-        json["yDeparture"] as String,
-        json["yArrival"] as String,
-        _stops,
-        json["transportDescription"] as String);
+      json['idTratta'] as String,
+      json["durata"] as String,
+      json["linea"] as String,
+      json["mezzo"] as String,
+      json["partenza"] as String,
+      json["oraPartenza"] as String,
+      json["arrivo"] as String,
+      json["oraArrivo"] as String,
+      json["note"] as String,
+      json["xPartenza"] as String,
+      json["xArrivo"] as String,
+      json["yPartenza"] as String,
+      json["yArrivo"] as String,
+      _stops,
+      json["mezzo"] as String,
+    );
   }
 }

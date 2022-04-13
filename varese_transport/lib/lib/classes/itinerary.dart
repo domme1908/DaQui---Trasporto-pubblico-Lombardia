@@ -52,25 +52,25 @@ class Itinerary {
       this.yArrival);
   //Factory that gets a well-defined JSON string and initializes a new Itinerary-Object
   factory Itinerary.fromJson(dynamic json) {
-    var sectionsObsJson = json["sections"] as List;
+    var sectionsObsJson = json["listaTratte"] as List;
     List<Section> _sections = sectionsObsJson
         .map((sectionsObj) => Section.fromJson(sectionsObj))
         .toList();
     //Return the new object by using the constructor
     return Itinerary(
-        int.parse(json['id']),
-        int.parse(json['exchangesNumber']),
-        json['duration'] as String,
-        json['departureTime'] as String,
-        json['arrivalTime'] as String,
-        json['departure'] as String,
-        json['arrival'] as String,
-        json['transports'].split(",") as List<String>,
-        json['dayNoticeDeparture'] as int,
+        int.parse(json['idPercorso']),
+        int.parse(json['numeroCambi']),
+        json['durata'] as String,
+        json['oraPartenza'] as String,
+        json['oraArrivo'] as String,
+        json['partenza'] as String,
+        json['arrivo'] as String,
+        List<String>.from(json["mezziPercorso"]),
+        0,
         _sections,
-        json['xDeparture'] as String,
-        json['yDeparture'] as String,
-        json['xArrival'] as String,
-        json['yArrival'] as String);
+        json['xPartenza'] as String,
+        json['yPartenza'] as String,
+        json['xArrivo'] as String,
+        json['yArrivo'] as String);
   }
 }

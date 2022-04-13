@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_maps/maps.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/section.dart';
 import 'package:varese_transport/lib/classes/stop.dart';
+import 'package:varese_transport/lib/classes/vehicles_icons.dart';
 
 import '../../../lib/classes/itinerary.dart';
 import '../details_screen.dart';
@@ -64,24 +65,42 @@ class _OSMapState extends State<OSMap> {
     return SfMaps(
       layers: [
         MapTileLayer(
-            zoomPanBehavior: _zoomPanBehavior,
-            controller: mapController,
-            initialLatLngBounds: MapLatLngBounds(
-                MapLatLng(min(latArr, latDep) - getDistance() / 90000,
-                    max(longArr, longDep) + getDistance() / 1000000),
-                MapLatLng(max(latArr, latDep) + getDistance() / 300000,
-                    min(longArr, longDep) - getDistance() / 1000000)),
-            urlTemplate:
-                'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=VBw9do6eEQAZXKn5YhfG',
-            sublayers: [
-              MapPolylineLayer(
-                polylines: getLines().toSet(),
-              ),
-            ],
-            initialMarkersCount: getListOfMarkers().length,
-            markerBuilder: (BuildContext context, int index) {
-              return getMarkers(context, index);
-            }),
+          zoomPanBehavior: _zoomPanBehavior,
+          controller: mapController,
+          initialLatLngBounds: MapLatLngBounds(
+              MapLatLng(min(latArr, latDep) - getDistance() / 90000,
+                  max(longArr, longDep) + getDistance() / 1000000),
+              MapLatLng(max(latArr, latDep) + getDistance() / 300000,
+                  min(longArr, longDep) - getDistance() / 1000000)),
+          urlTemplate: "http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+          //'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=VBw9do6eEQAZXKn5YhfG',
+          sublayers: [
+            MapPolylineLayer(
+              polylines: getLines().toSet(),
+            ),
+          ],
+          initialMarkersCount: getListOfMarkers().length,
+          markerBuilder: (BuildContext context, int index) {
+            return getMarkers(context, index);
+          },
+          tooltipSettings: const MapTooltipSettings(
+              color: kSecondaryColor, hideDelay: double.infinity),
+          markerTooltipBuilder: (BuildContext context, int index) {
+            return Container(
+              width: 50,
+              height: 20,
+              color: kSecondaryColor,
+              padding: const EdgeInsets.all(kDefaultPadding),
+              child: Row(children: [
+                Image.asset(
+                  "assets/images/transfer.png",
+                  scale: 5,
+                ),
+                VehiclesIcons(chosenSolution.vehicels.first)
+              ]),
+            );
+          },
+        ),
       ],
     );
   }
@@ -98,8 +117,8 @@ class _OSMapState extends State<OSMap> {
           MapLatLng(
               double.parse(section.yArrival), double.parse(section.xArrival))
         ];
-        sectionLine =
-            MapPolyline(points: points, color: Colors.blue, dashArray: [5, 5]);
+        sectionLine = MapPolyline(
+            points: points, width: 5.5, color: Colors.blue, dashArray: [5, 5]);
         result.add(sectionLine);
       } else {
         for (Stop stop in section.stops) {
@@ -108,7 +127,7 @@ class _OSMapState extends State<OSMap> {
           sectionLine = MapPolyline(
               points: points,
               color: getColorFromTD(section.transportDescription),
-              width: 3.5);
+              width: 5.5);
           result.add(sectionLine);
         }
       }
@@ -169,20 +188,22 @@ class _OSMapState extends State<OSMap> {
           for (var j = 0; j < section.stops.length; j++) {
             stop = section.stops.elementAt(j);
             if (j == 0) {
+              //Here we need to change
               result.add(MapMarker(
                   child: Icon(
                     Icons.circle,
                     color: kPrimaryColor,
-                    size: 15,
+                    size: 20,
                   ),
                   latitude: double.parse(stop.y),
                   longitude: double.parse(stop.x)));
             } else {
+              //Just a station, but no need to change
               result.add(MapMarker(
                   child: Icon(
                     Icons.circle,
                     color: kPrimaryColor,
-                    size: 6,
+                    size: 10,
                   ),
                   latitude: double.parse(stop.y),
                   longitude: double.parse(stop.x)));

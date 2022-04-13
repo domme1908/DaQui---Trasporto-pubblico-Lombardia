@@ -7,47 +7,38 @@ class GetIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (vehicle.contains("LINEE")) {
+    if (vehicle == "") {
       return Image.asset(
-        "assets/images/train.png",
+        "assets/images/walk.png",
         scale: 12,
       );
     }
-    switch (vehicle) {
-      case "TRATTO A PIEDI":
-        return Image.asset(
-          "assets/images/walk.png",
-          scale: 12,
-        );
-      case "AUTOBUS":
+    var intVehicle = int.parse(vehicle);
+    switch (intVehicle) {
+      case 3:
         return Image.asset(
           "assets/images/bus.png",
           scale: 12,
         );
-      case "REGIONALE":
+      case 1:
         return Image.asset(
           "assets/images/train.png",
-          scale: 2,
+          scale: 11.5,
         );
-      case "METROPOLITANA":
+      case 2:
         return Image.asset(
           "assets/images/metro_treno.png",
           scale: 12,
         );
-      case "EUROCITY":
+      case 4:
         return Image.asset(
-          "assets/images/eurocity.png",
-          scale: 17,
+          "assets/images/tram.png",
+          scale: 12,
         );
-      case "REGIONALE VELOCE":
+      case 5:
         return Image.asset(
-          "assets/images/regionale_veloce.png",
-          scale: 1.5,
-        );
-      case "TRENO":
-        return Image.asset(
-          "assets/images/train.png",
-          scale: 1.5,
+          "assets/images/traghetto.png",
+          scale: 12,
         );
     }
     //Just in case I forgot one vehicle

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/screens/menu_items/language_picker.dart';
-import 'package:varese_transport/screens/menu_items/settings_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../menu_items/about.dart';
 
@@ -29,13 +29,13 @@ class NavigationDrawer extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Lingua',
+                    text: AppLocalizations.of(context)!.language,
                     icon: Icons.language,
                     onClicked: () => selectedItem(context, 1),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Offrimi un cafè',
+                    text: AppLocalizations.of(context)!.coffe,
                     icon: Icons.favorite_border,
                     onClicked: () => selectedItem(context, 2),
                   ),
@@ -43,7 +43,7 @@ class NavigationDrawer extends StatelessWidget {
                   Divider(color: Colors.white70),
                   const SizedBox(height: 24),
                   buildMenuItem(
-                    text: 'Contatti',
+                    text: AppLocalizations.of(context)!.contact,
                     icon: Icons.contact_mail,
                     onClicked: () => selectedItem(context, 4),
                   ),
@@ -55,7 +55,7 @@ class NavigationDrawer extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(kDefaultPadding),
           child: Text(
-            "Dati sempre aggiornati direttamente da:",
+            AppLocalizations.of(context)!.data_banner_drawer,
             style: headerTextStyle.copyWith(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),

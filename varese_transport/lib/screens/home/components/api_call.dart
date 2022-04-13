@@ -45,9 +45,11 @@ class APICallState extends State<APICall> {
                     builder: (context) => const SolutionsScreen()));
           } else {
             //Otherwise display a snackbar with the error message
-            const errorMes = SnackBar(
+            var errorMes = SnackBar(
               //Snackbar desing
-              content: Text("Indicare partenza e destinazione!"),
+              content: Text(
+                AppLocalizations.of(context)!.no_stations_given,
+              ),
               behavior: SnackBarBehavior.floating,
             );
             //Display the snackbar
@@ -129,7 +131,7 @@ class APICallState extends State<APICall> {
   Future<List<Station>> fetchStations([text]) async {
     print("Fetching stations for " + text);
     final response =
-        await http.get(Uri.parse('http://localhost:3000/getStations?text=' +
+        await http.get(Uri.parse('http://192.168.1.56:3000/getStations?text=' +
             //'https://apidaqui-18067.nodechef.com/testStations?text=' +
             text));
     return compute(parseStations, response.body);

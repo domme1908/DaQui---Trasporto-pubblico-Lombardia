@@ -14,7 +14,6 @@ class Itinerary {
   String arrivalStation;
   String xArrival;
   String yArrival;
-  int dayNoticeDeparture;
 
   List<Section> sections;
   //A list of all the lines involved in the solution
@@ -28,7 +27,6 @@ class Itinerary {
         departureStation = "",
         arrivalStation = "",
         vehicels = List<String>.empty(),
-        dayNoticeDeparture = -1,
         sections = List<Section>.empty(),
         xArrival = "",
         yArrival = "",
@@ -44,7 +42,6 @@ class Itinerary {
       this.departureStation,
       this.arrivalStation,
       this.vehicels,
-      this.dayNoticeDeparture,
       this.sections,
       this.xDeparture,
       this.yDeparture,
@@ -66,7 +63,6 @@ class Itinerary {
         json['partenza'] as String,
         json['arrivo'] as String,
         List<String>.from(json["mezziPercorso"]),
-        0,
         _sections,
         json['xPartenza'] as String,
         json['yPartenza'] as String,

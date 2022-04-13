@@ -1,14 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
-import 'package:varese_transport/lib/classes/gradient_app_bar.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/screens/details/details_screen.dart';
 import 'package:varese_transport/screens/details/item.dart';
-import 'package:varese_transport/screens/solutions/solutions_screen.dart';
-
-import '../../lib/classes/stop.dart';
-import '../home/components/api_call.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -57,7 +52,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
       Container(
           margin: EdgeInsets.all(kDefaultPadding),
           child: Text(
-            "Viaggio",
+            AppLocalizations.of(context)!.travel_route,
             style: headerTextStyle.copyWith(fontSize: 30),
           )),
       Expanded(

@@ -1,7 +1,5 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:syncfusion_flutter_maps/maps.dart';
 import 'package:varese_transport/constants.dart';
@@ -72,7 +70,7 @@ class _OSMapState extends State<OSMap> {
                   max(longArr, longDep) + getDistance() / 1000000),
               MapLatLng(max(latArr, latDep) + getDistance() / 300000,
                   min(longArr, longDep) - getDistance() / 1000000)),
-          urlTemplate: "http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png",
+          urlTemplate: "http://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
           //'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=VBw9do6eEQAZXKn5YhfG',
           sublayers: [
             MapPolylineLayer(
@@ -136,10 +134,19 @@ class _OSMapState extends State<OSMap> {
   }
 
   Color getColorFromTD(String description) {
-    if (description == "REGIONALE" || description.contains("LINEE")) {
-      return Colors.blue;
-    } else if (description == "AUTOBUS") {
-      return kSecondaryColor;
+    switch (description) {
+      case "1":
+        return Color(0xFF006c67);
+      case "2":
+        return Color(0xFFff9914);
+      case "3":
+        return Color(0xFF73d2de);
+      case "4":
+        return Color(0xFFffdd00);
+      case "5":
+        return Color(0xFF8f00ff);
+      case "6":
+        return Color(0xFF7ae582);
     }
     return Colors.red;
   }
@@ -175,39 +182,39 @@ class _OSMapState extends State<OSMap> {
             ),
             latitude: double.parse(section.yArrival),
             longitude: double.parse(section.xArrival)));
+      }
+      if (section.stops == 0) {
+        result.add(MapMarker(
+            child: Icon(
+              Icons.circle,
+              color: Colors.red,
+              size: 20,
+            ),
+            latitude: double.parse(section.yDeparture),
+            longitude: double.parse(section.xDeparture)));
       } else {
-        if (section.stops == 0) {
-          result.add(MapMarker(
-              child: Icon(
-                Icons.circle,
-                color: Colors.red,
-              ),
-              latitude: double.parse(section.yDeparture),
-              longitude: double.parse(section.xDeparture)));
-        } else {
-          for (var j = 0; j < section.stops.length; j++) {
-            stop = section.stops.elementAt(j);
-            if (j == 0) {
-              //Here we need to change
-              result.add(MapMarker(
-                  child: Icon(
-                    Icons.circle,
-                    color: kPrimaryColor,
-                    size: 20,
-                  ),
-                  latitude: double.parse(stop.y),
-                  longitude: double.parse(stop.x)));
-            } else {
-              //Just a station, but no need to change
-              result.add(MapMarker(
-                  child: Icon(
-                    Icons.circle,
-                    color: kPrimaryColor,
-                    size: 10,
-                  ),
-                  latitude: double.parse(stop.y),
-                  longitude: double.parse(stop.x)));
-            }
+        for (var j = 0; j < section.stops.length; j++) {
+          stop = section.stops.elementAt(j);
+          if (j == 0) {
+            //Here we need to change
+            result.add(MapMarker(
+                child: Icon(
+                  Icons.circle,
+                  color: Color(0xFFFF9249),
+                  size: 18,
+                ),
+                latitude: double.parse(stop.y),
+                longitude: double.parse(stop.x)));
+          } else {
+            //Just a station, but no need to change
+            result.add(MapMarker(
+                child: Icon(
+                  Icons.circle,
+                  color: Color(0xFFFFE7A4),
+                  size: 10,
+                ),
+                latitude: double.parse(stop.y),
+                longitude: double.parse(stop.x)));
           }
         }
       }

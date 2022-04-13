@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:varese_transport/screens/home/components/header_with_textfields.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Body extends StatefulWidget {
   State<StatefulWidget> createState() {
@@ -33,12 +34,10 @@ class BodyState extends State<Body> {
             if (snapshot.data == null) {
               //Alert the user that there is no connection
               return AlertDialog(
-                  title: const Text("Server non raggiungibile"),
+                  title: Text(AppLocalizations.of(context)!.server_unavailable),
                   //TODO remove exact debug before production
                   content: Text(
-                      "Non riesco ad accedere al server! Verifica la tua conessione. (" +
-                          ex.toString() +
-                          ")"),
+                      AppLocalizations.of(context)!.server_unavailable_details),
                   actions: [
                     TextButton(
                         onPressed: () {
@@ -47,7 +46,7 @@ class BodyState extends State<Body> {
                             checkConnection();
                           });
                         },
-                        child: const Text("Riprova"))
+                        child: Text(AppLocalizations.of(context)!.try_again))
                   ]);
             }
           }

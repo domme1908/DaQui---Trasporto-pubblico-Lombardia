@@ -14,7 +14,7 @@ class Station {
   Station(this.station, this.type, this.x, this.y);
   //Factory from JSON
   factory Station.fromJson(dynamic json) {
-    return Station(json["address"] as String, json["type"] as String,
+    return Station(json["label"] as String, json["type"] as String,
         json["x"] as String, json["y"] as String);
   }
   //This function adds all the values to a string list

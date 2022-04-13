@@ -15,8 +15,18 @@ class GradientAppBar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: statusBarHeight),
       height: statusBarHeight + barHeight,
-      child: Center(
-        child: Text(
+      child: ListTile(
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+            size: 35,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
           title,
           style: const TextStyle(
               color: Colors.white,

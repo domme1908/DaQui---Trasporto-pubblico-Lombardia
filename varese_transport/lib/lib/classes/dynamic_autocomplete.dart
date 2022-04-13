@@ -72,10 +72,10 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
       noItemsFoundBuilder: (context) {
         //Avoid confusing the user with no items found when in realty we are simply waiting
         //for the first response to be returned
-        return const ListTile(
+        return ListTile(
           tileColor: kPrimaryColor,
           hoverColor: kSecondaryColor,
-          title: Text("Sto cercando...",
+          title: Text(AppLocalizations.of(context)!.no_stations_found,
               style: TextStyle(color: Colors.white, fontFamily: 'Poppins')),
         );
       },
@@ -128,7 +128,7 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
           return DeterminePosition().then((coordinates) {
             //Create a list containing just the position
             position.add(Station(
-                "Posizione",
+                AppLocalizations.of(context)!.location,
                 "posizione",
                 coordinates.longitude.toString(),
                 coordinates.latitude.toString()));

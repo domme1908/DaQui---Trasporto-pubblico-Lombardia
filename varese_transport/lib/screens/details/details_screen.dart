@@ -5,6 +5,7 @@ import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/lib/classes/logo_banner.dart';
 import 'package:varese_transport/screens/details/body.dart';
 import 'package:varese_transport/screens/details/components/map.dart';
+import 'package:varese_transport/screens/details/fullscreen_map.dart';
 
 class DetailsScreen extends StatefulWidget {
   static var solutionId = -1;
@@ -23,17 +24,31 @@ class _DetailsScreenState extends State<DetailsScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.grey.withAlpha(200),
-        child: Image.asset(
-          "assets/images/fullscreen.png",
-          scale: 25,
-          color: Colors.white,
-        ),
-        onPressed: (() => Navigator.push(
-            context, MaterialPageRoute(builder: ((context) => OSMap())))),
-      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+      floatingActionButton:
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Padding(
+            padding: EdgeInsets.all(kDefaultPadding),
+            child: FloatingActionButton(
+              heroTag: "btn1",
+              backgroundColor: kPrimaryColor.withAlpha(200),
+              child: Icon(Icons.arrow_back),
+              onPressed: (() => Navigator.pop(context)),
+            )),
+        Padding(
+            padding: EdgeInsets.all(kDefaultPadding),
+            child: FloatingActionButton(
+              heroTag: "btn2",
+              backgroundColor: kPrimaryColor.withAlpha(200),
+              child: Image.asset(
+                "assets/images/fullscreen.png",
+                scale: 25,
+                color: Colors.white,
+              ),
+              onPressed: (() => Navigator.push(context,
+                  MaterialPageRoute(builder: ((context) => FullscreenMap())))),
+            ))
+      ]),
       body: SlidingUpPanel(
         panel: Body(),
         body: OSMap(),

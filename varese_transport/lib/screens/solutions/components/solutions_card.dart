@@ -4,6 +4,7 @@ import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/lib/classes/vehicles_icons.dart';
 import 'package:varese_transport/screens/details/details_screen.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SolutionsCard extends StatelessWidget {
   //The data of this specific solution
@@ -76,11 +77,12 @@ class SolutionsCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text("Parte tra", style: subHeaderTextStyle),
+                  Text(AppLocalizations.of(context)!.departs_at,
+                      style: subHeaderTextStyle),
                   Text(
                     //Check if solution has already departed
                     getTimeToDeparture(data).inMinutes < 0
-                        ? "Già partito"
+                        ? AppLocalizations.of(context)!.already_departed
                         :
                         //Check if difference is less than 2 hours
                         getTimeToDeparture(data).inMinutes > 119
@@ -89,10 +91,11 @@ class SolutionsCard extends StatelessWidget {
                             getTimeToDeparture(data).inHours > 24
                                 ?
                                 //If no print the difference formatted as days
-                                getTimeToDeparture(data).inDays.toString() + "g"
+                                getTimeToDeparture(data).inDays.toString() +
+                                    AppLocalizations.of(context)!.days
                                 //If difference is less than a day but more than 2 hours print formatted as hours
                                 : getTimeToDeparture(data).inHours.toString() +
-                                    " ore"
+                                    AppLocalizations.of(context)!.hours
                             //If difference is less than 2 hours print formatted as minutes
                             : getTimeToDeparture(data).inMinutes.toString() +
                                 "min",
@@ -101,11 +104,13 @@ class SolutionsCard extends StatelessWidget {
                             getTimeToDeparture(data).inMinutes < 0 ? 18 : 30),
                   ),
                   Text(
-                    "Durata: " + data.duration.toString(),
+                    AppLocalizations.of(context)!.duration +
+                        data.duration.toString(),
                     style: subHeaderTextStyle,
                   ),
                   Text(
-                    "Cambi: " + data.transfers.toString(),
+                    AppLocalizations.of(context)!.transfers +
+                        data.transfers.toString(),
                     style: subHeaderTextStyle,
                     textAlign: TextAlign.left,
                   ),
@@ -172,7 +177,7 @@ Duration getTimeToDeparture(Itinerary itinerary) {
           ? "0" + DateTime.now().day.toString()
           : DateTime.now().day.toString()) +
       " " +
-      itinerary.departure +
+      itinerary.departure.replaceAll("*", "") +
       ":00");
   //startDate is the current time
   DateTime startDate = DateTime.now();
@@ -185,7 +190,8 @@ Duration getTimeToDeparture(Itinerary itinerary) {
       tempDate.substring(3, 5) +
       "-" +
       tempDate.substring(0, 2));
-  if (itinerary.dayNoticeDeparture == 1)
+
+  if (itinerary.departure.contains("*"))
     requestedDate = requestedDate.add(const Duration(days: 1));
   //Get only the date of today without the time!
   DateTime today = DateTime.parse(DateTime.now().toString().substring(0, 10));

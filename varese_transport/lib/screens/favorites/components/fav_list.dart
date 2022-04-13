@@ -18,7 +18,6 @@ class FavList extends StatefulWidget {
 }
 
 class _FavListState extends State<FavList> {
-  int _selectedIndex = 0;
   bool isFrom;
   AsyncSnapshot<List<List<String>>> snapshot;
   _FavListState(this.snapshot, this.isFrom);

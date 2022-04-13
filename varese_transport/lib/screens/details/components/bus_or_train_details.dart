@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/section.dart';
 import 'package:varese_transport/screens/details/components/get_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 //This widget is the small container between departure and arrival station that contains info
 //such as bus or train number, who operates this line, the duration and the stops
@@ -74,7 +75,7 @@ class BusOrTrainDetails extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(5),
               child: Text(
-                "Durata: " + section.duration,
+                AppLocalizations.of(context)!.duration + section.duration,
                 style: regularTextStyle.copyWith(fontSize: 12),
               ),
             ),
@@ -84,7 +85,9 @@ class BusOrTrainDetails extends StatelessWidget {
                     //-2 since list includes arrival
                     title: Text(
                       (section.stops.length - 2).toString() +
-                          (section.stops.length > 3 ? " fermate" : " fermata"),
+                          (section.stops.length > 3
+                              ? AppLocalizations.of(context)!.stops
+                              : AppLocalizations.of(context)!.stop),
                       textAlign: TextAlign.left,
                       style: regularTextStyle.copyWith(
                           fontSize: 12,

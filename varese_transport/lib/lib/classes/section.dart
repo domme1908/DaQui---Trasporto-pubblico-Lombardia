@@ -44,7 +44,7 @@ class Section {
     List<Stop> _stops =
         stopsObsJson.map((stopsObj) => Stop.fromJson(stopsObj)).toList();
     //Distinguish walking and other forms of transportation
-    if (json.containsKey("manager")) {
+    if (json.containsKey("gestore")) {
       //This one is for bus, train, etc.
       return Section(
         json['idTratta'] as String,
@@ -61,7 +61,7 @@ class Section {
         json["yPartenza"] as String,
         json["yArrivo"] as String,
         _stops,
-        json["transport"] as String,
+        json["mezzo"] as String,
         json["gestore"] as String,
       );
     }

@@ -4,6 +4,7 @@ import 'package:varese_transport/lib/classes/gradient_app_bar.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
 import 'package:varese_transport/screens/solutions/components/solutions_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -48,7 +49,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
     return Scaffold(
         body: Column(children: <Widget>[
       //Create the AppBar
-      const GradientAppBar("Soluzioni"),
+      GradientAppBar(AppLocalizations.of(context)!.solutions),
       //This builder fetches the data and displays a loading bar while doing so
       FutureBuilder<List<Itinerary>>(
         //Execute the async task
@@ -65,13 +66,13 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text("Ci dispiace!",
+                            Text(AppLocalizations.of(context)!.we_are_sorry,
                                 style: TextStyle(
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.bold,
                                     fontSize: 30)),
-                            const Text(
-                              "Non ci sono risultati per la tua ricerca",
+                            Text(
+                              AppLocalizations.of(context)!.no_results,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -99,7 +100,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                         margin:
                             EdgeInsets.symmetric(horizontal: 60, vertical: 10),
                         child: ElevatedButton(
-                          child: Text("Carica altri soluzioni"),
+                          child: Text(AppLocalizations.of(context)!.load_more),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
                               kSecondaryColor,

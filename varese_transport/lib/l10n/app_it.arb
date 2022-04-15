@@ -1,5 +1,6 @@
 {
 	"add_favs": "Aggiungi preferiti",
+	"already_fav":" è gia nella tua lista dei preferiti!",
 	"already_departed": "Già partito",
 	"areadifermata": "Fermata",
 	"arrival": "Destinazione",
@@ -32,6 +33,7 @@
 	"server_unavailable": "Server non raggiungibile",
 	"server_unavailable_details": "Non riesco ad accedere al server! Verifica la tua conessione.",
 	"solutions": "Soluzioni",
+	"station_cannot_be_same":"Stazione di partenza non può essere uguale alla stazione di destinazione!",
 	"stop": " fermata",
 	"stop_type_not_found": "Tipo di fermata sconosciuto",
 	"stops": " fermate",

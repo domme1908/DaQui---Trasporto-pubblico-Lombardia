@@ -1,6 +1,8 @@
 {
 	"add_favs": "Add favourites",
 	"already_departed": "departed",
+	"already_fav":" is already one of your favourites!",
+
 	"areadifermata": "Stop",
 	"arrival": "Destination",
 	"civico": "Address",
@@ -32,6 +34,7 @@
 	"server_unavailable": "Server not available",
 	"server_unavailable_details": "Please check your connection!",
 	"solutions": "Solutions",
+	"station_cannot_be_same":"Start and destination cannot be the same!",
 	"stop": " stop",
 	"stop_type_not_found": "Unkown type",
 	"stops": " stops",

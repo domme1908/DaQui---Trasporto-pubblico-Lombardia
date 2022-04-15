@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:user_messaging_platform/user_messaging_platform.dart';
 
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/screens/home/components/home_screen.dart';
@@ -44,6 +44,22 @@ Future<Locale> setLanguageFromMemory() async {
 class _MyAppState extends State<MyApp> {
   Locale locale;
   _MyAppState({required this.locale});
+  @override
+  void initState() {
+    super.initState();
+    updateConsent();
+  }
+
+  void updateConsent() async {
+    // Make sure to continue with the latest consent info.
+    var info = await UserMessagingPlatform.instance.requestConsentInfoUpdate();
+
+    // Show the consent form if consent is required.
+    if (info.consentStatus == ConsentStatus.required) {
+      // `showConsentForm` returns the latest consent info, after the consent from has been closed.
+      info = await UserMessagingPlatform.instance.showConsentForm();
+    }
+  }
 
   changeLanguage(Locale locale) {
     setState(() {

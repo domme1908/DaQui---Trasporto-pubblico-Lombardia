@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:varese_transport/lib/classes/itinerary.dart';
@@ -36,14 +37,34 @@ class APICallState extends State<APICall> {
     _interstitialAd?.dispose();
   }
 
+  ///This function decides whether to show an ad on click of the search button or not
+  ///If it is the first time the user opens the app no ads are shown
+  ///Ads are shown every second time the user does a search
+  Future<bool> checkIfShowAd() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey("ads")) {
+      if (prefs.getInt("ads")! % 2 == 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  ///This function checks weather the key ads is already present, if it is it will be incremented
+  ///by one, otherwise it will be created
+  Future<void> incrementSearches() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey("ads")) {
+      prefs.setInt("ads", prefs.getInt("ads")! + 1);
+    } else {
+      prefs.setInt("ads", 1);
+    }
+  }
+
   //These variables are used for the API call - they are updated from the body class
   static Station fromStation = Station.empty(), toStation = Station.empty();
   static String from = "null", to = "null", time = "", date = "";
-  static final AdRequest request = AdRequest(
-    keywords: <String>['foo', 'bar'],
-    contentUrl: 'http://foo.com/bar.html',
-    nonPersonalizedAds: true,
-  );
+  static final AdRequest request = AdRequest();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,22 +72,40 @@ class APICallState extends State<APICall> {
         height: 100,
         child: ElevatedButton(
           onPressed: () {
-            _showInterstitialAd();
-            //Check if neccessary values have been given
+            //Check if neccessary values have been given and if they are not the same
             if (!(fromStation.station == "null") &&
-                !(toStation.station == "null")) {
+                !(toStation.station == "null") &&
+                !((fromStation.x == toStation.x) &&
+                    (fromStation.y == toStation.y))) {
+              checkIfShowAd().then((flag) {
+                if (flag) {
+                  _showInterstitialAd();
+                }
+              });
+              incrementSearches();
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const SolutionsScreen()));
             } else {
+              var errorMes;
+              //Values have been given but are equal
+              if ((fromStation.x == toStation.x &&
+                  fromStation.y == toStation.y)) {
+                errorMes = AppLocalizations.of(context)!.station_cannot_be_same;
+              } else {
+                errorMes = AppLocalizations.of(context)!.no_stations_given;
+              }
               //Otherwise display a snackbar with the error message
-              var errorMes = SnackBar(
+              errorMes = SnackBar(
                 //Snackbar desing
                 content: Text(
-                  AppLocalizations.of(context)!.no_stations_given,
+                  errorMes,
+                  style:
+                      baseTextStyle.copyWith(color: Colors.white, fontSize: 16),
                 ),
                 behavior: SnackBarBehavior.floating,
+                backgroundColor: kPrimaryColor,
               );
               //Display the snackbar
               ScaffoldMessenger.of(context).showSnackBar(errorMes);
@@ -97,9 +136,9 @@ class APICallState extends State<APICall> {
 
   void _createInterstitialAd() {
     InterstitialAd.load(
-        adUnitId: Platform.isAndroid
-            ? 'ca-app-pub-2779208204217812/7073875316'
-            : 'ca-app-pub-3940256099942544/4411468910',
+        adUnitId:
+            //'ca-app-pub-3940256099942544/8691691433',
+            'ca-app-pub-2779208204217812/7073875316',
         request: request,
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {

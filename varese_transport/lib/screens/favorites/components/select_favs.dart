@@ -94,7 +94,7 @@ class _SelectFavsState extends State<SelectFavs> {
                 );
               },
               onSuggestionSelected: (Station suggestion) {
-                saveFav(suggestion);
+                saveFav(suggestion, context);
                 Navigator.pop(context);
                 Navigator.pop(context);
                 Navigator.push(
@@ -125,20 +125,47 @@ class _SelectFavsState extends State<SelectFavs> {
   }
 }
 
-void saveFav(Station favToSave) async {
+void saveFav(Station favToSave, BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
-  List<String> result;
-  result = favToSave.toStringList();
-
-  if (!prefs.containsKey("counter")) {
-    prefs.setInt("counter", 1);
-    result.add("1");
-
-    prefs.setStringList("fav1", result);
+  bool isPresent = await checkIfPresent(favToSave);
+  if (!isPresent) {
+    List<String> result;
+    result = favToSave.toStringList();
+    if (!prefs.containsKey("counter")) {
+      prefs.setInt("counter", 1);
+      result.add("1");
+      prefs.setStringList("fav1", result);
+    } else {
+      result.add((prefs.getInt("counter")! + 1).toString());
+      print(result);
+      prefs.setInt("counter", prefs.getInt("counter")! + 1);
+      prefs.setStringList("fav" + prefs.getInt("counter")!.toString(), result);
+    }
   } else {
-    result.add((prefs.getInt("counter")! + 1).toString());
-    print(result);
-    prefs.setInt("counter", prefs.getInt("counter")! + 1);
-    prefs.setStringList("fav" + prefs.getInt("counter")!.toString(), result);
+    //Display a snackbar to inform the user
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //Snackbar desing
+      content: Text(
+        favToSave.station + AppLocalizations.of(context)!.already_fav,
+        style: baseTextStyle.copyWith(color: Colors.white, fontSize: 16),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: kPrimaryColor,
+    ));
   }
+}
+
+Future<bool> checkIfPresent(Station favToSave) async {
+  final prefs = await SharedPreferences.getInstance();
+  if (prefs.containsKey("counter")) {
+    for (var i = 1; i < prefs.getInt("counter")!; i++) {
+      if (prefs.containsKey("fav" + i.toString())) {
+        if (prefs.getStringList("fav" + i.toString())!.elementAt(2) ==
+                favToSave.x &&
+            prefs.getStringList("fav" + i.toString())!.elementAt(3) ==
+                favToSave.y) return true;
+      }
+    }
+  }
+  return false;
 }

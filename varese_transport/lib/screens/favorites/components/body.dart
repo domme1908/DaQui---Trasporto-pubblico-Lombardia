@@ -111,7 +111,7 @@ Future<List<List<String>>> getFavs() async {
   } else {
     List<List<String>> result = [];
     for (String key in prefs.getKeys()) {
-      if (key != "counter" && key != "lang") {
+      if (key != "counter" && key != "lang" && key != "ads") {
         result.add(prefs.getStringList(key)!);
       }
     }

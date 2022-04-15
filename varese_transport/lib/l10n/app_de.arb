@@ -1,5 +1,6 @@
 {
 	"add_favs": "Hinzufügen",
+	"already_fav":" befindet sich bereits in der Liste deiner Favoriten!",
 	"already_departed": "Abgefahren",
 	"areadifermata": "Haltestelle",
 	"arrival": "Ziel",
@@ -32,6 +33,7 @@
 	"server_unavailable": "Server nicht erreichbar",
 	"server_unavailable_details": "Keine Verbindung zum Server. Überprüfe deine Verbindung!",
 	"solutions": "Lösungen",
+	"station_cannot_be_same":"Start- und Zielpunkt müssen verschieden sein!",
 	"stop": " Haltestelle",
 	"stop_type_not_found": "Haltestellentyp nicht gefunden",
 	"stops": " Haltestellen",

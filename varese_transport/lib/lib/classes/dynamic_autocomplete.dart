@@ -130,12 +130,16 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
                 "posizione",
                 coordinates.longitude.toString(),
                 coordinates.latitude.toString()));
+            //Push the result into the future value
             Future<List<Station>> result =
                 Future<List<Station>>.value(position);
             return result;
+          }).onError((error, stackTrace) {
+            //If location permission is denied by user just return an empty list
+            return Future<List<Station>>.value([]);
           });
         }
-        //This is used if the user does not conset to using the location or if the user types something into the field
+        //This part of code is reached when the textfield is no longer empty and the user is searching for a specific station
         return await APICallState().fetchStations(pattern);
       },
       //Display the loading field while fetching stations or user-location

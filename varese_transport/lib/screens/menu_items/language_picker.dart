@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/gradient_app_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -7,6 +8,11 @@ import '../../main.dart';
 
 class LanguagePicker extends StatelessWidget {
   const LanguagePicker({Key? key}) : super(key: key);
+
+  void setLang(String lang) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("lang", lang);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +34,7 @@ class LanguagePicker extends StatelessWidget {
               onTap: () {
                 MyApp.setLocale(context, Locale('it'));
                 Navigator.pop(context);
+                setLang("it");
               },
             ),
             ListTile(
@@ -40,6 +47,7 @@ class LanguagePicker extends StatelessWidget {
               onTap: () {
                 MyApp.setLocale(context, Locale('de'));
                 Navigator.pop(context);
+                setLang("de");
               },
             ),
             ListTile(
@@ -54,6 +62,7 @@ class LanguagePicker extends StatelessWidget {
               onTap: () {
                 MyApp.setLocale(context, Locale('en'));
                 Navigator.pop(context);
+                setLang("en");
               },
             ),
           ]),

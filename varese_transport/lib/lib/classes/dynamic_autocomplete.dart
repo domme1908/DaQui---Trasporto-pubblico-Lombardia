@@ -121,8 +121,6 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
       suggestionsCallback: (pattern) async {
         //If textfield is empty and selected grab position and display it as list
         if (pattern == "") {
-          //Produce a future object and complete it later with the coordinates
-          var completer = new Completer<List<Station>>();
           List<Station> position = [];
           //Make sure the user consented to the usage of his position and only if so enter the position section
           return DeterminePosition().then((coordinates) {
@@ -132,10 +130,9 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
                 "posizione",
                 coordinates.longitude.toString(),
                 coordinates.latitude.toString()));
-            //Since we need to provide a future we use a completer
-            completer.complete(position);
-            //Return the future of the completer
-            return completer.future;
+            Future<List<Station>> result =
+                Future<List<Station>>.value(position);
+            return result;
           });
         }
         //This is used if the user does not conset to using the location or if the user types something into the field

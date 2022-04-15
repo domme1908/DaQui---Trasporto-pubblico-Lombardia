@@ -1,35 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/screens/home/components/home_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
+  MobileAds.instance.initialize();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(new MyApp());
+    setLanguageFromMemory().then(
+      (value) => runApp(new MyApp(lang: value)),
+    );
   });
 }
 
 class MyApp extends StatefulWidget {
+  final Locale lang;
+  const MyApp({
+    Key? key,
+    required this.lang,
+  }) : super(key: key);
+
   static void setLocale(BuildContext context, Locale newLocale) async {
     _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
     state.changeLanguage(newLocale);
   }
 
   @override
-  _MyAppState createState() => _MyAppState();
+  _MyAppState createState() => _MyAppState(locale: lang);
+}
+
+Future<Locale> setLanguageFromMemory() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.containsKey("lang")) return Locale(prefs.getString("lang")!);
+  return Future<Locale>.value(Locale("it"));
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale _locale = Locale("it");
+  Locale locale;
+  _MyAppState({required this.locale});
 
   changeLanguage(Locale locale) {
     setState(() {
-      _locale = locale;
+      this.locale = locale;
     });
   }
 
@@ -41,7 +59,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: _locale,
+      locale: locale,
       localeResolutionCallback: (locale, supportedLocales) {
         for (var supportedLocale in supportedLocales) {
           if (supportedLocale.languageCode == locale!.languageCode &&

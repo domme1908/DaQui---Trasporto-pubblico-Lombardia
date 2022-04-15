@@ -23,69 +23,70 @@ class _FavListState extends State<FavList> {
   _FavListState(this.snapshot, this.isFrom);
   @override
   Widget build(BuildContext context) {
-    print(Body.removingFavs);
-    return ListView.builder(
-        itemCount: snapshot.data!.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
-              onTap: () {
-                if (isFrom) {
-                  DynamicVTAutocompleteState.textControllerFrom.text =
-                      snapshot.data![index].elementAt(0);
-                  APICallState.fromStation = Station(
-                      snapshot.data![index].elementAt(0),
-                      snapshot.data![index].elementAt(1),
-                      snapshot.data![index].elementAt(2),
-                      snapshot.data![index].elementAt(3));
-                } else {
-                  DynamicVTAutocompleteState.textControllerTo.text =
-                      snapshot.data![index].elementAt(0);
-                  APICallState.toStation = Station(
-                      snapshot.data![index].elementAt(0),
-                      snapshot.data![index].elementAt(1),
-                      snapshot.data![index].elementAt(2),
-                      snapshot.data![index].elementAt(3));
-                }
-                Navigator.pop(context);
-              },
-              child: ListTile(
-                trailing: Body.removingFavs
-                    ? GestureDetector(
-                        child: Icon(
-                          Icons.highlight_remove,
-                          color: Colors.red,
-                        ),
-                        onTap: () {
-                          print(snapshot.data![index].toString());
-                          deleteFav(
-                              int.parse(snapshot.data![index].elementAt(4)));
-                          Body.removingFavs = false;
+    return Expanded(
+        child: ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                  onTap: () {
+                    if (isFrom) {
+                      DynamicVTAutocompleteState.textControllerFrom.text =
+                          snapshot.data![index].elementAt(0);
+                      APICallState.fromStation = Station(
+                          snapshot.data![index].elementAt(0),
+                          snapshot.data![index].elementAt(1),
+                          snapshot.data![index].elementAt(2),
+                          snapshot.data![index].elementAt(3));
+                    } else {
+                      DynamicVTAutocompleteState.textControllerTo.text =
+                          snapshot.data![index].elementAt(0);
+                      APICallState.toStation = Station(
+                          snapshot.data![index].elementAt(0),
+                          snapshot.data![index].elementAt(1),
+                          snapshot.data![index].elementAt(2),
+                          snapshot.data![index].elementAt(3));
+                    }
+                    Navigator.pop(context);
+                  },
+                  child: ListTile(
+                    trailing: Body.removingFavs
+                        ? GestureDetector(
+                            child: Icon(
+                              Icons.highlight_remove,
+                              color: Colors.red,
+                            ),
+                            onTap: () {
+                              print(snapshot.data![index].toString());
+                              deleteFav(int.parse(
+                                  snapshot.data![index].elementAt(4)));
+                              Body.removingFavs = false;
 
-                          Navigator.pop(context);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: ((context) => FavScreen(isFrom))));
-                        })
-                    : Container(
-                        width: 1,
-                      ),
-                leading: Image.asset(
-                  "assets/images/" +
-                      snapshot.data![index].elementAt(1) +
-                      ".png",
-                  scale: 12,
-                ),
-                title: Text(
-                  snapshot.data![index].elementAt(0),
-                  style: headerTextStyle.copyWith(fontSize: 20),
-                ),
-                subtitle: Text(
-                  getTypeOfStation(snapshot.data![index].elementAt(1)),
-                  style: subHeaderTextStyle.copyWith(fontSize: 16),
-                ),
-              ));
-        });
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: ((context) =>
+                                          FavScreen(isFrom))));
+                            })
+                        : Container(
+                            width: 1,
+                          ),
+                    leading: Image.asset(
+                      "assets/images/" +
+                          snapshot.data![index].elementAt(1) +
+                          ".png",
+                      scale: 12,
+                    ),
+                    title: Text(
+                      snapshot.data![index].elementAt(0),
+                      style: headerTextStyle.copyWith(fontSize: 20),
+                    ),
+                    subtitle: Text(
+                      getTypeOfStation(snapshot.data![index].elementAt(1)),
+                      style: subHeaderTextStyle.copyWith(fontSize: 16),
+                    ),
+                  ));
+            }));
   }
 
 //Returns the right string of the station type

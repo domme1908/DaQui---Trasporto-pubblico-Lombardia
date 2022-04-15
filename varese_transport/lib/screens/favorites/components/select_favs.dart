@@ -49,23 +49,24 @@ class _SelectFavsState extends State<SelectFavs> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(children: [
-      GradientAppBar("Aggiungi preferiti"),
+      GradientAppBar(AppLocalizations.of(context)!.add_favs),
       Container(
           margin: EdgeInsets.all(kDefaultPadding),
           child: TypeAheadField(
               noItemsFoundBuilder: (context) {
-                return const ListTile(
-                  title: Text("Sto cercando...",
+                return ListTile(
+                  title: Text(AppLocalizations.of(context)!.no_stations_found,
                       style: TextStyle(
                           color: Colors.black, fontFamily: 'Poppins')),
                 );
               },
+              keepSuggestionsOnLoading: false,
               textFieldConfiguration: TextFieldConfiguration(
                 controller: _textController,
                 autofocus: false,
                 style: const TextStyle(fontFamily: 'Poppins'),
                 decoration: InputDecoration(
-                  hintText: "Cerca stazioni...",
+                  hintText: AppLocalizations.of(context)!.search_stations,
                   suffixIcon: IconButton(
                     onPressed: () {
                       _textController.clear();

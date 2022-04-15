@@ -35,12 +35,11 @@ class _BodyState extends State<Body> {
               if (snapshot.hasData) {
                 if (snapshot.data!.isEmpty) return noFavsYet(context);
 
-                return Expanded(child: FavList(snapshot, this.isFrom));
+                return FavList(snapshot, this.isFrom);
               } else {
                 return CircularProgressIndicator();
               }
             }),
-        Spacer(),
         Container(
             width: screenSize.width,
             height: 70,
@@ -112,7 +111,7 @@ Future<List<List<String>>> getFavs() async {
   } else {
     List<List<String>> result = [];
     for (String key in prefs.getKeys()) {
-      if (key != "counter") {
+      if (key != "counter" && key != "lang") {
         result.add(prefs.getStringList(key)!);
       }
     }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/logo_banner.dart';
 import 'package:varese_transport/screens/solutions/components/body.dart';
 
@@ -16,7 +17,9 @@ class _SolutionsScreenState extends State<SolutionsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Body(),
-      bottomNavigationBar: LogoBanner(),
+      bottomNavigationBar: LogoBanner(
+        bannerColor: kSecondaryColor,
+      ),
     );
   }
 }

@@ -18,10 +18,9 @@ class GetManager extends StatelessWidget {
         switch (section.manager) {
           case "PEREGO":
           case "CTPI":
-          case "TRENORD":
             return Image.asset(
               "assets/images/aziende_trasporto/CTPI.png",
-              scale: 8,
+              scale: 7,
             );
           case "BGTRASP-EST":
           case "BGTRASP-OV":
@@ -33,16 +32,13 @@ class GetManager extends StatelessWidget {
           case "TRASPBS-SUD":
             return Image.asset(
                 "assets/images/aziende_trasporto/TRASPBS-NORD.png",
-                scale: 2);
+                scale: 7);
           case "CO.MO.FUN":
             return Image.asset("assets/images/aziende_trasporto/co_mo_fun.png",
-                scale: 2);
-          case "STECAV":
-            return Image.asset("assets/images/aziende_trasporto/stecav.png",
-                scale: 2);
+                scale: 7);
           case "TRENITALIA":
-            return Image.asset("assets/images/aziende_trasporto/trenitalia.png",
-                scale: 15);
+            return Image.asset("assets/images/aziende_trasporto/TRENITALIA.png",
+                scale: 7);
 
           default:
             return Text(section.manager);

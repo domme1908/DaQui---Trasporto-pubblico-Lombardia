@@ -138,13 +138,13 @@ class _OSMapState extends State<OSMap> {
       case "1":
         return Color(0xFF006c67);
       case "2":
-        return Color(0xFFff9914);
+        return Color(0xFFe30514);
       case "3":
-        return Color(0xFF73d2de);
+        return Color(0xFFFF1ABF);
       case "4":
-        return Color(0xFFffdd00);
+        return Color(0xFF5e17eb);
       case "5":
-        return Color(0xFF8f00ff);
+        return Color(0xFFffde59);
       case "6":
         return Color(0xFF7ae582);
     }
@@ -170,7 +170,7 @@ class _OSMapState extends State<OSMap> {
         result.add(MapMarker(
             child: Image.asset(
               "assets/images/departure_map.png",
-              scale: 7,
+              scale: 6,
             ),
             latitude: double.parse(section.yDeparture),
             longitude: double.parse(section.xDeparture)));
@@ -178,7 +178,7 @@ class _OSMapState extends State<OSMap> {
         result.add(MapMarker(
             child: Image.asset(
               "assets/images/destination_map.png",
-              scale: 7,
+              scale: 6,
             ),
             latitude: double.parse(section.yArrival),
             longitude: double.parse(section.xArrival)));
@@ -210,7 +210,7 @@ class _OSMapState extends State<OSMap> {
             result.add(MapMarker(
                 child: Icon(
                   Icons.circle,
-                  color: Color(0xFFFFE7A4),
+                  color: Color(0xFFFFFFFF),
                   size: 10,
                 ),
                 latitude: double.parse(stop.y),

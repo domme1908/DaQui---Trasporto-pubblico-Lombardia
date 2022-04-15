@@ -56,7 +56,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
         maxHeight: size.height * 0.7,
         minHeight: size.height * 0.55,
       ),
-      bottomNavigationBar: LogoBanner(),
+      bottomNavigationBar: LogoBanner(
+        bannerColor: kSecondaryColor,
+      ),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:varese_transport/lib/classes/itinerary.dart';
@@ -19,56 +21,125 @@ class APICall extends StatefulWidget {
 }
 
 class APICallState extends State<APICall> {
+  InterstitialAd? _interstitialAd;
+  int _numInterstitialLoadAttempts = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _createInterstitialAd();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _interstitialAd?.dispose();
+  }
+
   //These variables are used for the API call - they are updated from the body class
   static Station fromStation = Station.empty(), toStation = Station.empty();
   static String from = "null", to = "null", time = "", date = "";
-
+  static final AdRequest request = AdRequest(
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    nonPersonalizedAds: true,
+  );
   @override
   Widget build(BuildContext context) {
     return Container(
-      //Style the button
-      margin: const EdgeInsets.all(kDefaultPadding),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(36),
-        color: kSecondaryColor,
-      ),
-      //InkWell-> Rectangular area that responds to touch
-      child: InkWell(
-        //On botton click call API
-        onTap: () {
-          //Check if neccessary values have been given
-          if (!(fromStation.station == "null") &&
-              !(toStation.station == "null")) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const SolutionsScreen()));
-          } else {
-            //Otherwise display a snackbar with the error message
-            var errorMes = SnackBar(
-              //Snackbar desing
-              content: Text(
-                AppLocalizations.of(context)!.no_stations_given,
-              ),
-              behavior: SnackBarBehavior.floating,
-            );
-            //Display the snackbar
-            ScaffoldMessenger.of(context).showSnackBar(errorMes);
-          }
-        },
-        //Further design of the button
-        child: SizedBox(
-          height: 50,
-          width: double.infinity,
-          child: Center(
-              child: Text(
-            AppLocalizations.of(context)!.search_button,
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 25),
-          )),
-        ),
-      ),
+        padding: EdgeInsets.all(kDefaultPadding),
+        height: 100,
+        child: ElevatedButton(
+          onPressed: () {
+            _showInterstitialAd();
+            //Check if neccessary values have been given
+            if (!(fromStation.station == "null") &&
+                !(toStation.station == "null")) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SolutionsScreen()));
+            } else {
+              //Otherwise display a snackbar with the error message
+              var errorMes = SnackBar(
+                //Snackbar desing
+                content: Text(
+                  AppLocalizations.of(context)!.no_stations_given,
+                ),
+                behavior: SnackBarBehavior.floating,
+              );
+              //Display the snackbar
+              ScaffoldMessenger.of(context).showSnackBar(errorMes);
+            }
+          },
+          style: ElevatedButton.styleFrom(
+            primary: kSecondaryColor,
+            shape: StadiumBorder(),
+            enableFeedback: true,
+            shadowColor: kPrimaryColor,
+            elevation: 12,
+          ),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(""),
+            Text(
+              AppLocalizations.of(context)!.search_button,
+              style:
+                  headerTextStyle.copyWith(color: Colors.white, fontSize: 25),
+            ),
+            Icon(
+              Icons.search,
+              size: 35,
+            ),
+          ]),
+        ));
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: Platform.isAndroid
+            ? 'ca-app-pub-2779208204217812/7073875316'
+            : 'ca-app-pub-3940256099942544/4411468910',
+        request: request,
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            print('$ad loaded');
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error.');
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < 3) {
+              _createInterstitialAd();
+            }
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      print('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        _createInterstitialAd();
+      },
     );
+    _interstitialAd!.show();
+    _interstitialAd = null;
   }
 
   //The api call - sends the collected values to the js rest api
@@ -92,8 +163,7 @@ class APICallState extends State<APICall> {
         time);
     //TODO URL must be changed to final value
     final response = await http.get(Uri.parse(
-        'http://192.168.1.56:3000/getSolutions?from=' +
-            // 'https://apidaqui-18067.nodechef.com/getSolutions?from=' +
+        'https://apidaqui-18067.nodechef.com/getSolutions?from=' +
             (fromStation.station != "Posizione"
                 ? fromStation.station.replaceAll(RegExp('\\s'), '%20')
                 : "La tua posizione") +
@@ -130,10 +200,8 @@ class APICallState extends State<APICall> {
 
   Future<List<Station>> fetchStations([text]) async {
     print("Fetching stations for " + text);
-    final response =
-        await http.get(Uri.parse('http://192.168.1.56:3000/getStations?text=' +
-            //'https://apidaqui-18067.nodechef.com/testStations?text=' +
-            text));
+    final response = await http.get(Uri.parse(
+        'https://apidaqui-18067.nodechef.com/getStations?text=' + text));
     return compute(parseStations, response.body);
   }
 

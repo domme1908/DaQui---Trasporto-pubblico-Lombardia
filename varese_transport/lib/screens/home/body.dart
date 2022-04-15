@@ -35,7 +35,6 @@ class BodyState extends State<Body> {
               //Alert the user that there is no connection
               return AlertDialog(
                   title: Text(AppLocalizations.of(context)!.server_unavailable),
-                  //TODO remove exact debug before production
                   content: Text(
                       AppLocalizations.of(context)!.server_unavailable_details),
                   actions: [

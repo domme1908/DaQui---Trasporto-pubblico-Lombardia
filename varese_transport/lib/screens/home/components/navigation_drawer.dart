@@ -2,14 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/logo_banner.dart';
+import 'package:varese_transport/screens/home/components/api_call.dart';
 import 'package:varese_transport/screens/menu_items/language_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../menu_items/about.dart';
 
-class NavigationDrawer extends StatelessWidget {
+class NavigationDrawer extends StatefulWidget {
+  NavigationDrawer({Key? key}) : super(key: key);
+
+  @override
+  State<NavigationDrawer> createState() => _NavigationDrawerState();
+}
+
+class _NavigationDrawerState extends State<NavigationDrawer> {
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.of(context).size;
+
+    bool _train = true,
+        bus = true,
+        ship = true,
+        tram = true,
+        metro = true,
+        cablecar = true;
     return Drawer(
         child: Material(
       color: kPrimaryColor,
@@ -25,9 +41,187 @@ class NavigationDrawer extends StatelessWidget {
                   const SizedBox(height: 12),
                   const SizedBox(height: 24),
                   buildMenuItem(
-                    text: 'About',
-                    icon: Icons.info,
-                    onClicked: () => selectedItem(context, 0),
+                    text: 'Vehicles',
+                    icon: Icons.bus_alert,
+                    onClicked: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return StatefulBuilder(
+                                builder: (context, setState) => AlertDialog(
+                                      actions: [
+                                        Padding(
+                                            padding: EdgeInsets.fromLTRB(
+                                                kDefaultPadding,
+                                                0,
+                                                kDefaultPadding,
+                                                kDefaultPadding),
+                                            child: ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: kSecondaryColor,
+                                                  shape: StadiumBorder(),
+                                                  enableFeedback: true,
+                                                  shadowColor: kPrimaryColor,
+                                                ),
+                                                onPressed: () =>
+                                                    Navigator.of(context).pop(),
+                                                child: Text("OK")))
+                                      ],
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30))),
+                                      backgroundColor: kPrimaryColor,
+                                      contentTextStyle: baseTextStyle.copyWith(
+                                          color: Colors.white, fontSize: 15),
+                                      titleTextStyle: headerTextStyle.copyWith(
+                                          color: Colors.white, fontSize: 20),
+                                      title: Text(AppLocalizations.of(context)!
+                                          .select_vehicles),
+                                      content: Container(
+                                        height: 480,
+                                        width: screenSize.width * 0.8,
+                                        child: Column(children: [
+                                          SwitchListTile(
+                                            activeColor: kSecondaryColor,
+                                            title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .train,
+                                              style:
+                                                  subHeaderTextStyle.copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 15),
+                                            ),
+                                            secondary: Image.asset(
+                                              "assets/images/train.png",
+                                              scale: 10,
+                                            ),
+                                            value: _train,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                APICallState.train = value;
+                                                _train = value;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 24),
+                                          SwitchListTile(
+                                            activeColor: kSecondaryColor,
+                                            title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .metro,
+                                              style:
+                                                  subHeaderTextStyle.copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 15),
+                                            ),
+                                            secondary: Image.asset(
+                                              "assets/images/metro_treno.png",
+                                              scale: 10,
+                                            ),
+                                            value: metro,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                APICallState.metro = value;
+                                                metro = value;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 24),
+                                          SwitchListTile(
+                                            activeColor: kSecondaryColor,
+                                            title: Text(
+                                              AppLocalizations.of(context)!.bus,
+                                              style:
+                                                  subHeaderTextStyle.copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 15),
+                                            ),
+                                            secondary: Image.asset(
+                                              "assets/images/bus.png",
+                                              scale: 10,
+                                            ),
+                                            value: bus,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                APICallState.bus = value;
+                                                bus = value;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 24),
+                                          SwitchListTile(
+                                            activeColor: kSecondaryColor,
+                                            title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .tram,
+                                              style:
+                                                  subHeaderTextStyle.copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 15),
+                                            ),
+                                            secondary: Image.asset(
+                                              "assets/images/tram.png",
+                                              scale: 10,
+                                            ),
+                                            value: tram,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                APICallState.tram = value;
+                                                tram = value;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 24),
+                                          SwitchListTile(
+                                            activeColor: kSecondaryColor,
+                                            title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .ship,
+                                              style:
+                                                  subHeaderTextStyle.copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 15),
+                                            ),
+                                            secondary: Image.asset(
+                                              "assets/images/traghetto.png",
+                                              scale: 10,
+                                            ),
+                                            value: ship,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                ship = value;
+                                                APICallState.ship = value;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 24),
+                                          SwitchListTile(
+                                            activeColor: kSecondaryColor,
+                                            title: Text(
+                                              AppLocalizations.of(context)!
+                                                  .ship,
+                                              style:
+                                                  subHeaderTextStyle.copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 15),
+                                            ),
+                                            secondary: Image.asset(
+                                              "assets/images/funicolare.png",
+                                              scale: 10,
+                                            ),
+                                            value: cablecar,
+                                            onChanged: (bool value) {
+                                              setState(() {
+                                                APICallState.cablecar = value;
+                                                cablecar = value;
+                                              });
+                                            },
+                                          ),
+                                        ]),
+                                      ),
+                                    ));
+                          });
+                    },
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
@@ -35,18 +229,24 @@ class NavigationDrawer extends StatelessWidget {
                     icon: Icons.language,
                     onClicked: () => selectedItem(context, 1),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
+                  Divider(color: Colors.white70),
+                  const SizedBox(height: 24),
                   buildMenuItem(
                     text: AppLocalizations.of(context)!.coffe,
                     icon: Icons.favorite_border,
                     onClicked: () => selectedItem(context, 2),
                   ),
-                  const SizedBox(height: 24),
-                  Divider(color: Colors.white70),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
                   buildMenuItem(
                     text: AppLocalizations.of(context)!.contact,
                     icon: Icons.contact_mail,
+                    onClicked: () => selectedItem(context, 3),
+                  ),
+                  const SizedBox(height: 24),
+                  buildMenuItem(
+                    text: 'About',
+                    icon: Icons.info,
                     onClicked: () => selectedItem(context, 4),
                   ),
                 ],
@@ -87,9 +287,8 @@ class NavigationDrawer extends StatelessWidget {
 
   Future<void> selectedItem(BuildContext context, int index) async {
     Navigator.of(context).pop();
-
     switch (index) {
-      case 0:
+      case 4:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => About(),
         ));
@@ -102,6 +301,8 @@ class NavigationDrawer extends StatelessWidget {
       case 2:
         const url = "https://www.buymeacoffee.com/dominik.markart";
         await launch(url);
+        break;
+      case 0:
         break;
     }
   }

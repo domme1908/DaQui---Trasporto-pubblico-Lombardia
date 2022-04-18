@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/cli_commands.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varese_transport/constants.dart';
@@ -61,9 +62,54 @@ class APICallState extends State<APICall> {
     }
   }
 
+  ///This function returns the string, that needs to be appended to the request in order select which vehicles
+  ///are desired by the user - defaults to all vehicles allowed
+  String getVehicles() {
+    List<String> tempResult = [];
+    String result = "%20%22options%22:%20%5b";
+    if (train) tempResult.add("%221");
+    if (metro) tempResult.add("%222");
+    if (bus) tempResult.add("%223");
+    if (tram) tempResult.add("%224");
+    if (ship) tempResult.add("%225");
+    if (cablecar) tempResult.add("%226");
+    if (tempResult.length == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          AppLocalizations.of(context)!.no_vehicles_given,
+          style: baseTextStyle.copyWith(color: Colors.white, fontSize: 16),
+        ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: kPrimaryColor,
+      ));
+      return "";
+    }
+    if (tempResult.length == 1) {
+      result += tempResult.first + "%22";
+    } else {
+      for (int i = 0; i < tempResult.length; i++) {
+        if (i != tempResult.length - 1) {
+          result += tempResult.elementAt(i) + "%22,";
+        } else {
+          result += tempResult.elementAt(i) + "%22";
+        }
+      }
+    }
+    result += "%5d,%20";
+    String output = result.replaceAll("%22", "\"").replaceAll("%20", " ");
+    print(output);
+    return result;
+  }
+
   //These variables are used for the API call - they are updated from the body class
   static Station fromStation = Station.empty(), toStation = Station.empty();
   static String from = "null", to = "null", time = "", date = "";
+  static bool train = true,
+      bus = true,
+      ship = true,
+      tram = true,
+      metro = true,
+      cablecar = true;
   static final AdRequest request = AdRequest();
   @override
   Widget build(BuildContext context) {
@@ -76,7 +122,8 @@ class APICallState extends State<APICall> {
             if (!(fromStation.station == "null") &&
                 !(toStation.station == "null") &&
                 !((fromStation.x == toStation.x) &&
-                    (fromStation.y == toStation.y))) {
+                    (fromStation.y == toStation.y)) &&
+                getVehicles() != "") {
               checkIfShowAd().then((flag) {
                 if (flag) {
                   _showInterstitialAd();
@@ -120,6 +167,7 @@ class APICallState extends State<APICall> {
           ),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            //Leave this here to divede the space of the Button equally in three
             Text(""),
             Text(
               AppLocalizations.of(context)!.search_button,
@@ -183,9 +231,10 @@ class APICallState extends State<APICall> {
 
   //The api call - sends the collected values to the js rest api
   Future<List<Itinerary>> fetchItinerary() async {
-    print("FETCHING SOLUTIONS");
-    print('http://localhost:3000/getSolutions?from=' +
-        fromStation.station.replaceAll(RegExp('\\s'), '%20') +
+    print('https://apidaqui-18067.nodechef.com/getSolutions?from=' +
+        (fromStation.station != "Posizione"
+            ? fromStation.station.replaceAll(RegExp('\\s'), '%20')
+            : "La tua posizione") +
         "&fromX=" +
         fromStation.x +
         "&fromY=" +
@@ -199,8 +248,9 @@ class APICallState extends State<APICall> {
         "&date=" +
         date.replaceAll(".", "/") +
         "&when=" +
-        time);
-    //TODO URL must be changed to final value
+        time +
+        "&options=" +
+        getVehicles());
     final response = await http.get(Uri.parse(
         'https://apidaqui-18067.nodechef.com/getSolutions?from=' +
             (fromStation.station != "Posizione"
@@ -219,8 +269,14 @@ class APICallState extends State<APICall> {
             "&date=" +
             date.replaceAll(".", "/") +
             "&when=" +
-            time));
-    print("AFTER FETCHING ");
+            time +
+            "&options=" +
+            getVehicles()));
+    print("BODY" + response.body);
+    if (response.body == "") {
+      List<Itinerary> result = [];
+      return Future<List<Itinerary>>.value(result);
+    }
     //Call the compute function provided by flutter
     return compute(
         parseItinerary,
@@ -230,8 +286,6 @@ class APICallState extends State<APICall> {
 
   List<Itinerary> parseItinerary(String responseBody) {
     //Parse the response to a JSON Map
-    print(responseBody);
-
     final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
     //Execute the json-factory of class Itinerary on all elements in order to return a List<Itinerary>
     return parsed.map<Itinerary>((json) => Itinerary.fromJson(json)).toList();

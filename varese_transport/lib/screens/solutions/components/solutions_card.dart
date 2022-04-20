@@ -100,8 +100,11 @@ class SolutionsCard extends StatelessWidget {
                             : getTimeToDeparture(data).inMinutes.toString() +
                                 "min",
                     style: headerTextStyle.copyWith(
-                        fontSize:
-                            getTimeToDeparture(data).inMinutes < 0 ? 18 : 30),
+                        fontSize: getTimeToDeparture(data).inMinutes < 0
+                            ? 18
+                            : getTimeToDeparture(data).inMinutes > 99
+                                ? 25
+                                : 28),
                   ),
                   Text(
                     AppLocalizations.of(context)!.duration +

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:language_builder/language_builder.dart';
@@ -39,6 +42,172 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
     APICallState.time = TimeOfDay.now().format(context);
     //Get total size of the screen
     Size size = MediaQuery.of(context).size;
+
+    Widget getTimePicker() {
+      return //Time Picker
+          Container(
+        //Some basic desing code
+        height: 50,
+        width: size.width * 0.35,
+        margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+        padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(36),
+            boxShadow: [
+              BoxShadow(
+                  offset: Offset(0, 10),
+                  blurRadius: 50,
+                  color: kPrimaryColor.withOpacity(0.23))
+            ]),
+        //Code similar to date-picker -> check above for doc
+        child: TextField(
+          controller: timeinput,
+          readOnly: true,
+          decoration: const InputDecoration(
+            icon: Icon(Icons.access_time),
+            hintStyle: TextStyle(
+              color: Colors.grey,
+            ),
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+          ),
+          onTap: () async {
+            if (Platform.isAndroid) {
+              TimeOfDay? pickedTime = await showTimePicker(
+                  context: context,
+                  //Set initial time to now
+                  //Lookups for past time is tecnically possible but not a big issue
+                  initialTime: TimeOfDay.now(),
+                  builder: (context, childWidget) {
+                    //Sets clock to 24h instead of AM PM -> In Italy no one understands AMPM
+                    return MediaQuery(
+                      data: MediaQuery.of(context)
+                          .copyWith(alwaysUse24HourFormat: true),
+                      child: childWidget!,
+                    );
+                  });
+              //Always check if the time was correctly set in order to avoid NullPointerExceptions
+              if (pickedTime != null) {
+                timeinput.text = pickedTime.format(context);
+                APICallState.time = pickedTime.to24hours();
+              }
+            } else {
+              //IOS Date Picker
+              showCupertinoModalPopup(
+                  context: context,
+                  builder: (context) => Container(
+                      height: 500,
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      child: Column(children: [
+                        SizedBox(
+                          height: 400,
+                          child: CupertinoDatePicker(
+                              use24hFormat: true,
+                              minimumDate: DateTime.now(),
+                              mode: CupertinoDatePickerMode.time,
+                              onDateTimeChanged: (val) {
+                                TimeOfDay result = TimeOfDay.fromDateTime(val);
+                                timeinput.text = result.to24hours();
+                                //Save to static APICall variable for API call
+                                APICallState.time = result.to24hours();
+                              }),
+                        ),
+                        CupertinoButton(
+                          child: const Text('OK'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        )
+                      ])));
+            }
+          },
+        ),
+      );
+    }
+
+    Widget getDatePicker() {
+      return Container(
+          margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+          padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+          height: 50,
+          width: size.width * 0.40,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(36),
+              boxShadow: [
+                BoxShadow(
+                    offset: Offset(0, 10),
+                    blurRadius: 50,
+                    color: kPrimaryColor.withOpacity(0.23))
+              ]),
+          child: TextField(
+            //Set the controller to be able to change the text afterwards
+            controller: dateinput,
+            //Avoid popping up of keyboard
+            readOnly: true,
+            //Design the calendar field
+            decoration: const InputDecoration(
+              icon: Icon(Icons.calendar_month),
+              hintStyle: TextStyle(
+                color: Colors.grey,
+              ),
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+            ),
+            //Open datepicker
+            //This function must be async since we don't know how long the user
+            //will keep the window open
+            onTap: () async {
+              if (Platform.isAndroid) {
+                //pickedDate is nullable since the window can be closed without inputting data
+                DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    //Lookups for paste values make no sense hence they are disabled
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2101));
+                //Proceed only if we have a DateTime object
+                if (pickedDate != null) {
+                  //Format date
+                  String formated =
+                      DateFormat('dd.MM.yyyy').format(pickedDate!);
+                  //Save if to the textfield for user benefit
+                  dateinput.text = formated;
+                  //Save to static APICall variable for API call
+                  APICallState.date = formated;
+                }
+              } else {
+                //IOS Date Picker
+                showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => Container(
+                        height: 500,
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        child: Column(children: [
+                          SizedBox(
+                            height: 400,
+                            child: CupertinoDatePicker(
+                                use24hFormat: true,
+                                minimumDate: DateTime.now(),
+                                maximumYear: DateTime.now().year + 1,
+                                mode: CupertinoDatePickerMode.date,
+                                onDateTimeChanged: (val) {
+                                  String formated =
+                                      DateFormat('dd.MM.yyyy').format(val);
+                                  //Save if to the textfield for user benefit
+                                  dateinput.text = formated;
+                                  //Save to static APICall variable for API call
+                                  APICallState.date = formated;
+                                }),
+                          ),
+                          CupertinoButton(
+                            child: const Text('OK'),
+                            onPressed: () => Navigator.of(context).pop(),
+                          )
+                        ])));
+              }
+            },
+          ));
+    }
 
     return Container(
         //40% of total height
@@ -97,114 +266,9 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                       bottom: 0,
                       left: 0,
                       right: 0,
-                      child:
-                          Wrap(alignment: WrapAlignment.spaceAround, children: [
-                        Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: kDefaultPadding),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: kDefaultPadding),
-                            height: 50,
-                            width: size.width * 0.43,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(36),
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: Offset(0, 10),
-                                      blurRadius: 50,
-                                      color: kPrimaryColor.withOpacity(0.23))
-                                ]),
-                            child: TextField(
-                              //Set the controller to be able to change the text afterwards
-                              controller: dateinput,
-                              //Avoid popping up of keyboard
-                              readOnly: true,
-                              //Design the calendar field
-                              decoration: const InputDecoration(
-                                icon: Icon(Icons.calendar_month),
-                                hintStyle: TextStyle(
-                                  color: Colors.grey,
-                                ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
-                              //Open datepicker
-                              //This function must be async since we don't know how long the user
-                              //will keep the window open
-                              onTap: () async {
-                                //pickedDate is nullable since the window can be closed without inputting data
-                                DateTime? pickedDate = await showDatePicker(
-                                    context: context,
-                                    //Lookups for paste values make no sense hence they are disabled
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime(2101));
-                                //Proceed only if we have a DateTime object
-                                if (pickedDate != null) {
-                                  //Format date
-                                  String formated = DateFormat('dd.MM.yyyy')
-                                      .format(pickedDate);
-                                  //Save if to the textfield for user benefit
-                                  dateinput.text = formated;
-                                  //Save to static APICall variable for API call
-                                  APICallState.date = formated;
-                                }
-                              },
-                            )),
-                        //Time Picker
-                        Container(
-                          //Some basic desing code
-                          height: 50,
-                          width: size.width * 0.35,
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: kDefaultPadding),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: kDefaultPadding),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(36),
-                              boxShadow: [
-                                BoxShadow(
-                                    offset: Offset(0, 10),
-                                    blurRadius: 50,
-                                    color: kPrimaryColor.withOpacity(0.23))
-                              ]),
-                          //Code similar to date-picker -> check above for doc
-                          child: TextField(
-                            controller: timeinput,
-                            readOnly: true,
-                            decoration: const InputDecoration(
-                              icon: Icon(Icons.access_time),
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                              ),
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                            ),
-                            onTap: () async {
-                              TimeOfDay? pickedTime = await showTimePicker(
-                                  context: context,
-                                  //Set initial time to now
-                                  //Lookups for past time is tecnically possible but not a big issue
-                                  initialTime: TimeOfDay.now(),
-                                  builder: (context, childWidget) {
-                                    //Sets clock to 24h instead of AM PM -> In Italy no one understands AMPM
-                                    return MediaQuery(
-                                      data: MediaQuery.of(context).copyWith(
-                                          alwaysUse24HourFormat: true),
-                                      child: childWidget!,
-                                    );
-                                  });
-                              //Always check if the time was correctly set in order to avoid NullPointerExceptions
-                              if (pickedTime != null) {
-                                timeinput.text = pickedTime.format(context);
-                                APICallState.time = pickedTime.to24hours();
-                              }
-                            },
-                          ),
-                        ),
-                      ]))
+                      child: Wrap(
+                          alignment: WrapAlignment.spaceAround,
+                          children: [getDatePicker(), getTimePicker()]))
                 ]));
   }
 }

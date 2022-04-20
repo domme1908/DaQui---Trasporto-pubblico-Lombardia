@@ -1,6 +1,8 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:user_messaging_platform/user_messaging_platform.dart';
@@ -13,9 +15,7 @@ void main() {
   MobileAds.instance.initialize();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    setLanguageFromMemory().then(
-      (value) => runApp(new MyApp(lang: value)),
-    );
+    setLanguageFromMemory().then((value) => runApp(new MyApp(lang: value)));
   });
 }
 
@@ -70,9 +70,12 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return PlatformApp(
+      //return MaterialApp(
       //Some basic settings
       debugShowCheckedModeBanner: false,
+      //useInheritedMediaQuery: true,
+      // builder: DevicePreview.appBuilder,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: locale,
@@ -85,12 +88,7 @@ class _MyAppState extends State<MyApp> {
         }
         return supportedLocales.first;
       },
-      title: 'DA-QUI',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        textTheme: Theme.of(context).textTheme.apply(bodyColor: kTextColor),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      title: 'DaQui',
       //Start the home screen
       home: HomeScreen(),
     );

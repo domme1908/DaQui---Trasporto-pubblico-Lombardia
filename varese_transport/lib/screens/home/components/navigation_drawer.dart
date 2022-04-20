@@ -74,12 +74,12 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                       contentTextStyle: baseTextStyle.copyWith(
                                           color: Colors.white, fontSize: 15),
                                       titleTextStyle: headerTextStyle.copyWith(
-                                          color: Colors.white, fontSize: 20),
+                                          color: Colors.white, fontSize: 18),
                                       title: Text(AppLocalizations.of(context)!
                                           .select_vehicles),
                                       content: Container(
                                         height: 480,
-                                        width: screenSize.width * 0.8,
+                                        width: screenSize.width * 0.9,
                                         child: Column(children: [
                                           SwitchListTile(
                                             activeColor: kSecondaryColor,
@@ -93,7 +93,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                             ),
                                             secondary: Image.asset(
                                               "assets/images/train.png",
-                                              scale: 10,
+                                              scale: 9,
                                             ),
                                             value: _train,
                                             onChanged: (bool value) {
@@ -103,7 +103,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                               });
                                             },
                                           ),
-                                          const SizedBox(height: 24),
+                                          const SizedBox(height: 18),
                                           SwitchListTile(
                                             activeColor: kSecondaryColor,
                                             title: Text(
@@ -116,7 +116,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                             ),
                                             secondary: Image.asset(
                                               "assets/images/metro_treno.png",
-                                              scale: 10,
+                                              scale: 9,
                                             ),
                                             value: metro,
                                             onChanged: (bool value) {
@@ -126,7 +126,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                               });
                                             },
                                           ),
-                                          const SizedBox(height: 24),
+                                          const SizedBox(height: 17),
                                           SwitchListTile(
                                             activeColor: kSecondaryColor,
                                             title: Text(
@@ -138,7 +138,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                             ),
                                             secondary: Image.asset(
                                               "assets/images/bus.png",
-                                              scale: 10,
+                                              scale: 9,
                                             ),
                                             value: bus,
                                             onChanged: (bool value) {
@@ -148,7 +148,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                               });
                                             },
                                           ),
-                                          const SizedBox(height: 24),
+                                          const SizedBox(height: 17),
                                           SwitchListTile(
                                             activeColor: kSecondaryColor,
                                             title: Text(
@@ -161,7 +161,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                             ),
                                             secondary: Image.asset(
                                               "assets/images/tram.png",
-                                              scale: 10,
+                                              scale: 9,
                                             ),
                                             value: tram,
                                             onChanged: (bool value) {
@@ -171,7 +171,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                               });
                                             },
                                           ),
-                                          const SizedBox(height: 24),
+                                          const SizedBox(height: 17),
                                           SwitchListTile(
                                             activeColor: kSecondaryColor,
                                             title: Text(
@@ -184,7 +184,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                             ),
                                             secondary: Image.asset(
                                               "assets/images/traghetto.png",
-                                              scale: 10,
+                                              scale: 9,
                                             ),
                                             value: ship,
                                             onChanged: (bool value) {
@@ -194,12 +194,12 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                               });
                                             },
                                           ),
-                                          const SizedBox(height: 24),
+                                          const SizedBox(height: 17),
                                           SwitchListTile(
                                             activeColor: kSecondaryColor,
                                             title: Text(
                                               AppLocalizations.of(context)!
-                                                  .ship,
+                                                  .cable_car,
                                               style:
                                                   subHeaderTextStyle.copyWith(
                                                       color: Colors.white,
@@ -207,7 +207,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                             ),
                                             secondary: Image.asset(
                                               "assets/images/funicolare.png",
-                                              scale: 10,
+                                              scale: 9,
                                             ),
                                             value: cablecar,
                                             onChanged: (bool value) {

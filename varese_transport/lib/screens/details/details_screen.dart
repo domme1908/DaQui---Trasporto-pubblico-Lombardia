@@ -50,8 +50,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
             ))
       ]),
       body: SlidingUpPanel(
+        boxShadow: [BoxShadow(color: Colors.transparent)],
         panel: Body(),
         body: OSMap(),
+        backdropEnabled: true,
+        color: Color.fromARGB(0, 255, 255, 255),
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
         maxHeight: size.height * 0.7,
         minHeight: size.height * 0.55,

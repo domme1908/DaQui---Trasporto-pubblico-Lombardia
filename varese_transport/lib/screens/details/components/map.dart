@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:syncfusion_flutter_maps/maps.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/section.dart';
 import 'package:varese_transport/lib/classes/stop.dart';
@@ -60,47 +61,66 @@ class _OSMapState extends State<OSMap> {
 
   @override
   Widget build(BuildContext context) {
-    return SfMaps(
-      layers: [
-        MapTileLayer(
-          zoomPanBehavior: _zoomPanBehavior,
-          controller: mapController,
-          initialLatLngBounds: MapLatLngBounds(
-              MapLatLng(min(latArr, latDep) - getDistance() / 90000,
-                  max(longArr, longDep) + getDistance() / 1000000),
-              MapLatLng(max(latArr, latDep) + getDistance() / 300000,
-                  min(longArr, longDep) - getDistance() / 1000000)),
-          urlTemplate: "http://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-          //'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=VBw9do6eEQAZXKn5YhfG',
-          sublayers: [
-            MapPolylineLayer(
-              polylines: getLines().toSet(),
-            ),
-          ],
-          initialMarkersCount: getListOfMarkers().length,
-          markerBuilder: (BuildContext context, int index) {
-            return getMarkers(context, index);
-          },
-          tooltipSettings: const MapTooltipSettings(
-              color: kSecondaryColor, hideDelay: double.infinity),
-          markerTooltipBuilder: (BuildContext context, int index) {
-            return Container(
-              width: 50,
-              height: 20,
-              color: kSecondaryColor,
-              padding: const EdgeInsets.all(kDefaultPadding),
-              child: Row(children: [
-                Image.asset(
-                  "assets/images/transfer.png",
-                  scale: 5,
+    return Stack(children: [
+      SfMaps(
+        layers: [
+          MapTileLayer(
+            zoomPanBehavior: _zoomPanBehavior,
+            controller: mapController,
+            initialLatLngBounds: MapLatLngBounds(
+                MapLatLng(min(latArr, latDep) - getDistance() / 90000,
+                    max(longArr, longDep) + getDistance() / 1000000),
+                MapLatLng(max(latArr, latDep) + getDistance() / 300000,
+                    min(longArr, longDep) - getDistance() / 1000000)),
+            urlTemplate: "http://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            //'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=VBw9do6eEQAZXKn5YhfG',
+            sublayers: [
+              MapPolylineLayer(
+                polylines: getLines().toSet(),
+              ),
+            ],
+            initialMarkersCount: getListOfMarkers().length,
+            markerBuilder: (BuildContext context, int index) {
+              return getMarkers(context, index);
+            },
+            tooltipSettings: const MapTooltipSettings(
+                color: kSecondaryColor, hideDelay: double.infinity),
+            markerTooltipBuilder: (BuildContext context, int index) {
+              return Container(
+                width: 50,
+                height: 20,
+                color: kSecondaryColor,
+                padding: const EdgeInsets.all(kDefaultPadding),
+                child: Row(children: [
+                  Image.asset(
+                    "assets/images/transfer.png",
+                    scale: 5,
+                  ),
+                  VehiclesIcons(chosenSolution.vehicels.first)
+                ]),
+              );
+            },
+          ),
+        ],
+      ),
+      Positioned(
+          bottom: 0,
+          right: 0,
+          child: Container(
+              margin: EdgeInsets.all(10),
+              color: Color.fromARGB(116, 255, 255, 255),
+              child: InkWell(
+                child: Text(
+                  "©OpenStreetMap",
+                  textAlign: TextAlign.end,
+                  style: baseTextStyle.copyWith(fontSize: 10),
                 ),
-                VehiclesIcons(chosenSolution.vehicels.first)
-              ]),
-            );
-          },
-        ),
-      ],
-    );
+                onTap: () async {
+                  const url = "https://www.openstreetmap.org/";
+                  await launch(url);
+                },
+              ))),
+    ]);
   }
 
   List<MapPolyline> getLines() {

@@ -7,7 +7,8 @@ import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/section.dart';
 import 'package:varese_transport/lib/classes/stop.dart';
 import 'package:varese_transport/lib/classes/vehicles_icons.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:varese_transport/screens/home/components/api_call.dart';
 import '../../../lib/classes/itinerary.dart';
 import '../details_screen.dart';
 
@@ -27,8 +28,10 @@ class _OSMapState extends State<OSMap> {
   late double longDep;
   late double latArr;
   late double longArr;
+  late Future<http.Response> maplink;
   @override
   void initState() {
+    maplink = APICallState().getMapLink();
     double resultLat, resultLong;
     resultLat = (double.parse(chosenSolution.yDeparture) +
             double.parse(chosenSolution.yArrival)) /
@@ -61,66 +64,77 @@ class _OSMapState extends State<OSMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      SfMaps(
-        layers: [
-          MapTileLayer(
-            zoomPanBehavior: _zoomPanBehavior,
-            controller: mapController,
-            initialLatLngBounds: MapLatLngBounds(
-                MapLatLng(min(latArr, latDep) - getDistance() / 90000,
-                    max(longArr, longDep) + getDistance() / 1000000),
-                MapLatLng(max(latArr, latDep) + getDistance() / 300000,
-                    min(longArr, longDep) - getDistance() / 1000000)),
-            urlTemplate: "http://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            //'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=VBw9do6eEQAZXKn5YhfG',
-            sublayers: [
-              MapPolylineLayer(
-                polylines: getLines().toSet(),
-              ),
-            ],
-            initialMarkersCount: getListOfMarkers().length,
-            markerBuilder: (BuildContext context, int index) {
-              return getMarkers(context, index);
-            },
-            tooltipSettings: const MapTooltipSettings(
-                color: kSecondaryColor, hideDelay: double.infinity),
-            markerTooltipBuilder: (BuildContext context, int index) {
-              return Container(
-                width: 50,
-                height: 20,
-                color: kSecondaryColor,
-                padding: const EdgeInsets.all(kDefaultPadding),
-                child: Row(children: [
-                  Image.asset(
-                    "assets/images/transfer.png",
-                    scale: 5,
+    return FutureBuilder(
+        future: maplink,
+        builder: (context, snapshot) {
+          print(snapshot.data);
+          if (snapshot.data != null) {
+            http.Response parsedSnap = snapshot!.data as http.Response;
+            return Stack(children: [
+              SfMaps(
+                layers: [
+                  MapTileLayer(
+                    zoomPanBehavior: _zoomPanBehavior,
+                    controller: mapController,
+                    initialLatLngBounds: MapLatLngBounds(
+                        MapLatLng(min(latArr, latDep) - getDistance() / 90000,
+                            max(longArr, longDep) + getDistance() / 1000000),
+                        MapLatLng(max(latArr, latDep) + getDistance() / 300000,
+                            min(longArr, longDep) - getDistance() / 1000000)),
+                    //insert the url we got from the server as map tiles provider
+                    urlTemplate: parsedSnap.body,
+                    sublayers: [
+                      MapPolylineLayer(
+                        polylines: getLines().toSet(),
+                      ),
+                    ],
+                    initialMarkersCount: getListOfMarkers().length,
+                    markerBuilder: (BuildContext context, int index) {
+                      return getMarkers(context, index);
+                    },
+                    tooltipSettings: const MapTooltipSettings(
+                        color: kSecondaryColor, hideDelay: double.infinity),
+                    markerTooltipBuilder: (BuildContext context, int index) {
+                      return Container(
+                        width: 50,
+                        height: 20,
+                        color: kSecondaryColor,
+                        padding: const EdgeInsets.all(kDefaultPadding),
+                        child: Row(children: [
+                          Image.asset(
+                            "assets/images/transfer.png",
+                            scale: 5,
+                          ),
+                          VehiclesIcons(chosenSolution.vehicels.first)
+                        ]),
+                      );
+                    },
                   ),
-                  VehiclesIcons(chosenSolution.vehicels.first)
-                ]),
-              );
-            },
-          ),
-        ],
-      ),
-      Positioned(
-          bottom: 0,
-          right: 0,
-          child: Container(
-              margin: EdgeInsets.all(10),
-              color: Color.fromARGB(116, 255, 255, 255),
-              child: InkWell(
-                child: Text(
-                  "©OpenStreetMap",
-                  textAlign: TextAlign.end,
-                  style: baseTextStyle.copyWith(fontSize: 10),
-                ),
-                onTap: () async {
-                  const url = "https://www.openstreetmap.org/";
-                  await launch(url);
-                },
-              ))),
-    ]);
+                ],
+              ),
+              Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                      margin: EdgeInsets.all(10),
+                      color: Color.fromARGB(116, 255, 255, 255),
+                      child: InkWell(
+                        child: Text(
+                          "©OpenStreetMap",
+                          textAlign: TextAlign.end,
+                          style: baseTextStyle.copyWith(fontSize: 10),
+                        ),
+                        onTap: () async {
+                          const url = "https://www.openstreetmap.org/";
+                          await launch(url);
+                        },
+                      ))),
+            ]);
+          }
+          return Container(
+            color: kSecondaryColor,
+          );
+        });
   }
 
   List<MapPolyline> getLines() {

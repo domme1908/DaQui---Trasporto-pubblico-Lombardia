@@ -63,7 +63,9 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
         Expanded(
             child: Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30)),
                     color: Colors.white),
                 child: Column(children: [
                   Container(

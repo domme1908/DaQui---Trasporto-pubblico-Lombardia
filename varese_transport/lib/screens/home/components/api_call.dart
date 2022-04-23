@@ -229,6 +229,13 @@ class APICallState extends State<APICall> {
     _interstitialAd = null;
   }
 
+  ///This call is to get the link for the maps from the api in order to be
+  ///able to change it later without having to update the whole app
+  Future<http.Response> getMapLink() async {
+    return http
+        .get(Uri.parse('https://apidaqui-18067.nodechef.com/getMapLink'));
+  }
+
   //The api call - sends the collected values to the js rest api
   Future<List<Itinerary>> fetchItinerary() async {
     print('https://apidaqui-18067.nodechef.com/getSolutions?from=' +

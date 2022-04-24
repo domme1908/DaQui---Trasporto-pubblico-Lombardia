@@ -68,7 +68,6 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
   Widget build(BuildContext context) {
     //Use TypeAhead in order to be able to load the suggestions one by one
     return TypeAheadField(
-      //TODO Check if Sto cercando stays on too long
       noItemsFoundBuilder: (context) {
         //Avoid confusing the user with no items found when in realty we are simply waiting
         //for the first response to be returned
@@ -130,6 +129,9 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
                 "posizione",
                 coordinates.longitude.toString(),
                 coordinates.latitude.toString()));
+            /*   position.sort((first,second)=>{
+              if()
+            })*/
             //Push the result into the future value
             Future<List<Station>> result =
                 Future<List<Station>>.value(position);

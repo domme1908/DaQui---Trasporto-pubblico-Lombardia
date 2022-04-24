@@ -168,8 +168,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                 //Proceed only if we have a DateTime object
                 if (pickedDate != null) {
                   //Format date
-                  String formated =
-                      DateFormat('dd.MM.yyyy').format(pickedDate!);
+                  String formated = DateFormat('dd.MM.yyyy').format(pickedDate);
                   //Save if to the textfield for user benefit
                   dateinput.text = formated;
                   //Save to static APICall variable for API call

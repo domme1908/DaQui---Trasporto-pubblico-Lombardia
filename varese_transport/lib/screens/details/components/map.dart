@@ -69,7 +69,7 @@ class _OSMapState extends State<OSMap> {
         builder: (context, snapshot) {
           print(snapshot.data);
           if (snapshot.data != null) {
-            http.Response parsedSnap = snapshot!.data as http.Response;
+            http.Response parsedSnap = snapshot.data as http.Response;
             return Stack(children: [
               SfMaps(
                 layers: [

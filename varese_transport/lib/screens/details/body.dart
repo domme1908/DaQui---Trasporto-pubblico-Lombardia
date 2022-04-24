@@ -42,12 +42,12 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Container(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-          Container(
-              margin: EdgeInsets.all(10),
-              color: Color.fromARGB(116, 255, 255, 255),
-              child: Positioned(
-                  right: 0,
+        SizedBox(
+            height: 40,
+            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              Container(
+                  margin: EdgeInsets.all(10),
+                  color: Color.fromARGB(116, 255, 255, 255),
                   child: InkWell(
                     child: Text(
                       "©OpenStreetMap",
@@ -58,8 +58,8 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                       const url = "https://www.openstreetmap.org/";
                       await launch(url);
                     },
-                  )))
-        ]),
+                  ))
+            ])),
         Expanded(
             child: Container(
                 decoration: BoxDecoration(

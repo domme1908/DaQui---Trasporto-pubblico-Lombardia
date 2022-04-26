@@ -1,4 +1,6 @@
 import 'package:geolocator/geolocator.dart';
+//This is the sample class of the geolocator plugin to ask the users permission for location
+//It can be found in full here: https://pub.dev/packages/geolocator
 
 /// Determine the current position of the device.
 ///

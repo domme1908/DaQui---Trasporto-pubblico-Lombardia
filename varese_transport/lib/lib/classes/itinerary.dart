@@ -1,6 +1,6 @@
 import 'package:varese_transport/lib/classes/section.dart';
 
-//This class represents one possible solution for the requested route
+///This class represents one possible solution for the requested route
 class Itinerary {
   //Later neccessary to get exact route details
   int solutionID;

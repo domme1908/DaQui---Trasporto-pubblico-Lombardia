@@ -15,33 +15,14 @@ class Body extends StatefulWidget {
   }
 }
 
-class _BodyState extends State<Body> with TickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<Color?> _colorTween;
+class _BodyState extends State<Body> {
   Itinerary chosenSolution = DetailsScreen.chosenItinerary;
-  @override
-  void initState() {
-    super.initState();
-    //Regulates the progress indicator
-    _animationController =
-        AnimationController(duration: const Duration(seconds: 3), vsync: this);
-    _colorTween = _animationController
-        .drive(ColorTween(begin: kPrimaryColor, end: kSecondaryColor));
-    _animationController.repeat();
-  }
-
-  //Avoids execptions if going back after first opening solutions
-  //Disposes the animation controller correctly
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        //Attribution to OSMaps
         SizedBox(
             height: 40,
             child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -61,6 +42,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                   ))
             ])),
         Expanded(
+            //Container needs to be white since the mother container is transperant
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -68,14 +50,19 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                         topRight: Radius.circular(30)),
                     color: Colors.white),
                 child: Column(children: [
+                  //This is the line on the top of the sliding up panel
                   Container(
                       height: 4,
                       margin: EdgeInsets.only(top: 20),
                       child: Container(
-                        height: 3,
-                        width: 50,
-                        color: Colors.black54,
+                        height: 5,
+                        width: 70,
+                        decoration: BoxDecoration(
+                          color: Colors.black54,
+                          borderRadius: BorderRadius.circular(40),
+                        ),
                       )),
+                  //The title of the sliding up panel
                   Container(
                       margin: EdgeInsets.all(kDefaultPadding),
                       child: Text(

@@ -18,11 +18,12 @@ class DetailsScreen extends StatefulWidget {
   }
 }
 
+///This functions has a SlidingUpPanel as its main widget that displays
+///the map in the background and the details-list in the foreground
 class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       floatingActionButton:

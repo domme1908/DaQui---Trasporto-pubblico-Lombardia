@@ -53,8 +53,8 @@ android {
         applicationId "com.daQui.daQuiTrasportoLom"
         minSdkVersion flutterMinSdkVersion
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 9
-        versionName "Beta 2.1"
+        versionCode 10
+        versionName "Beta 2.2"
     }
 
    signingConfigs {

@@ -71,11 +71,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return PlatformApp(
-      //return MaterialApp(
       //Some basic settings
       debugShowCheckedModeBanner: false,
-      //useInheritedMediaQuery: true,
-      // builder: DevicePreview.appBuilder,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: locale,

@@ -4,7 +4,7 @@ import 'package:varese_transport/screens/details/components/get_icon.dart';
 
 import '../../../constants.dart';
 
-//This class returns the tile used to display either the departure or the arrival station of one section of the trip
+///This class returns the tile used to display either the departure or the arrival station of one section of the trip
 class StationTile extends StatelessWidget {
   final Section section;
   final bool isDeparture;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-//This class simply returns the fitting icon for the list tile of the departure station
+///This class simply returns the fitting icon for the list tile of the departure station
 class GetIcon extends StatelessWidget {
   final String vehicle;
   const GetIcon(this.vehicle, {Key? key}) : super(key: key);
@@ -41,7 +41,7 @@ class GetIcon extends StatelessWidget {
           scale: 12,
         );
     }
-    //Just in case I forgot one vehicle
+    //Some fallback code
     return const Icon(Icons.not_interested);
   }
 }

@@ -8,10 +8,12 @@ import 'package:varese_transport/screens/home/components/api_call.dart';
 import '../../screens/favorites/favorites_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+///This class returns a textfields with auto-complete suggestions
+///that are fetched from the server based on what the user writes into the
+///search field
 class DynamicVTAutocomplete extends StatefulWidget {
   //Parameters passed by the call in the headerWithTextfields class
   bool isFrom;
-  //Constructor
   DynamicVTAutocomplete(this.isFrom, {Key? key}) : super(key: key);
 
   @override
@@ -21,14 +23,18 @@ class DynamicVTAutocomplete extends StatefulWidget {
   }
 }
 
+//The with TickerProviderStateMixin is necessary for the color-changing CircularProgressIndicator()
 class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
     with TickerProviderStateMixin {
+  //Necessary to know on which APICallState static variable to save the choosen value
   bool isFrom;
+  //Needed to set the text that is displayed
   static TextEditingController textControllerFrom = TextEditingController();
   static TextEditingController textControllerTo = TextEditingController();
+  //For color-changing CircularProgressIndicator()
   late AnimationController _animationController;
   late Animation<Color?> _colorTween;
-  //Constructor
+
   DynamicVTAutocompleteState(
     this.isFrom,
   );
@@ -69,8 +75,7 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
     //Use TypeAhead in order to be able to load the suggestions one by one
     return TypeAheadField(
       noItemsFoundBuilder: (context) {
-        //Avoid confusing the user with no items found when in realty we are simply waiting
-        //for the first response to be returned
+        //Return a ListTile with "No stations found" if user input results in no stations
         return ListTile(
           tileColor: kPrimaryColor,
           hoverColor: kSecondaryColor,
@@ -118,7 +123,7 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
       ),
       //Specify the source of the data
       suggestionsCallback: (pattern) async {
-        //If textfield is empty and selected grab position and display it as list
+        //If textfield is empty and selected get location and display it as list-item
         if (pattern == "") {
           List<Station> position = [];
           //Make sure the user consented to the usage of his position and only if so enter the position section
@@ -129,9 +134,6 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
                 "posizione",
                 coordinates.longitude.toString(),
                 coordinates.latitude.toString()));
-            /*   position.sort((first,second)=>{
-              if()
-            })*/
             //Push the result into the future value
             Future<List<Station>> result =
                 Future<List<Station>>.value(position);
@@ -146,6 +148,7 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
       },
       //Display the loading field while fetching stations or user-location
       keepSuggestionsOnLoading: false,
+      //Style of the ProgressIndicator that is being displayed while suggestions are fetched
       loadingBuilder: (BuildContext context) {
         return Container(
           height: 200,

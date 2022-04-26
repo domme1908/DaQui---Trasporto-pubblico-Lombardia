@@ -4,8 +4,8 @@ import 'package:varese_transport/lib/classes/section.dart';
 import 'package:varese_transport/screens/details/components/get_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-//This widget is the small container between departure and arrival station that contains info
-//such as bus or train number, who operates this line, the duration and the stops
+///This widget is the small container between departure and arrival station that contains info
+///such as bus or train number, who operates this line, the duration and the stops
 class BusOrTrainDetails extends StatelessWidget {
   final Section section;
   const BusOrTrainDetails(this.section, {Key? key}) : super(key: key);
@@ -16,6 +16,7 @@ class BusOrTrainDetails extends StatelessWidget {
     //No height constraint in order to allow for adaptation (opening fermate or simply more or less info)
     //No width constraint since it is being set by the parent
     return Container(
+      //Needed for the line on the left hand side to pass by without bejng covered up by this container
       margin: const EdgeInsets.only(left: 40),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -35,7 +36,7 @@ class BusOrTrainDetails extends StatelessWidget {
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  //As in the solutions screen assign each line an exact color
+                  //Assign each line an exact color
                   color: Colors.primaries.elementAt(
                       getIntFromString(section.line) % Colors.primaries.length),
                 ),
@@ -108,13 +109,12 @@ class BusOrTrainDetails extends StatelessWidget {
     );
   }
 
-  //A hashing function that assing an int to a given string
+  //A hashing function that assingS an int to a given string
   int getIntFromString(String lineName) {
     var result = 0;
     for (var i = 0; i < lineName.length; i++) {
       result += lineName.codeUnitAt(i);
     }
-
     return result;
   }
 
@@ -122,7 +122,6 @@ class BusOrTrainDetails extends StatelessWidget {
   List<Widget> getStops(Section sections) {
     List<Widget> result = [];
     result.add(const Divider());
-
     for (var i = 1; i < sections.stops.length - 1; i++) {
       result.add(
         Text(

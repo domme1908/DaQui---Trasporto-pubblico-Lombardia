@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/cli_commands.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:varese_transport/lib/classes/itinerary.dart';
+import 'package:varese_transport/screens/home/body.dart';
 import 'package:varese_transport/screens/solutions/solutions_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -126,7 +125,10 @@ class APICallState extends State<APICall> {
                 getVehicles() != "") {
               checkIfShowAd().then((flag) {
                 if (flag) {
-                  _showInterstitialAd();
+                  print(BodyState.ads);
+                  if (BodyState.ads) {
+                    _showInterstitialAd();
+                  }
                 }
               });
               incrementSearches();

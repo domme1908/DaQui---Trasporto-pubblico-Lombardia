@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:user_messaging_platform/user_messaging_platform.dart';
 
-import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/screens/home/components/home_screen.dart';
 
 void main() {

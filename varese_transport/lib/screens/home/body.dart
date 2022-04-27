@@ -10,6 +10,7 @@ class Body extends StatefulWidget {
 }
 
 class BodyState extends State<Body> {
+  static bool ads = false;
   Exception ex = Exception();
   bool flag = false;
   //This method checks weather the api we are trying to reach is available or not
@@ -48,6 +49,12 @@ class BodyState extends State<Body> {
                         child: Text(AppLocalizations.of(context)!.try_again))
                   ]);
             }
+          }
+          if (snapshot.hasData) {
+            http.Response response = snapshot.data! as http.Response;
+            print("responseeeee " + response.body);
+            if (response.body == "adsOk") ads = true;
+            if (response.body == "noAds") ads = false;
           }
           return snapshot.hasData
               ? Column(

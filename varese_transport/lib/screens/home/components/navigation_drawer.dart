@@ -237,12 +237,6 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                     icon: Icons.favorite_border,
                     onClicked: () => selectedItem(context, 2),
                   ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: AppLocalizations.of(context)!.contact,
-                    icon: Icons.contact_mail,
-                    onClicked: () => selectedItem(context, 3),
-                  ),
                   const SizedBox(height: 24),
                   buildMenuItem(
                     text: 'About',

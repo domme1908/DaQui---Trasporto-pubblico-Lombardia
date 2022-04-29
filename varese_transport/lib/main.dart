@@ -1,4 +1,6 @@
-import 'package:device_preview/device_preview.dart';
+import 'dart:io';
+
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,13 +52,26 @@ class _MyAppState extends State<MyApp> {
   }
 
   void updateConsent() async {
-    // Make sure to continue with the latest consent info.
-    var info = await UserMessagingPlatform.instance.requestConsentInfoUpdate();
+    //Android devices
+    if (Platform.isAndroid) {
+      // Make sure to continue with the latest consent info.
+      var info =
+          await UserMessagingPlatform.instance.requestConsentInfoUpdate();
 
-    // Show the consent form if consent is required.
-    if (info.consentStatus == ConsentStatus.required) {
-      // `showConsentForm` returns the latest consent info, after the consent from has been closed.
-      info = await UserMessagingPlatform.instance.showConsentForm();
+      // Show the consent form if consent is required.
+      if (info.consentStatus == ConsentStatus.required) {
+        // `showConsentForm` returns the latest consent info, after the consent from has been closed.
+        info = await UserMessagingPlatform.instance.showConsentForm();
+      }
+    }
+    //IOS Devices
+    else {
+      // If the system can show an authorization request dialog
+      if (await AppTrackingTransparency.trackingAuthorizationStatus ==
+          TrackingStatus.notDetermined) {
+        // Request system's tracking authorization dialog
+        await AppTrackingTransparency.requestTrackingAuthorization();
+      }
     }
   }
 

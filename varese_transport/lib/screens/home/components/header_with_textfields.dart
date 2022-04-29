@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:language_builder/language_builder.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/dynamic_autocomplete.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

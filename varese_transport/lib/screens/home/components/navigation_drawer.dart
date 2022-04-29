@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:varese_transport/constants.dart';
@@ -232,11 +234,13 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                   const SizedBox(height: 24),
                   Divider(color: Colors.white70),
                   const SizedBox(height: 24),
-                  buildMenuItem(
-                    text: AppLocalizations.of(context)!.coffe,
-                    icon: Icons.favorite_border,
-                    onClicked: () => selectedItem(context, 2),
-                  ),
+                  Platform.isAndroid
+                      ? buildMenuItem(
+                          text: AppLocalizations.of(context)!.coffe,
+                          icon: Icons.favorite_border,
+                          onClicked: () => selectedItem(context, 2),
+                        )
+                      : Container(),
                   const SizedBox(height: 24),
                   buildMenuItem(
                     text: 'About',

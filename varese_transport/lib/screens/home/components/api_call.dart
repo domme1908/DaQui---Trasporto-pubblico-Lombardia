@@ -73,14 +73,6 @@ class APICallState extends State<APICall> {
     if (ship) tempResult.add("%225");
     if (cablecar) tempResult.add("%226");
     if (tempResult.length == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          AppLocalizations.of(context)!.no_vehicles_given,
-          style: baseTextStyle.copyWith(color: Colors.white, fontSize: 16),
-        ),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: kPrimaryColor,
-      ));
       return "";
     }
     if (tempResult.length == 1) {
@@ -142,8 +134,14 @@ class APICallState extends State<APICall> {
               if ((fromStation.x == toStation.x &&
                   fromStation.y == toStation.y)) {
                 errorMes = AppLocalizations.of(context)!.station_cannot_be_same;
-              } else {
+              }
+              //Values have not been given but there are some vehicles selected
+              else if (getVehicles() != "") {
                 errorMes = AppLocalizations.of(context)!.no_stations_given;
+              }
+              //No vehicles are selected -> this has max priority so we override any previous message
+              if (getVehicles() == "") {
+                errorMes = AppLocalizations.of(context)!.no_vehicles_given;
               }
               //Otherwise display a snackbar with the error message
               errorMes = SnackBar(
@@ -308,7 +306,6 @@ class APICallState extends State<APICall> {
   }
 
   List<Station> parseStations(String responseBody) {
-    //TODO HTTP STATUS CODES SWITCH
     if (responseBody.contains("error")) {
       return List<Station>.empty();
     }

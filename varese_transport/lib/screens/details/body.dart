@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/screens/details/details_screen.dart';
 import 'package:varese_transport/screens/details/item.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Body extends StatefulWidget {
-  const Body({Key? key}) : super(key: key);
+  final double height;
+  const Body({
+    Key? key,
+    required this.height,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _BodyState();
+    return _BodyState(height);
   }
 }
 
 class _BodyState extends State<Body> {
   Itinerary chosenSolution = DetailsScreen.chosenItinerary;
+  final double height;
+  _BodyState(this.height);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         //Attribution to OSMaps
         SizedBox(

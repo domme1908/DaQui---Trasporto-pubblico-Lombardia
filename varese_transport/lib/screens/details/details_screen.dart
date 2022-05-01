@@ -52,7 +52,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ]),
       body: SlidingUpPanel(
         boxShadow: [BoxShadow(color: Colors.transparent)],
-        panel: Body(),
+        panel: Body(
+          height: size.height * 0.85,
+        ),
+        collapsed: Body(
+          height: size.height * 0.55,
+        ),
         body: OSMap(),
         backdropEnabled: true,
         color: Color.fromARGB(0, 255, 255, 255),

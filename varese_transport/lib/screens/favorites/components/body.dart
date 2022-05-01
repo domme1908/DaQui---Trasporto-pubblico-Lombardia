@@ -104,8 +104,6 @@ Widget noFavsYet(BuildContext context) {
 
 Future<List<List<String>>> getFavs() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  print(prefs.getKeys());
-  print(prefs.get("counter"));
   if (!prefs.containsKey("counter")) {
     return List<List<String>>.empty();
   } else {

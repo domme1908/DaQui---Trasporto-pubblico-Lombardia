@@ -114,11 +114,11 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                             APICallState.time = snapshot
                                 .data![snapshot.data!.length - 1].departure;
                             setState(() {
+                              futureItinerary = APICallState().fetchItinerary();
                               _scrollController.animateTo(
                                   _scrollController.position.minScrollExtent,
                                   duration: const Duration(milliseconds: 2000),
                                   curve: Curves.fastOutSlowIn);
-                              futureItinerary = APICallState().fetchItinerary();
                             });
                           },
                         ),

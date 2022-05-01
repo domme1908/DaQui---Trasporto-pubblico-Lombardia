@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:varese_transport/lib/classes/dynamic_autocomplete.dart';
 import 'package:varese_transport/lib/classes/gradient_app_bar.dart';
-import 'package:varese_transport/screens/favorites/components/fav_list.dart';
-import 'package:varese_transport/screens/home/components/home_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../constants.dart';
@@ -158,7 +155,7 @@ void saveFav(Station favToSave, BuildContext context) async {
 Future<bool> checkIfPresent(Station favToSave) async {
   final prefs = await SharedPreferences.getInstance();
   if (prefs.containsKey("counter")) {
-    for (var i = 1; i < prefs.getInt("counter")!; i++) {
+    for (var i = 1; i <= prefs.getInt("counter")!; i++) {
       if (prefs.containsKey("fav" + i.toString())) {
         if (prefs.getStringList("fav" + i.toString())!.elementAt(2) ==
                 favToSave.x &&

@@ -66,12 +66,14 @@ class _MyAppState extends State<MyApp> {
     }
     //IOS Devices
     else {
-      // If the system can show an authorization request dialog
-      if (await AppTrackingTransparency.trackingAuthorizationStatus ==
-          TrackingStatus.notDetermined) {
-        // Request system's tracking authorization dialog
-        await AppTrackingTransparency.requestTrackingAuthorization();
-      }
+      Future.delayed(const Duration(milliseconds: 750), () async {
+        // If the system can show an authorization request dialog
+        if (await AppTrackingTransparency.trackingAuthorizationStatus ==
+            TrackingStatus.notDetermined) {
+          // Request system's tracking authorization dialog
+          await AppTrackingTransparency.requestTrackingAuthorization();
+        }
+      });
     }
   }
 

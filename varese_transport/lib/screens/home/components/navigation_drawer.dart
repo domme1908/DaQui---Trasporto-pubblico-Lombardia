@@ -22,12 +22,12 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
 
-    bool _train = true,
-        bus = true,
-        ship = true,
-        tram = true,
-        metro = true,
-        cablecar = true;
+    bool _train = APICallState.train,
+        bus = APICallState.bus,
+        ship = APICallState.ship,
+        tram = APICallState.tram,
+        metro = APICallState.metro,
+        cablecar = APICallState.cablecar;
     return Drawer(
         child: Material(
       color: kPrimaryColor,

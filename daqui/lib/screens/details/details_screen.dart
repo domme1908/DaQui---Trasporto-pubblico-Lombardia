@@ -14,13 +14,14 @@ class DetailsScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _DetailsScreenState();
+    return DetailsScreenState();
   }
 }
 
 ///This functions has a SlidingUpPanel as its main widget that displays
 ///the map in the background and the details-list in the foreground
-class _DetailsScreenState extends State<DetailsScreen> {
+class DetailsScreenState extends State<DetailsScreen> {
+  static PanelController panelController = PanelController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -52,12 +53,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ]),
       body: SlidingUpPanel(
         boxShadow: [BoxShadow(color: Colors.transparent)],
-        panel: Body(
-          height: size.height * 0.85,
-        ),
-        collapsed: Body(
-          height: size.height * 0.55,
-        ),
+        //Use panelBuilder in order to pass on the Scrollcontroller
+        //This enables the initial pulling up of the panel transitioning to the scrolling
+        //Of the list
+        panelBuilder: (sc) => Body(controller: sc),
         body: OSMap(),
         backdropEnabled: true,
         color: Color.fromARGB(0, 255, 255, 255),

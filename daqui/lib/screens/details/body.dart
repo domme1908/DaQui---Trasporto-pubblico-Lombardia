@@ -8,27 +8,26 @@ import 'package:varese_transport/screens/details/details_screen.dart';
 import 'package:varese_transport/screens/details/item.dart';
 
 class Body extends StatefulWidget {
-  final double height;
+  final ScrollController controller;
   const Body({
     Key? key,
-    required this.height,
+    required this.controller,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _BodyState(height);
+    return _BodyState(controller);
   }
 }
 
 class _BodyState extends State<Body> {
   Itinerary chosenSolution = DetailsScreen.chosenItinerary;
-  final double height;
-  _BodyState(this.height);
+  final ScrollController controller;
+  _BodyState(this.controller);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         //Attribution to OSMaps
         SizedBox(
@@ -80,6 +79,7 @@ class _BodyState extends State<Body> {
                   Expanded(
                       //Create a ListView.builder in order to display the elements of the fetched array
                       child: ListView.builder(
+                    controller: controller,
                     shrinkWrap: true,
                     //Every item (element) is a SolutionsCard
                     itemBuilder: (context, index) => Item(

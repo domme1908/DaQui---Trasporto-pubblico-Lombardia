@@ -35,11 +35,10 @@ class BusOrTrainDetails extends StatelessWidget {
                 width: 60,
                 padding: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  //Assign each line an exact color
-                  color: Colors.primaries.elementAt(
-                      getIntFromString(section.line) % Colors.primaries.length),
-                ),
+                    borderRadius: BorderRadius.circular(20),
+                    //Assign each line an exact color
+                    color:
+                        getBackgroundColor(section.line, section.description)),
                 child: Text(
                   section.line,
                   style: baseTextStyle.copyWith(
@@ -47,13 +46,12 @@ class BusOrTrainDetails extends StatelessWidget {
                       //Choose the text color based on what provides greater contrast using the .computeLuminance
                       //function provided by Color
                       //Since we are using only primaries colors I think its always white but better be safe than sorry
-                      color: Colors.primaries
-                                  .elementAt(getIntFromString(section.line) %
-                                      Colors.primaries.length)
-                                  .computeLuminance() >
-                              0.5
-                          ? Colors.black
-                          : Colors.white),
+                      color:
+                          getBackgroundColor(section.line, section.description)
+                                      .computeLuminance() >
+                                  0.5
+                              ? Colors.black
+                              : Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -107,6 +105,36 @@ class BusOrTrainDetails extends StatelessWidget {
                   )
           ]),
     );
+  }
+
+  Color getBackgroundColor(String lineName, String description) {
+    //Check if line is Metro
+    if (description == "2") {
+      if (lineName == "M1") {
+        return Color(0xFFe31d1a);
+      }
+      if (lineName == "M2") {
+        return Color(0xFF638b18);
+      }
+      if (lineName == "M3") {
+        return Color(0xFFf6a704);
+      }
+      if (lineName == "M4") {
+        return Color(0xFF14386a);
+      }
+      if (lineName == "M5") {
+        return Color(0xFF9778d3);
+      }
+      //Brescian Metro - Just one line
+      if (lineName == "METRO") {
+        return Colors.yellow;
+      } else {
+        //Default case
+        return Colors.orange;
+      }
+    }
+    return Colors.primaries
+        .elementAt(getIntFromString(lineName) % Colors.primaries.length);
   }
 
   //A hashing function that assingS an int to a given string

@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:user_messaging_platform/user_messaging_platform.dart';
+import 'package:user_messaging_platform/user_messaging_platform.dart' as UMP;
 
 import 'package:varese_transport/screens/home/components/home_screen.dart';
 
@@ -56,12 +56,12 @@ class _MyAppState extends State<MyApp> {
     if (Platform.isAndroid) {
       // Make sure to continue with the latest consent info.
       var info =
-          await UserMessagingPlatform.instance.requestConsentInfoUpdate();
+          await UMP.UserMessagingPlatform.instance.requestConsentInfoUpdate();
 
       // Show the consent form if consent is required.
-      if (info.consentStatus == ConsentStatus.required) {
+      if (info.consentStatus == UMP.ConsentStatus.required) {
         // `showConsentForm` returns the latest consent info, after the consent from has been closed.
-        info = await UserMessagingPlatform.instance.showConsentForm();
+        info = await UMP.UserMessagingPlatform.instance.showConsentForm();
       }
     }
     //IOS Devices

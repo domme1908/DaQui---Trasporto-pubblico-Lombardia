@@ -20,6 +20,7 @@ class BodyState extends State<Body> {
     } on Exception catch (e) {
       //Save exeption for debug
       ex = e;
+      print(ex);
       flag = true;
       return null;
     }

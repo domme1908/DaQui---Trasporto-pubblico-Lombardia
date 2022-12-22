@@ -40,6 +40,8 @@ class GetIcon extends StatelessWidget {
           "assets/images/traghetto.png",
           scale: 12,
         );
+      case 6:
+        return Image.asset("assets/images/funicolare.png", scale: 12);
     }
     //Some fallback code
     return const Icon(Icons.not_interested);

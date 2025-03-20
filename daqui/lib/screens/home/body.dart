@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:varese_transport/screens/home/components/header_with_textfields.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:varese_transport/l10n/app_localizations.dart';
 
 class Body extends StatefulWidget {
   State<StatefulWidget> createState() {

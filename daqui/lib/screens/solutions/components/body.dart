@@ -4,7 +4,7 @@ import 'package:varese_transport/lib/classes/gradient_app_bar.dart';
 import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
 import 'package:varese_transport/screens/solutions/components/solutions_card.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:varese_transport/l10n/app_localizations.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);

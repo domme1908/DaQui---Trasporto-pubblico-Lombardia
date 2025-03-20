@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:varese_transport/lib/classes/gradient_app_bar.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class About extends StatefulWidget {
   About({Key? key}) : super(key: key);
@@ -14,21 +13,20 @@ class _AboutState extends State<About> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        GradientAppBar("About"),
-        Expanded(
-            child: Stack(children: [
-          WebView(
-            initialUrl: 'https://apidaqui-18067.nodechef.com/about',
-            onPageFinished: (finish) {
-              setState(() {
-                isLoading = false;
-              });
-            },
+      body: Column(
+        children: [
+          GradientAppBar("About"),
+          Expanded(
+            child: Stack(
+              children: [
+                isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : Container(),
+              ],
+            ),
           ),
-          isLoading ? Center(child: CircularProgressIndicator()) : Container()
-        ])),
-      ]),
+        ],
+      ),
     );
   }
 }

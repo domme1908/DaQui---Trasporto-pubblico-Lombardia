@@ -5,7 +5,7 @@ import 'package:varese_transport/lib/classes/station.dart';
 import 'package:varese_transport/screens/favorites/components/body.dart';
 import 'package:varese_transport/screens/favorites/favorites_screen.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:varese_transport/l10n/app_localizations.dart';
 
 import '../../../constants.dart';
 

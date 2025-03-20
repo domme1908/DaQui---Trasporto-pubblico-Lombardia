@@ -4,7 +4,7 @@ import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/gradient_app_bar.dart';
 import 'package:varese_transport/screens/favorites/components/fav_list.dart';
 import 'package:varese_transport/screens/favorites/components/select_favs.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:varese_transport/l10n/app_localizations.dart';
 
 class Body extends StatefulWidget {
   bool isFrom;

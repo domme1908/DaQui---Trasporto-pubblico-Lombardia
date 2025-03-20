@@ -4,7 +4,7 @@ import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/lib/classes/vehicles_icons.dart';
 import 'package:varese_transport/screens/details/details_screen.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:varese_transport/l10n/app_localizations.dart';
 
 class SolutionsCard extends StatelessWidget {
   //The data of this specific solution

@@ -6,7 +6,7 @@ import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/logo_banner.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
 import 'package:varese_transport/screens/menu_items/language_picker.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:varese_transport/l10n/app_localizations.dart';
 
 import '../../menu_items/about.dart';
 

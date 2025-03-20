@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:varese_transport/lib/classes/itinerary.dart';
 import 'package:varese_transport/screens/home/body.dart';
 import 'package:varese_transport/screens/solutions/solutions_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:varese_transport/l10n/app_localizations.dart';
 
 import '../../../lib/classes/station.dart';
 import '../../../lib/classes/stop.dart';
@@ -22,19 +21,16 @@ class APICall extends StatefulWidget {
 }
 
 class APICallState extends State<APICall> {
-  InterstitialAd? _interstitialAd;
   int _numInterstitialLoadAttempts = 0;
 
   @override
   void initState() {
     super.initState();
-    _createInterstitialAd();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _interstitialAd?.dispose();
   }
 
   ///This function decides whether to show an ad on click of the search button or not
@@ -101,7 +97,6 @@ class APICallState extends State<APICall> {
       tram = true,
       metro = true,
       cablecar = true;
-  static final AdRequest request = AdRequest();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -119,7 +114,6 @@ class APICallState extends State<APICall> {
                 if (flag) {
                   print(BodyState.ads);
                   if (BodyState.ads) {
-                    _showInterstitialAd();
                   }
                 }
               });
@@ -182,52 +176,6 @@ class APICallState extends State<APICall> {
         ));
   }
 
-  void _createInterstitialAd() {
-    InterstitialAd.load(
-        adUnitId:
-            //'ca-app-pub-3940256099942544/8691691433',
-            'ca-app-pub-2779208204217812/7073875316',
-        request: request,
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (InterstitialAd ad) {
-            print('$ad loaded');
-            _interstitialAd = ad;
-            _numInterstitialLoadAttempts = 0;
-            _interstitialAd!.setImmersiveMode(true);
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            print('InterstitialAd failed to load: $error.');
-            _numInterstitialLoadAttempts += 1;
-            _interstitialAd = null;
-            if (_numInterstitialLoadAttempts < 3) {
-              _createInterstitialAd();
-            }
-          },
-        ));
-  }
-
-  void _showInterstitialAd() {
-    if (_interstitialAd == null) {
-      print('Warning: attempt to show interstitial before loaded.');
-      return;
-    }
-    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (InterstitialAd ad) =>
-          print('ad onAdShowedFullScreenContent.'),
-      onAdDismissedFullScreenContent: (InterstitialAd ad) {
-        print('$ad onAdDismissedFullScreenContent.');
-        ad.dispose();
-        _createInterstitialAd();
-      },
-      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-        print('$ad onAdFailedToShowFullScreenContent: $error');
-        ad.dispose();
-        _createInterstitialAd();
-      },
-    );
-    _interstitialAd!.show();
-    _interstitialAd = null;
-  }
 
   ///This call is to get the link for the maps from the api in order to be
   ///able to change it later without having to update the whole app

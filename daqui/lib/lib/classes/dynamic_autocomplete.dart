@@ -2,11 +2,11 @@ import 'dart:async';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
 import 'package:varese_transport/constants.dart';
+import 'package:varese_transport/l10n/app_localizations.dart';
 import 'package:varese_transport/lib/classes/determine_position.dart';
 import 'package:varese_transport/lib/classes/station.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
 import '../../screens/favorites/favorites_screen.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///This class returns a textfields with auto-complete suggestions
 ///that are fetched from the server based on what the user writes into the

@@ -3,17 +3,14 @@ import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:user_messaging_platform/user_messaging_platform.dart' as UMP;
+import 'package:varese_transport/l10n/app_localizations.dart';
 
 import 'package:varese_transport/screens/home/components/home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     setLanguageFromMemory().then((value) => runApp(new MyApp(lang: value)));
@@ -48,33 +45,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    updateConsent();
-  }
-
-  void updateConsent() async {
-    //Android devices
-    if (Platform.isAndroid) {
-      // Make sure to continue with the latest consent info.
-      var info =
-          await UMP.UserMessagingPlatform.instance.requestConsentInfoUpdate();
-
-      // Show the consent form if consent is required.
-      if (info.consentStatus == UMP.ConsentStatus.required) {
-        // `showConsentForm` returns the latest consent info, after the consent from has been closed.
-        info = await UMP.UserMessagingPlatform.instance.showConsentForm();
-      }
-    }
-    //IOS Devices
-    else {
-      Future.delayed(const Duration(milliseconds: 750), () async {
-        // If the system can show an authorization request dialog
-        if (await AppTrackingTransparency.trackingAuthorizationStatus ==
-            TrackingStatus.notDetermined) {
-          // Request system's tracking authorization dialog
-          await AppTrackingTransparency.requestTrackingAuthorization();
-        }
-      });
-    }
   }
 
   changeLanguage(Locale locale) {

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:varese_transport/constants.dart';
 import 'package:varese_transport/lib/classes/dynamic_autocomplete.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:varese_transport/l10n/app_localizations.dart';
 
 import '../../../lib/classes/station.dart';
 import 'api_call.dart';

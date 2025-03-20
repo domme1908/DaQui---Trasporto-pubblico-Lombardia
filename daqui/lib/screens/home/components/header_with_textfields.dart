@@ -238,7 +238,7 @@ class HeaderWithTextfieldsState extends State<HeaderWithTextfields> {
                           Text(
                             AppLocalizations.of(context)!.homescreen_greeting,
                             style:
-                                Theme.of(context).textTheme.headline3!.copyWith(
+                                Theme.of(context).textTheme.headlineLarge!.copyWith(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),

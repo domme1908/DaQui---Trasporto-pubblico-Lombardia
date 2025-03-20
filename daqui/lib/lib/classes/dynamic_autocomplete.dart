@@ -74,7 +74,8 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
   Widget build(BuildContext context) {
     //Use TypeAhead in order to be able to load the suggestions one by one
     return TypeAheadField(
-      noItemsFoundBuilder: (context) {
+      controller: isFrom ? textControllerFrom : textControllerTo, 
+      emptyBuilder: (context) {
         //Return a ListTile with "No stations found" if user input results in no stations
         return ListTile(
           tileColor: kPrimaryColor,
@@ -84,45 +85,48 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
         );
       },
       //Style and config of the Textfield
-      textFieldConfiguration: TextFieldConfiguration(
-        controller: isFrom ? textControllerFrom : textControllerTo,
-        autofocus: false,
-        style: const TextStyle(fontFamily: 'Poppins'),
-        decoration: InputDecoration(
-          hintText: isFrom
-              ? AppLocalizations.of(context)!.departure
-              : AppLocalizations.of(context)!.arrival,
-          //Fav-Icon
-          icon: IconButton(
-            icon: Icon(
-              Icons.star,
-              color: Colors.orange,
+      builder: (context, typeAheadController, focusNode) {
+        return TextField(
+          controller: typeAheadController,
+          autofocus: false,
+          style: const TextStyle(fontFamily: 'Poppins'),
+          decoration: InputDecoration(
+            hintText: isFrom
+                ? AppLocalizations.of(context)!.departure
+                : AppLocalizations.of(context)!.arrival,
+            //Fav-Icon
+            icon: IconButton(
+              icon: Icon(
+                Icons.star,
+                color: Colors.orange,
+              ),
+              visualDensity: VisualDensity.compact,
+              onPressed: () {
+                //Open the FavScreen
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => FavScreen(isFrom),
+                ));
+              },
             ),
-            visualDensity: VisualDensity.compact,
-            onPressed: () {
-              //Open the FavScreen
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => FavScreen(isFrom),
-              ));
-            },
+            //Clear icon
+            suffixIcon: IconButton(
+              onPressed: () {
+                if (isFrom) {
+                  textControllerFrom.clear();
+                  APICallState.fromStation = Station.empty();
+                } else {
+                  textControllerTo.clear();
+                  APICallState.toStation = Station.empty();
+                }
+              },
+              icon: const Icon(Icons.clear),
+            ),
           ),
-          //Clear icon
-          suffixIcon: IconButton(
-            onPressed: () {
-              if (isFrom) {
-                textControllerFrom.clear();
-                APICallState.fromStation = Station.empty();
-              } else {
-                textControllerTo.clear();
-                APICallState.toStation = Station.empty();
-              }
-            },
-            icon: const Icon(Icons.clear),
-          ),
-        ),
-      ),
+        );
+      },
       //Specify the source of the data
       suggestionsCallback: (pattern) async {
+        print(pattern);
         //If textfield is empty and selected get location and display it as list-item
         if (pattern == "") {
           List<Station> position = [];
@@ -147,7 +151,7 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
         return await APICallState().fetchStations(pattern);
       },
       //Display the loading field while fetching stations or user-location
-      keepSuggestionsOnLoading: false,
+      retainOnLoading: true,
       //Style of the ProgressIndicator that is being displayed while suggestions are fetched
       loadingBuilder: (BuildContext context) {
         return Container(
@@ -178,7 +182,7 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
         );
       },
       //If clicked save value in API call and in the textfield
-      onSuggestionSelected: (Station suggestion) {
+      onSelected: (Station suggestion) {
         if (isFrom) {
           APICallState.fromStation = suggestion;
           textControllerFrom.text = suggestion.station;

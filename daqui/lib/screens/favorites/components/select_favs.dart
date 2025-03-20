@@ -49,56 +49,63 @@ class _SelectFavsState extends State<SelectFavs> {
       GradientAppBar(AppLocalizations.of(context)!.add_favs),
       Container(
           margin: EdgeInsets.all(kDefaultPadding),
-          child: TypeAheadField(
-              noItemsFoundBuilder: (context) {
-                return ListTile(
-                  title: Text(AppLocalizations.of(context)!.no_stations_found,
-                      style: TextStyle(
-                          color: Colors.black, fontFamily: 'Poppins')),
-                );
-              },
-              keepSuggestionsOnLoading: false,
-              textFieldConfiguration: TextFieldConfiguration(
-                controller: _textController,
+          child: TypeAheadField<Station>(
+            debounceDuration: Duration(milliseconds: 300),
+            builder: (context, controller, focusNode) {
+              return TextField(
+                controller: controller,
+                focusNode: focusNode,
                 autofocus: false,
                 style: const TextStyle(fontFamily: 'Poppins'),
                 decoration: InputDecoration(
                   hintText: AppLocalizations.of(context)!.search_stations,
                   suffixIcon: IconButton(
                     onPressed: () {
-                      _textController.clear();
+                      controller.clear();
                     },
                     icon: const Icon(Icons.clear),
                   ),
                 ),
-              ),
-              suggestionsCallback: (pattern) async {
-                return await APICallState().fetchStations(pattern);
-              },
-              itemBuilder: (context, Station suggestion) {
-                return ListTile(
-                  leading: Image.asset(
-                    "assets/images/" + suggestion.type + ".png",
-                    scale: 16,
-                  ),
-                  subtitle: Text(
-                    getTypeOfStation(suggestion.type),
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  title: Text(suggestion.station,
-                      style: const TextStyle(
-                          color: Colors.black, fontFamily: 'Poppins')),
-                );
-              },
-              onSuggestionSelected: (Station suggestion) {
-                saveFav(suggestion, context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: ((context) => FavScreen(isFrom))));
-              }))
+              );
+            },
+            suggestionsCallback: (pattern) async {
+              return await APICallState().fetchStations(pattern);
+            },
+            itemBuilder: (context, Station suggestion) {
+              return ListTile(
+                leading: Image.asset(
+                  "assets/images/${suggestion.type}.png",
+                  scale: 16,
+                ),
+                subtitle: Text(
+                  getTypeOfStation(suggestion.type),
+                  style: TextStyle(color: Colors.black),
+                ),
+                title: Text(
+                  suggestion.station,
+                  style: const TextStyle(
+                      color: Colors.black, fontFamily: 'Poppins'),
+                ),
+              );
+            },
+            onSelected: (Station suggestion) {
+              saveFav(suggestion, context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: ((context) => FavScreen(isFrom))),
+              );
+            },
+            emptyBuilder: (context) {
+              return ListTile(
+                title: Text(
+                  AppLocalizations.of(context)!.no_stations_found,
+                  style: TextStyle(color: Colors.black, fontFamily: 'Poppins'),
+                ),
+              );
+            },
+          ))
     ]));
   }
 

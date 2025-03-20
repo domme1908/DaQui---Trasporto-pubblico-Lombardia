@@ -159,7 +159,7 @@ class APICallState extends State<APICall> {
             }
           },
           style: ElevatedButton.styleFrom(
-            primary: kSecondaryColor,
+            backgroundColor: kSecondaryColor,
             shape: StadiumBorder(),
             enableFeedback: true,
             shadowColor: kPrimaryColor,

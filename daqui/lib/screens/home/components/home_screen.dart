@@ -1,7 +1,7 @@
 // ignore_for_file: import_of_legacy_library_into_null_safe
 import 'package:flutter/material.dart';
 import 'package:varese_transport/screens/home/components/api_call.dart';
-import 'package:varese_transport/screens/home/components/navigation_drawer.dart';
+import 'package:varese_transport/screens/home/components/navigation_drawer.dart' as custom;
 import '../body.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         extendBodyBehindAppBar: true,
-        drawer: NavigationDrawer(),
+        drawer: custom.NavigationDrawer(),
         //Paint the top app bar - in this case just the menu icon
         appBar: build_app_bar(),
         //Call the body class to paint the central elements

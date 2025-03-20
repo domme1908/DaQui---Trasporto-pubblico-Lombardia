@@ -60,7 +60,7 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                                                 kDefaultPadding),
                                             child: ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
-                                                  primary: kSecondaryColor,
+                                                  backgroundColor: kSecondaryColor,
                                                   shape: StadiumBorder(),
                                                   enableFeedback: true,
                                                   shadowColor: kPrimaryColor,

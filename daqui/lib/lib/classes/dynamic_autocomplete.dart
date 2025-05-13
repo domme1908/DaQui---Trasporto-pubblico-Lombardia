@@ -35,18 +35,19 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
   late AnimationController _animationController;
   late Animation<Color?> _colorTween;
 
-  DynamicVTAutocompleteState(
-    this.isFrom,
-  );
+  DynamicVTAutocompleteState(this.isFrom);
 
   @override
   void initState() {
     super.initState();
     //Regulates the progress indicator
-    _animationController =
-        AnimationController(duration: const Duration(seconds: 3), vsync: this);
-    _colorTween = _animationController
-        .drive(ColorTween(begin: kPrimaryColor, end: kSecondaryColor));
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+    _colorTween = _animationController.drive(
+      ColorTween(begin: kPrimaryColor, end: kSecondaryColor),
+    );
     _animationController.repeat();
   }
 
@@ -73,49 +74,49 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
   @override
   Widget build(BuildContext context) {
     //Use TypeAhead in order to be able to load the suggestions one by one
-    return TypeAheadField(
-      controller: isFrom ? textControllerFrom : textControllerTo, 
+    return TypeAheadField<Station>(
+      controller:
+          isFrom
+              ? textControllerFrom
+              : textControllerTo, // supply your controller here
       emptyBuilder: (context) {
-        //Return a ListTile with "No stations found" if user input results in no stations
         return ListTile(
           tileColor: kPrimaryColor,
           hoverColor: kSecondaryColor,
-          title: Text(AppLocalizations.of(context)!.no_stations_found,
-              style: TextStyle(color: Colors.white, fontFamily: 'Poppins')),
+          title: Text(
+            AppLocalizations.of(context)!.no_stations_found,
+            style: TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+          ),
         );
       },
-      //Style and config of the Textfield
       builder: (context, typeAheadController, focusNode) {
+        // typeAheadController is the same as the one you supplied
         return TextField(
           controller: typeAheadController,
+          focusNode: focusNode,
           autofocus: false,
           style: const TextStyle(fontFamily: 'Poppins'),
           decoration: InputDecoration(
-            hintText: isFrom
-                ? AppLocalizations.of(context)!.departure
-                : AppLocalizations.of(context)!.arrival,
-            //Fav-Icon
+            hintText:
+                isFrom
+                    ? AppLocalizations.of(context)!.departure
+                    : AppLocalizations.of(context)!.arrival,
             icon: IconButton(
-              icon: Icon(
-                Icons.star,
-                color: Colors.orange,
-              ),
+              icon: const Icon(Icons.star, color: Colors.orange),
               visualDensity: VisualDensity.compact,
               onPressed: () {
-                //Open the FavScreen
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => FavScreen(isFrom),
-                ));
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => FavScreen(isFrom)),
+                );
               },
             ),
-            //Clear icon
             suffixIcon: IconButton(
               onPressed: () {
+                // Use the supplied controller
+                typeAheadController.clear();
                 if (isFrom) {
-                  textControllerFrom.clear();
                   APICallState.fromStation = Station.empty();
                 } else {
-                  textControllerTo.clear();
                   APICallState.toStation = Station.empty();
                 }
               },
@@ -124,65 +125,57 @@ class DynamicVTAutocompleteState extends State<DynamicVTAutocomplete>
           ),
         );
       },
-      //Specify the source of the data
       suggestionsCallback: (pattern) async {
         print(pattern);
-        //If textfield is empty and selected get location and display it as list-item
-        if (pattern == "") {
+        if (pattern.isEmpty) {
           List<Station> position = [];
-          //Make sure the user consented to the usage of his position and only if so enter the position section
-          return DeterminePosition().then((coordinates) {
-            //Create a list containing just the position
-            position.add(Station(
+          try {
+            final coordinates = await DeterminePosition();
+            position.add(
+              Station(
                 AppLocalizations.of(context)!.location,
                 "posizione",
                 coordinates.longitude.toString(),
-                coordinates.latitude.toString()));
-            //Push the result into the future value
-            Future<List<Station>> result =
-                Future<List<Station>>.value(position);
-            return result;
-          }).onError((error, stackTrace) {
-            //If location permission is denied by user just return an empty list
-            return Future<List<Station>>.value([]);
-          });
+                coordinates.latitude.toString(),
+              ),
+            );
+            return position;
+          } catch (_) {
+            return <Station>[];
+          }
         }
-        //This part of code is reached when the textfield is no longer empty and the user is searching for a specific station
         return await APICallState().fetchStations(pattern);
       },
-      //Display the loading field while fetching stations or user-location
       retainOnLoading: true,
-      //Style of the ProgressIndicator that is being displayed while suggestions are fetched
       loadingBuilder: (BuildContext context) {
         return Container(
           height: 200,
           color: kPrimaryColor,
           child: Center(
-              child: CircularProgressIndicator(
-            valueColor: _colorTween,
-          )),
+            child: CircularProgressIndicator(valueColor: _colorTween),
+          ),
         );
       },
-      //Style of the suggestion boxes
       itemBuilder: (context, Station suggestion) {
         return ListTile(
           tileColor: kPrimaryColor,
           hoverColor: kSecondaryColor,
           leading: Image.asset(
-            "assets/images/" + suggestion.type + ".png",
+            "assets/images/${suggestion.type}.png",
             scale: 16,
           ),
           subtitle: Text(
             getTypeOfStation(suggestion.type),
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
           ),
-          title: Text(suggestion.station,
-              style:
-                  const TextStyle(color: Colors.white, fontFamily: 'Poppins')),
+          title: Text(
+            suggestion.station,
+            style: const TextStyle(color: Colors.white, fontFamily: 'Poppins'),
+          ),
         );
       },
-      //If clicked save value in API call and in the textfield
       onSelected: (Station suggestion) {
+        // Now you can access the same controller via your static member
         if (isFrom) {
           APICallState.fromStation = suggestion;
           textControllerFrom.text = suggestion.station;

@@ -15,9 +15,9 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "com.daQui.varese_transport"
+    namespace = "com.daQui.daQuiTrasportoLom"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -29,7 +29,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.daQui.varese_transport"
+        applicationId = "com.daQui.daQuiTrasportoLom"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

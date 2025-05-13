@@ -1,4 +1,4 @@
-package com.daQui.varese_transport
+package com.daQui.daQuiTrasportoLom
 
 import io.flutter.embedding.android.FlutterActivity
 

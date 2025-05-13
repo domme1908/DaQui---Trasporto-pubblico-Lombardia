@@ -8,7 +8,7 @@
 PRODUCT_NAME = varese_transport
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.daQui.vareseTransport
+PRODUCT_BUNDLE_IDENTIFIER = com.daQui.daQuiTrasportoLom
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2025 com.daQui. All rights reserved.
